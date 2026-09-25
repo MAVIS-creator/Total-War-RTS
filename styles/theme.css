@@ -1,0 +1,108 @@
+/**
+ * Military Sci-Fi Theme Variables & Global Utilities
+ * Direction: Gunmetal / steel, cyan technical accents, angular chamfers, restrained glow
+ */
+
+:root {
+  /* Surface colors */
+  --maw-bg-space: #070a0e;
+  --maw-bg-base: #0d1218;
+  --maw-bg-surface: #121820;
+  --maw-bg-panel: #16202c;
+  --maw-bg-panel-elevated: #1c2836;
+  --maw-bg-overlay: rgba(7, 10, 14, 0.85);
+
+  /* Steel & Armor Borders */
+  --maw-border-dark: #1b2632;
+  --maw-border: #293847;
+  --maw-border-bright: #3d5167;
+  --maw-border-steel: #526c88;
+
+  /* Technical Cyan Accents */
+  --maw-cyan: #00d2d3;
+  --maw-cyan-bright: #48dbfb;
+  --maw-cyan-dim: #00a8a8;
+  --maw-cyan-bg: rgba(0, 210, 211, 0.08);
+  --maw-cyan-glow: 0 0 12px rgba(0, 210, 211, 0.35);
+
+  /* Status & Combat Telemetry */
+  --maw-good: #1dd1a1;
+  --maw-good-dim: rgba(29, 209, 161, 0.15);
+  --maw-warn: #feca57;
+  --maw-warn-dim: rgba(254, 202, 87, 0.15);
+  --maw-danger: #ff6b6b;
+  --maw-danger-dim: rgba(255, 107, 107, 0.15);
+  --maw-power: #54a0ff;
+  --maw-ore: #ffd32a;
+
+  /* Typography */
+  --maw-text-bright: #ffffff;
+  --maw-text: #d8e2ed;
+  --maw-text-muted: #8395a7;
+  --maw-text-dim: #576574;
+  --maw-font-sans: 'Rajdhani', 'Chakra Petch', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --maw-font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', monospace;
+
+  /* Sizing & Transitions */
+  --maw-radius-sm: 3px;
+  --maw-radius-md: 5px;
+  --maw-transition: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Global Reset & Base Styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--maw-bg-base);
+  color: var(--maw-text);
+  font-family: var(--maw-font-sans);
+  font-size: 13px;
+  line-height: 1.4;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Technical Corner Bracket Mixin for Panels */
+.maw-bracket-box {
+  position: relative;
+  background: var(--maw-bg-panel);
+  border: 1px solid var(--maw-border);
+}
+
+.maw-bracket-box::before,
+.maw-bracket-box::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  pointer-events: none;
+}
+
+.maw-bracket-box::before {
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid var(--maw-cyan);
+  border-left: 2px solid var(--maw-cyan);
+}
+
+.maw-bracket-box::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 2px solid var(--maw-cyan);
+  border-right: 2px solid var(--maw-cyan);
+}
+
+/* Subtle Technical Grid Background */
+.maw-grid-pattern {
+  background-image: 
+    linear-gradient(to right, rgba(41, 56, 71, 0.25) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(41, 56, 71, 0.25) 1px, transparent 1px);
+  background-size: 24px 24px;
+}

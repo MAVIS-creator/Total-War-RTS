@@ -54,17 +54,17 @@ Own/create:
 /styles
 ```
 
-- [ ] Reusable Button component.
-- [ ] Reusable Panel component.
-- [ ] Reusable Modal component.
-- [ ] Reusable Tooltip component.
-- [ ] Reusable Slider component.
-- [ ] Reusable Dropdown component.
-- [ ] Reusable Tabs component.
-- [ ] Reusable ResourceCounter component.
-- [ ] Reusable ProgressBar component.
-- [ ] Reusable UnitPortrait component.
-- [ ] Reusable CommandButton component.
+- [x] Reusable Button component.
+- [x] Reusable Panel component.
+- [x] Reusable Modal component.
+- [x] Reusable Tooltip component.
+- [x] Reusable Slider component.
+- [x] Reusable Dropdown component.
+- [x] Reusable Tabs component.
+- [x] Reusable ResourceCounter component.
+- [x] Reusable ProgressBar component.
+- [x] Reusable UnitPortrait component.
+- [x] Reusable CommandButton component.
 
 ---
 

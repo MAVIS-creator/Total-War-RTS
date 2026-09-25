@@ -1,0 +1,532 @@
+/**
+ * Military Sci-Fi UI Component Styles
+ */
+
+/* ==========================================================================
+   1. BUTTON COMPONENT (.maw-btn)
+   ========================================================================== */
+.maw-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 6px 14px;
+  background: var(--maw-bg-panel);
+  color: var(--maw-text);
+  border: 1px solid var(--maw-border-bright);
+  border-radius: var(--maw-radius-sm);
+  font-family: var(--maw-font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  outline: none;
+  position: relative;
+  transition: var(--maw-transition);
+}
+
+.maw-btn:hover:not(:disabled) {
+  background: var(--maw-bg-panel-elevated);
+  border-color: var(--maw-cyan);
+  color: var(--maw-text-bright);
+  box-shadow: 0 0 8px rgba(0, 210, 211, 0.2);
+}
+
+.maw-btn:active:not(:disabled) {
+  transform: translateY(1px);
+  background: rgba(0, 210, 211, 0.15);
+  border-color: var(--maw-cyan-bright);
+}
+
+.maw-btn:focus-visible {
+  outline: 2px solid var(--maw-cyan);
+  outline-offset: 1px;
+}
+
+.maw-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  border-color: var(--maw-border-dark);
+}
+
+/* Button Variants */
+.maw-btn--primary {
+  background: rgba(0, 210, 211, 0.15);
+  border-color: var(--maw-cyan);
+  color: var(--maw-cyan-bright);
+}
+.maw-btn--primary:hover:not(:disabled) {
+  background: rgba(0, 210, 211, 0.3);
+  box-shadow: var(--maw-cyan-glow);
+}
+
+.maw-btn--danger {
+  border-color: var(--maw-danger);
+  color: var(--maw-danger);
+}
+.maw-btn--danger:hover:not(:disabled) {
+  background: var(--maw-danger-dim);
+  box-shadow: 0 0 8px rgba(255, 107, 107, 0.3);
+}
+
+.maw-btn--active {
+  border-color: var(--maw-cyan-bright);
+  background: rgba(0, 210, 211, 0.22);
+  color: #fff;
+}
+
+/* ==========================================================================
+   2. PANEL COMPONENT (.maw-panel)
+   ========================================================================== */
+.maw-panel {
+  position: relative;
+  background: var(--maw-bg-panel);
+  border: 1px solid var(--maw-border);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+}
+
+.maw-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--maw-bg-surface);
+  border-bottom: 1px solid var(--maw-border);
+}
+
+.maw-panel__title {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--maw-cyan);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.maw-panel__title-badge {
+  font-size: 10px;
+  padding: 1px 5px;
+  background: var(--maw-border);
+  color: var(--maw-text-muted);
+  border-radius: 2px;
+}
+
+.maw-panel__body {
+  padding: 12px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.maw-panel__footer {
+  padding: 8px 12px;
+  background: var(--maw-bg-surface);
+  border-top: 1px solid var(--maw-border);
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+/* ==========================================================================
+   3. MODAL COMPONENT (.maw-modal)
+   ========================================================================== */
+.maw-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--maw-bg-overlay);
+  backdrop-filter: blur(4px);
+  display: grid;
+  place-items: center;
+  z-index: 100;
+  padding: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms ease;
+}
+
+.maw-modal-backdrop.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.maw-modal {
+  width: min(560px, 100%);
+  max-height: calc(100vh - 40px);
+  transform: translateY(8px);
+  transition: transform 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.maw-modal-backdrop.is-open .maw-modal {
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   4. TOOLTIP COMPONENT (.maw-tooltip)
+   ========================================================================== */
+.maw-tooltip {
+  position: fixed;
+  z-index: 200;
+  pointer-events: none;
+  background: var(--maw-bg-panel-elevated);
+  border: 1px solid var(--maw-border-bright);
+  padding: 8px 10px;
+  max-width: 260px;
+  font-size: 11px;
+  color: var(--maw-text);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7);
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.maw-tooltip__header {
+  font-weight: 800;
+  color: var(--maw-cyan-bright);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.maw-tooltip__desc {
+  color: var(--maw-text-muted);
+  line-height: 1.35;
+}
+
+.maw-tooltip__stats {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-top: 1px solid var(--maw-border);
+  padding-top: 4px;
+  font-family: var(--maw-font-mono);
+  font-size: 10px;
+  color: var(--maw-text-dim);
+}
+
+/* ==========================================================================
+   5. SLIDER COMPONENT (.maw-slider)
+   ========================================================================== */
+.maw-slider-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.maw-slider-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--maw-text-muted);
+  text-transform: uppercase;
+}
+
+.maw-slider-val {
+  font-family: var(--maw-font-mono);
+  color: var(--maw-cyan-bright);
+}
+
+.maw-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  background: var(--maw-bg-base);
+  border: 1px solid var(--maw-border);
+  border-radius: 2px;
+  outline: none;
+}
+
+.maw-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 18px;
+  background: var(--maw-cyan);
+  border: 1px solid #fff;
+  cursor: pointer;
+  transition: var(--maw-transition);
+}
+
+.maw-slider::-webkit-slider-thumb:hover {
+  background: var(--maw-cyan-bright);
+  box-shadow: var(--maw-cyan-glow);
+}
+
+/* ==========================================================================
+   6. DROPDOWN COMPONENT (.maw-dropdown)
+   ========================================================================== */
+.maw-dropdown-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+}
+
+.maw-dropdown-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--maw-text-muted);
+  text-transform: uppercase;
+}
+
+.maw-dropdown-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 40px;
+  padding: 0 12px;
+  background: var(--maw-bg-base);
+  border: 1px solid var(--maw-border-bright);
+  color: var(--maw-text);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.maw-dropdown-trigger:hover {
+  border-color: var(--maw-cyan);
+}
+
+.maw-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--maw-bg-surface);
+  border: 1px solid var(--maw-border-steel);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
+  z-index: 50;
+  margin-top: 2px;
+  display: none;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.maw-dropdown-menu.is-open {
+  display: block;
+}
+
+.maw-dropdown-option {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 100ms;
+}
+
+.maw-dropdown-option:hover {
+  background: rgba(0, 210, 211, 0.12);
+  color: var(--maw-cyan-bright);
+}
+
+.maw-dropdown-option.is-selected {
+  background: rgba(0, 210, 211, 0.2);
+  color: #fff;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   7. TABS COMPONENT (.maw-tabs)
+   ========================================================================== */
+.maw-tabs {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--maw-border);
+  padding-bottom: 2px;
+}
+
+.maw-tab {
+  min-height: 36px;
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom: 2px solid transparent;
+  color: var(--maw-text-muted);
+  font-family: var(--maw-font-sans);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--maw-transition);
+}
+
+.maw-tab:hover {
+  color: var(--maw-text);
+  border-color: var(--maw-border);
+}
+
+.maw-tab.is-active {
+  color: var(--maw-cyan-bright);
+  background: var(--maw-bg-panel);
+  border-color: var(--maw-border);
+  border-bottom-color: var(--maw-cyan);
+}
+
+/* ==========================================================================
+   8. RESOURCE COUNTER COMPONENT (.maw-resource)
+   ========================================================================== */
+.maw-resource {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  background: var(--maw-bg-panel);
+  border: 1px solid var(--maw-border);
+  font-size: 12px;
+}
+
+.maw-resource__icon {
+  width: 14px;
+  height: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.maw-resource__label {
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--maw-text-muted);
+}
+
+.maw-resource__val {
+  font-family: var(--maw-font-mono);
+  font-weight: 700;
+  color: var(--maw-text-bright);
+}
+
+.maw-resource--ore .maw-resource__label { color: var(--maw-ore); }
+.maw-resource--power .maw-resource__label { color: var(--maw-power); }
+.maw-resource--warn .maw-resource__val { color: var(--maw-warn); }
+.maw-resource--danger .maw-resource__val { color: var(--maw-danger); }
+
+/* ==========================================================================
+   9. PROGRESS BAR COMPONENT (.maw-progress)
+   ========================================================================== */
+.maw-progress {
+  width: 100%;
+  height: 6px;
+  background: var(--maw-bg-base);
+  border: 1px solid var(--maw-border-dark);
+  position: relative;
+  overflow: hidden;
+}
+
+.maw-progress__bar {
+  height: 100%;
+  width: 0%;
+  background: var(--maw-cyan);
+  transition: width 100ms linear;
+}
+
+.maw-progress--hp .maw-progress__bar { background: var(--maw-good); }
+.maw-progress--hp-warn .maw-progress__bar { background: var(--maw-warn); }
+.maw-progress--hp-danger .maw-progress__bar { background: var(--maw-danger); }
+
+/* ==========================================================================
+   10. UNIT PORTRAIT COMPONENT (.maw-portrait)
+   ========================================================================== */
+.maw-portrait {
+  position: relative;
+  width: 54px;
+  height: 54px;
+  background: var(--maw-bg-surface);
+  border: 1px solid var(--maw-border-bright);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.maw-portrait__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.maw-portrait__tech {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  font-size: 9px;
+  font-family: var(--maw-font-mono);
+  background: rgba(0, 0, 0, 0.75);
+  color: var(--maw-cyan);
+  padding: 0 3px;
+  border-bottom-right-radius: 2px;
+}
+
+.maw-portrait__rank {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  font-size: 10px;
+  color: var(--maw-ore);
+}
+
+/* ==========================================================================
+   11. COMMAND BUTTON COMPONENT (.maw-cmd-btn)
+   ========================================================================== */
+.maw-cmd-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 100px;
+  min-height: 52px;
+  padding: 6px 8px;
+  background: var(--maw-bg-panel);
+  border: 1px solid var(--maw-border);
+  color: var(--maw-text);
+  font-family: var(--maw-font-sans);
+  text-align: left;
+  cursor: pointer;
+  position: relative;
+  transition: var(--maw-transition);
+}
+
+.maw-cmd-btn:hover:not(:disabled) {
+  background: var(--maw-bg-panel-elevated);
+  border-color: var(--maw-cyan);
+}
+
+.maw-cmd-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.maw-cmd-btn__title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--maw-text-bright);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.maw-cmd-btn__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10px;
+  font-family: var(--maw-font-mono);
+  color: var(--maw-text-muted);
+}
+
+.maw-cmd-btn__cost {
+  color: var(--maw-ore);
+}
+
+.maw-cmd-btn__progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--maw-cyan);
+  transition: width 100ms;
+}
