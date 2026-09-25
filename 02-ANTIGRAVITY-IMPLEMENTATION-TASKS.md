@@ -7,6 +7,8 @@
 > Do not modify core economy, combat, AI, pathfinding, research logic, or gameplay balance.
 >
 > Start condition: Codex must first complete the baseline snapshot, prototype audit, `/src/contracts`, and Vite/TypeScript/Phaser foundation. This file is a target presentation backlog; it does not claim its listed menus, units, effects, Tech 4, or assets exist in the current prototype.
+>
+> Checkpoint rule: after every validated UI or asset checkpoint, make a descriptive commit and push the active branch to GitHub before beginning the next checkpoint.
 
 ---
 

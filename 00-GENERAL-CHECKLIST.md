@@ -27,6 +27,8 @@
 - [ ] Antigravity consumes contracts but does not change game rules.
 - [ ] No agent commits directly to `main`.
 - [ ] Every major milestone must be tested before merging.
+- [ ] At every completed checkpoint, commit the validated work with a descriptive message and push the active branch to GitHub before beginning the next checkpoint.
+- [ ] Keep `main`, `codex/core-engine`, and `antigravity/visual-ui` published to the configured GitHub origin.
 - [ ] No proprietary MAW3 assets should be copied directly into the new game.
 - [ ] Use MAW3.5 concepts only as visual/gameplay inspiration.
 

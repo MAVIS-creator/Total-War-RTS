@@ -31,6 +31,7 @@ The simulation must remain independent from presentation.
 - [ ] Perform the audit and establish `/src/contracts` before Antigravity begins implementation.
 - [ ] Complete Vite, TypeScript, and Phaser foundations before future-feature work.
 - [ ] Verify ground-unit and Tech 1–3 parity before implementing Tech 4, infantry, aircraft, or save/load.
+- [ ] At the end of every validated checkpoint, make a descriptive commit and push the active branch to GitHub before starting subsequent work.
 
 ## 1. Audit Existing Prototype
 
