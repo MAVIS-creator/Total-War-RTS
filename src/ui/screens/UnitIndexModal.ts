@@ -10,14 +10,18 @@ interface EntityDoc {
   hp: number;
   role: string;
   desc: string;
+  imageUrl?: string;
 }
 
 const DATABASE: EntityDoc[] = [
-  { name: 'Scout', category: 'unit', tech: 1, cost: 300, hp: 180, role: 'Fast recon', desc: 'High-speed scouting vehicle equipped with light rapid autocannon.' },
-  { name: 'Assault Tank', category: 'unit', tech: 1, cost: 550, hp: 360, role: 'Balanced armor', desc: 'Versatile main battle unit with reliable kinetic cannon.' },
-  { name: 'Heavy Tank', category: 'unit', tech: 2, cost: 1050, hp: 760, role: 'Frontline armor', desc: 'Reinforced dual-tread assault vehicle built for breakthrough engagements.' },
-  { name: 'Artillery', category: 'unit', tech: 2, cost: 1250, hp: 310, role: 'Long range', desc: 'Mobile long-range siege platform designed to shell structures from safety.' },
-  { name: 'Juggernaut', category: 'unit', tech: 3, cost: 2600, hp: 1750, role: 'Experimental armor', desc: 'Massive armored behemoth fielding devastating high-caliber heavy armament.' },
+  { name: 'Scout Buggy', category: 'unit', tech: 1, cost: 300, hp: 180, role: 'Fast recon', desc: '6-wheel all-terrain high-speed scouting vehicle with rotating sensor dish and light repeater cannon.', imageUrl: '/assets/portraits/scout.jpg' },
+  { name: 'Mech Infantry', category: 'unit', tech: 1, cost: 200, hp: 140, role: 'Light infantry', desc: 'Mechanized heavy power armor infantry armed with rapid-fire kinetic rail rifle and shoulder launcher.', imageUrl: '/assets/portraits/infantry.jpg' },
+  { name: 'Cruiser MBT', category: 'unit', tech: 1, cost: 550, hp: 360, role: 'Main battle tank', desc: 'Sloped composite armor tank fielding a high-velocity rail cannon and coaxial autocannon.', imageUrl: '/assets/portraits/tank.jpg' },
+  { name: 'Heavy Tank', category: 'unit', tech: 2, cost: 1050, hp: 760, role: 'Frontline armor', desc: 'Reinforced dual-tread assault vehicle built for breakthrough engagements.', imageUrl: '/assets/portraits/tank.jpg' },
+  { name: 'Siege Artillery', category: 'unit', tech: 2, cost: 1250, hp: 310, role: 'Long range siege', desc: 'Self-propelled howitzer with hydraulic stabilizing outriggers and massive long-range siege cannon.', imageUrl: '/assets/portraits/artillery.jpg' },
+  { name: 'Juggernaut', category: 'unit', tech: 3, cost: 2600, hp: 1750, role: 'Experimental siege tank', desc: 'Colossal quad-track armored behemoth fielding twin devastating heavy rail cannons.', imageUrl: '/assets/portraits/tank.jpg' },
+  { name: 'Interceptor Jet', category: 'unit', tech: 2, cost: 950, hp: 280, role: 'Air superiority', desc: 'Supersonic delta-wing fighter with twin vectoring plasma thrusters and air-to-air missiles.', imageUrl: '/assets/portraits/interceptor.jpg' },
+  { name: 'Strategic Bomber', category: 'unit', tech: 3, cost: 1800, hp: 650, role: 'Tactical bombing', desc: 'Heavy flying-wing stealth bomber dropping area-effect plasma ordnance on ground targets.', imageUrl: '/assets/portraits/bomber.jpg' },
   { name: 'Headquarters', category: 'building', tech: 1, cost: 0, hp: 9000, role: 'Command & Ore', desc: 'Central operational hub and primary resource source. Protect at all costs.' },
   { name: 'Power Cell', category: 'building', tech: 1, cost: 500, hp: 1900, role: 'Power Generation', desc: 'Initial energy generator providing 12,000 power units to the base.' },
   { name: 'Extractor', category: 'building', tech: 1, cost: 900, hp: 2500, role: 'Ore Harvester', desc: 'Automated mineral siphon producing continuous secondary ore income.' },
@@ -92,6 +96,7 @@ export class UnitIndexModal {
       card.style.background = 'var(--maw-bg-base)';
 
       const portrait = new UnitPortrait({
+        imageUrl: item.imageUrl,
         fallbackText: item.name,
         techLevel: item.tech,
       });

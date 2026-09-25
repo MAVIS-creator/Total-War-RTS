@@ -421,24 +421,24 @@ Pipeline:
 
 For each unit:
 
-- [ ] Neutral hard-surface material.
-- [ ] Team-color mask.
-- [ ] Strong silhouette.
-- [ ] Readable at game scale.
-- [ ] Consistent isometric camera.
-- [ ] Directional frames.
-- [ ] Wreck/death state.
-- [ ] Portrait.
-- [ ] Build icon.
+- [x] Neutral hard-surface material.
+- [x] Team-color mask.
+- [x] Strong silhouette.
+- [x] Readable at game scale.
+- [x] Consistent isometric camera.
+- [x] Directional frames.
+- [x] Wreck/death state.
+- [x] Portrait.
+- [x] Build icon.
 
 Initial units:
 
-- [ ] Scout.
-- [ ] Infantry.
-- [ ] Tank.
-- [ ] Artillery.
-- [ ] Interceptor.
-- [ ] Bomber.
+- [x] Scout.
+- [x] Infantry.
+- [x] Tank.
+- [x] Artillery.
+- [x] Interceptor.
+- [x] Bomber.
 
 ---
 

@@ -121,13 +121,14 @@ export class HUDOverlay {
     this.armyCounter.setValue(selectedCount);
   }
 
-  updateSelection(title: string, meta: string, hpPercent: number, rank?: number, tech?: number): void {
+  updateSelection(title: string, meta: string, hpPercent: number, rank?: number, tech?: number, imageUrl?: string): void {
     this.selTitleEl.textContent = title;
     this.selMetaEl.textContent = meta;
     this.selHpBar.setPercent(hpPercent);
 
     this.selPortraitWrap.innerHTML = '';
     const portrait = new UnitPortrait({
+      imageUrl,
       fallbackText: title,
       rank,
       techLevel: tech,

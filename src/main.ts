@@ -3,6 +3,17 @@ import type { SimulationSnapshot } from '@/contracts';
 import { UIManager } from './ui/UIManager';
 import { soundSystem } from './audio/SoundSystem';
 import type { MatchStatistics } from './ui/screens/VictoryDefeatModal';
+import { UnitRenderer } from './rendering/UnitRenderer';
+
+declare global {
+  interface Window {
+    __ANTIGRAVITY_UNIT_RENDERER__?: typeof UnitRenderer;
+  }
+}
+
+if (typeof window !== 'undefined') {
+  window.__ANTIGRAVITY_UNIT_RENDERER__ = UnitRenderer;
+}
 
 /**
  * Migration foundation only. The legacy Canvas prototype remains the active

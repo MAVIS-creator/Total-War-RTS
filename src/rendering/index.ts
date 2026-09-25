@@ -1,4 +1,5 @@
 export * from './VisualEffects';
+export * from './UnitRenderer';
 
 /**
  * Antigravity Rendering System contracts & foundations
