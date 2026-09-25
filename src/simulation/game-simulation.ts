@@ -3,6 +3,7 @@ import type {
   BuildingState,
   CommandResult,
   GameSettings,
+  MapDefinition,
   PlayerId,
   PlayerState,
   ProductionQueueItem,
@@ -15,6 +16,8 @@ import type {
 import { StableIdFactory } from '@/core/stable-id';
 import { SeededRandom } from '@/core/seeded-random';
 import { prototypeBuildings, prototypeUnits } from '@/data/prototype-content';
+import { getMap } from '@/data/maps';
+import { isBlocked } from '@/simulation/map-loader';
 
 const FIXED_STEP_SECONDS = 1 / 20;
 const EPSILON = 0.000_001;
@@ -30,6 +33,7 @@ type MutableBuilding = Omit<BuildingState, 'productionQueue'> & { productionQueu
 export class GameSimulation {
   private readonly ids = new StableIdFactory();
   private readonly random: SeededRandom;
+  private readonly map: MapDefinition;
   private readonly players = new Map<PlayerId, MutablePlayer>();
   private readonly units = new Map<string, UnitState>();
   private readonly buildings = new Map<string, MutableBuilding>();
@@ -39,6 +43,8 @@ export class GameSimulation {
 
   public constructor(private readonly settings: GameSettings) {
     this.random = new SeededRandom(settings.seed ?? 1);
+    this.map = getMap(settings.mapId);
+    if (this.map.playerCount !== settings.playerCount) throw new Error('Game settings player count does not match the selected map.');
   }
 
   public addPlayer(id: PlayerId, name: string, ore: number, populationCap = this.settings.populationCap): void {
@@ -57,6 +63,27 @@ export class GameSimulation {
     this.buildings.set(id, { id, ownerId, definitionId: definition.id, position, health: definition.health, maxHealth: definition.health, productionQueue: [] });
     this.recalculatePlayer(ownerId);
     return id;
+  }
+
+  public validateBuildingPlacement(ownerId: PlayerId, definitionId: keyof typeof prototypeBuildings, position: WorldPosition): CommandResult {
+    const player = this.requirePlayer(ownerId);
+    const definition = prototypeBuildings[definitionId];
+    if (player.techLevel < definition.techLevel) return this.reject(ownerId, 'Technology requirement is not met.');
+    if (player.economy.ore < definition.cost.ore) return this.reject(ownerId, 'Insufficient ore.');
+    if (!this.footprintIsInsideMap(definition, position)) return this.reject(ownerId, 'Building footprint is outside map bounds.');
+    if (!this.footprintIsPassable(definition, position)) return this.reject(ownerId, 'Building footprint overlaps blocked terrain.');
+    if (this.footprintOverlapsBuilding(definition, position)) return this.reject(ownerId, 'Building footprint overlaps an existing structure.');
+    return { accepted: true };
+  }
+
+  public placeBuilding(ownerId: PlayerId, definitionId: keyof typeof prototypeBuildings, position: WorldPosition): CommandResult {
+    const validation = this.validateBuildingPlacement(ownerId, definitionId, position);
+    if (!validation.accepted) return validation;
+    const definition = prototypeBuildings[definitionId];
+    const player = this.requirePlayer(ownerId);
+    player.economy.ore -= definition.cost.ore;
+    this.addBuilding(ownerId, definition, position);
+    return { accepted: true };
   }
 
   public queueUnit(ownerId: PlayerId, factoryId: string, definitionId: keyof typeof prototypeUnits): CommandResult {
@@ -138,6 +165,35 @@ export class GameSimulation {
     player.economy.orePerSecond = orePerSecond;
     player.power.generated = generated;
     player.power.consumed = consumed;
+  }
+
+  private footprintIsInsideMap(definition: BuildingDefinition, position: WorldPosition): boolean {
+    const halfWidth = definition.footprint.width / 2;
+    const halfHeight = definition.footprint.height / 2;
+    return position.x - halfWidth >= 0 && position.y - halfHeight >= 0 && position.x + halfWidth <= this.map.width && position.y + halfHeight <= this.map.height;
+  }
+
+  private footprintIsPassable(definition: BuildingDefinition, position: WorldPosition): boolean {
+    const halfWidth = definition.footprint.width / 2;
+    const halfHeight = definition.footprint.height / 2;
+    const firstColumn = Math.floor((position.x - halfWidth) / this.map.terrain.tileSize);
+    const lastColumn = Math.floor((position.x + halfWidth - EPSILON) / this.map.terrain.tileSize);
+    const firstRow = Math.floor((position.y - halfHeight) / this.map.terrain.tileSize);
+    const lastRow = Math.floor((position.y + halfHeight - EPSILON) / this.map.terrain.tileSize);
+    for (let row = firstRow; row <= lastRow; row += 1) {
+      for (let column = firstColumn; column <= lastColumn; column += 1) {
+        if (isBlocked(this.map.terrain, { x: column * this.map.terrain.tileSize, y: row * this.map.terrain.tileSize })) return false;
+      }
+    }
+    return true;
+  }
+
+  private footprintOverlapsBuilding(definition: BuildingDefinition, position: WorldPosition): boolean {
+    return [...this.buildings.values()].some((building) => {
+      const existing = this.buildingById(building.definitionId);
+      return Math.abs(position.x - building.position.x) < (definition.footprint.width + existing.footprint.width) / 2
+        && Math.abs(position.y - building.position.y) < (definition.footprint.height + existing.footprint.height) / 2;
+    });
   }
 
   private requirePlayer(id: PlayerId): MutablePlayer {

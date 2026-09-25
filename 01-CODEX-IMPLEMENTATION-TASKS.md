@@ -296,19 +296,19 @@ Implement:
 - [ ] Defined behavior under shortage.
 
 ### Population
-- [ ] Current population.
-- [ ] Population cap.
-- [ ] Unit cost.
-- [ ] Production blocked at cap.
+- [x] Current population.
+- [x] Population cap.
+- [x] Unit cost.
+- [x] Production blocked at cap.
 
 ---
 
 ## 13. Construction
 
-- [ ] Building ghost validation API.
-- [ ] Terrain validity.
-- [ ] Collision validity.
-- [ ] Resource cost.
+- [x] Building ghost validation API.
+- [x] Terrain validity.
+- [x] Collision validity.
+- [x] Resource cost.
 - [ ] Construction timer.
 - [ ] Building becomes active after completion.
 - [ ] Cancel/refund rules.
@@ -318,15 +318,15 @@ Implement:
 
 ## 14. Production
 
-- [ ] Factory queues.
-- [ ] Unit cost charged correctly.
-- [ ] Build time.
+- [x] Factory queues.
+- [x] Unit cost charged correctly.
+- [x] Build time.
 - [ ] Queue cancellation.
 - [ ] Queue progress.
-- [ ] Spawn location.
+- [x] Spawn location.
 - [ ] Rally point.
-- [ ] Population cap handling.
-- [ ] Block production if prerequisites missing.
+- [x] Population cap handling.
+- [x] Block production if prerequisites missing.
 
 ---
 

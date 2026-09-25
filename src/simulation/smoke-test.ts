@@ -14,10 +14,17 @@ try {
   if (!(error instanceof Error) || error.message === 'Expected invalid map validation to fail.') throw error;
 }
 
-const simulation = new GameSimulation({ playerCount: 2, populationCap: 3, mapId: 'prototype-medium', seed: 42 });
+const simulation = new GameSimulation({ playerCount: 2, populationCap: 3, mapId: 'frozen-front', seed: 42 });
 simulation.addPlayer('player-1', 'Player', 2_000);
 const factoryId = simulation.addBuilding('player-1', prototypeBuildings.factory, { x: 0, y: 0 });
 simulation.addBuilding('player-1', prototypeBuildings.powercell, { x: 100, y: 0 });
+
+const blockedPlacement = simulation.placeBuilding('player-1', 'powercell', { x: 225, y: 125 });
+const validPlacement = simulation.placeBuilding('player-1', 'powercell', { x: 400, y: 300 });
+const overlappingPlacement = simulation.placeBuilding('player-1', 'powercell', { x: 400, y: 300 });
+if (blockedPlacement.accepted) throw new Error('Expected blocked terrain placement to be rejected.');
+if (!validPlacement.accepted) throw new Error('Expected valid building placement to be accepted.');
+if (overlappingPlacement.accepted) throw new Error('Expected overlapping building placement to be rejected.');
 
 const firstQueue = simulation.queueUnit('player-1', factoryId, 'tank');
 const duplicateQueue = simulation.queueUnit('player-1', factoryId, 'tank');
