@@ -44,6 +44,12 @@ export interface BuildingDefinition {
   readonly productionUnitIds?: readonly string[];
 }
 
+export interface TechLevelDefinition {
+  readonly level: TechLevel;
+  readonly researchId?: string;
+  readonly description: string;
+}
+
 export interface ResearchDefinition {
   readonly id: string;
   readonly name: string;

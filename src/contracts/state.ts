@@ -62,6 +62,11 @@ export interface GameSettings {
   readonly mapId: string;
 }
 
+export interface CommandResult {
+  readonly accepted: boolean;
+  readonly reason?: string;
+}
+
 export interface SimulationSnapshot {
   readonly tick: number;
   readonly settings: GameSettings;

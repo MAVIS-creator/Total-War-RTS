@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
 import type { SimulationSnapshot } from '@/contracts';
+export { GameSimulation } from '@/simulation/game-simulation';
+export { prototypeBuildings, prototypeResearch, prototypeTechLevels, prototypeUnits } from '@/data/prototype-content';
 
 /**
  * Migration foundation only. The legacy Canvas prototype remains the active

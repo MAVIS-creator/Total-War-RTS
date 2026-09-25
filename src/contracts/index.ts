@@ -5,11 +5,13 @@ export type {
   PlayerId,
   ResearchDefinition,
   TechLevel,
+  TechLevelDefinition,
   UnitDefinition,
   WeaponDefinition,
 } from './content';
 export type {
   BuildingState,
+  CommandResult,
   EconomyState,
   GameSettings,
   PlayerState,

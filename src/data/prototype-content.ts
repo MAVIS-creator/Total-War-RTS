@@ -1,0 +1,40 @@
+import type {
+  BuildingDefinition,
+  ResearchDefinition,
+  TechLevelDefinition,
+  UnitDefinition,
+} from '@/contracts';
+
+/** Values extracted from the V0.2 prototype; rebalance is explicitly out of scope here. */
+export const prototypeUnits = {
+  scout: { id: 'scout', name: 'Scout', techLevel: 1, cost: { ore: 300, population: 1 }, buildSeconds: 2.4, health: 180, speed: 125, weapon: { damage: 22, range: 145, reloadSeconds: 0.55, projectileSpeed: 520 }, role: 'Fast recon' },
+  tank: { id: 'tank', name: 'Assault Tank', techLevel: 1, cost: { ore: 550, population: 2 }, buildSeconds: 2.62, health: 360, speed: 82, weapon: { damage: 46, range: 180, reloadSeconds: 0.95, projectileSpeed: 450 }, role: 'Balanced armor' },
+  heavy: { id: 'heavy', name: 'Heavy Tank', techLevel: 2, cost: { ore: 1050, population: 3 }, buildSeconds: 5, health: 760, speed: 58, weapon: { damage: 90, range: 205, reloadSeconds: 1.3, projectileSpeed: 430 }, role: 'Frontline armor' },
+  artillery: { id: 'artillery', name: 'Artillery', techLevel: 2, cost: { ore: 1250, population: 3 }, buildSeconds: 5.95, health: 310, speed: 48, weapon: { damage: 135, range: 430, reloadSeconds: 2.25, projectileSpeed: 360 }, role: 'Long range' },
+  juggernaut: { id: 'juggernaut', name: 'Juggernaut', techLevel: 3, cost: { ore: 2600, population: 6 }, buildSeconds: 12.38, health: 1750, speed: 42, weapon: { damage: 180, range: 245, reloadSeconds: 1.6, projectileSpeed: 470 }, role: 'Experimental armor' },
+} as const satisfies Record<string, UnitDefinition>;
+
+export const prototypeBuildings = {
+  hq: { id: 'hq', name: 'Headquarters', techLevel: 1, cost: { ore: 0 }, health: 9000, footprint: { width: 70, height: 70 }, orePerSecond: 1000 },
+  powercell: { id: 'powercell', name: 'Power Cell', techLevel: 1, cost: { ore: 500 }, health: 1900, footprint: { width: 34, height: 34 }, powerGeneration: 12000, orePerSecond: 50 },
+  extractor: { id: 'extractor', name: 'Extractor', techLevel: 1, cost: { ore: 900 }, health: 2500, footprint: { width: 40, height: 40 }, powerConsumption: 350, orePerSecond: 100 },
+  factory: { id: 'factory', name: 'Vehicle Factory', techLevel: 1, cost: { ore: 2400 }, health: 5600, footprint: { width: 60, height: 60 }, powerConsumption: 1500, productionUnitIds: Object.keys(prototypeUnits) },
+  wind: { id: 'wind', name: 'Wind Turbine', techLevel: 2, cost: { ore: 850 }, health: 2300, footprint: { width: 40, height: 40 }, powerGeneration: 20000, orePerSecond: 100 },
+  reactor: { id: 'reactor', name: 'Reactor', techLevel: 2, cost: { ore: 2100 }, health: 4300, footprint: { width: 48, height: 48 }, powerGeneration: 35000, orePerSecond: 200 },
+  fusion: { id: 'fusion', name: 'Fusion Plant', techLevel: 3, cost: { ore: 5200 }, health: 6900, footprint: { width: 54, height: 54 }, powerGeneration: 90000, orePerSecond: 450 },
+  turret: { id: 'turret', name: 'Cannon Turret', techLevel: 1, cost: { ore: 1400 }, health: 3300, footprint: { width: 36, height: 36 }, powerConsumption: 550 },
+  artilleryTurret: { id: 'artilleryTurret', name: 'Artillery Defense', techLevel: 2, cost: { ore: 3200 }, health: 4600, footprint: { width: 42, height: 42 }, powerConsumption: 1200 },
+  shield: { id: 'shield', name: 'Shield Node', techLevel: 3, cost: { ore: 4800 }, health: 6200, footprint: { width: 46, height: 46 }, powerConsumption: 2600 },
+} as const satisfies Record<string, BuildingDefinition>;
+
+export const prototypeResearch = {
+  tech2: { id: 'tech2', name: 'Tech 2', targetTechLevel: 2, cost: { ore: 12000 }, researchSeconds: 12, prerequisites: [] },
+  tech3: { id: 'tech3', name: 'Tech 3', targetTechLevel: 3, cost: { ore: 26000 }, researchSeconds: 20, prerequisites: ['tech2'] },
+} as const satisfies Record<string, ResearchDefinition>;
+
+export const prototypeTechLevels: readonly TechLevelDefinition[] = [
+  { level: 1, description: 'Starting ground-force technology.' },
+  { level: 2, researchId: 'tech2', description: 'Heavy armor, artillery, and reactor technology.' },
+  { level: 3, researchId: 'tech3', description: 'Juggernaut, fusion, and shield-node technology.' },
+  { level: 4, description: 'Reserved for future roadmap work; absent from the prototype.' },
+];
