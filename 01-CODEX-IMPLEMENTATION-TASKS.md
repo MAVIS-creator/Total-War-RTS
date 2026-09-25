@@ -476,10 +476,10 @@ Minimum implementation:
 
 ## 21. Victory / Defeat
 
-- [ ] Destroy HQ victory condition.
-- [ ] Player HQ destruction triggers defeat.
-- [ ] Game freezes simulation after result.
-- [ ] Result state exposed to UI.
+- [x] Destroy HQ victory condition.
+- [x] Player HQ destruction triggers defeat.
+- [x] Game freezes simulation after result.
+- [x] Result state exposed to UI.
 - [ ] Return-to-menu supported.
 
 Later:

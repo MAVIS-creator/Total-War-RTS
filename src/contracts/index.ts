@@ -17,6 +17,7 @@ export type {
   EconomyState,
   GameSettings,
   MapDefinition,
+  MatchResult,
   PlayerState,
   PopulationState,
   PowerState,

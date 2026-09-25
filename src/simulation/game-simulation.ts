@@ -4,6 +4,7 @@ import type {
   CommandResult,
   GameSettings,
   MapDefinition,
+  MatchResult,
   PlayerId,
   PlayerState,
   ProductionQueueItem,
@@ -45,10 +46,12 @@ export class GameSimulation {
   private readonly players = new Map<PlayerId, MutablePlayer>();
   private readonly units = new Map<string, MutableUnit>();
   private readonly buildings = new Map<string, MutableBuilding>();
+  private readonly headquartersOwners = new Set<PlayerId>();
   private readonly projectiles = new Map<string, MutableProjectile>();
   private events: SimulationEvent[] = [];
   private accumulator = 0;
   private tickCount = 0;
+  private result?: MatchResult;
 
   public constructor(private readonly settings: GameSettings) {
     this.random = new SeededRandom(settings.seed ?? 1);
@@ -70,6 +73,7 @@ export class GameSimulation {
     this.requirePlayer(ownerId);
     const id = this.ids.next('building');
     this.buildings.set(id, { id, ownerId, definitionId: definition.id, position, health: definition.health, maxHealth: definition.health, productionQueue: [] });
+    if (definition.id === prototypeBuildings.hq.id) this.headquartersOwners.add(ownerId);
     this.recalculatePlayer(ownerId);
     return id;
   }
@@ -155,6 +159,7 @@ export class GameSimulation {
 
   public advance(elapsedSeconds: number): void {
     if (!Number.isFinite(elapsedSeconds) || elapsedSeconds < 0) throw new Error('Elapsed time must be a non-negative finite number.');
+    if (this.result) return;
     this.accumulator += elapsedSeconds;
     while (this.accumulator + EPSILON >= FIXED_STEP_SECONDS) {
       this.step(FIXED_STEP_SECONDS);
@@ -170,6 +175,7 @@ export class GameSimulation {
       units: [...this.units.values()].map((unit) => ({ ...unit, position: { ...unit.position }, destination: unit.destination ? { ...unit.destination } : undefined, targetId: unit.targetId })),
       buildings: [...this.buildings.values()].map((building) => ({ ...building, productionQueue: [...building.productionQueue] })),
       projectiles: [...this.projectiles.values()].map((projectile) => ({ ...projectile, position: { ...projectile.position } })),
+      result: this.result ? { ...this.result } : undefined,
     };
   }
 
@@ -274,8 +280,21 @@ export class GameSimulation {
     if (this.units.delete(id)) {
       const player = this.requirePlayer(target.ownerId);
       player.population.used -= this.unitById(target.definitionId).cost.population ?? 0;
-    } else if (this.buildings.delete(id)) this.recalculatePlayer(target.ownerId);
+    } else if (this.buildings.delete(id)) {
+      this.recalculatePlayer(target.ownerId);
+      if (target.definitionId === prototypeBuildings.hq.id) this.evaluateResult();
+    }
     this.events.push({ type: 'entity-destroyed', entityId: id, ownerId: target.ownerId });
+  }
+
+  private evaluateResult(): void {
+    if (this.result || this.headquartersOwners.size < 2) return;
+    const survivingOwners = [...this.headquartersOwners].filter((ownerId) => [...this.buildings.values()].some((building) => building.ownerId === ownerId && building.definitionId === prototypeBuildings.hq.id));
+    if (survivingOwners.length !== 1) return;
+    const winnerId = survivingOwners[0];
+    if (!winnerId) return;
+    this.result = { winnerId, outcome: winnerId === this.settings.humanPlayerId ? 'victory' : 'defeat' };
+    this.events.push({ type: 'match-ended', result: this.result });
   }
 
   private recalculatePlayer(ownerId: PlayerId): void {

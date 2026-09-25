@@ -79,6 +79,7 @@ export interface GameSettings {
   readonly populationCap: number;
   readonly mapId: string;
   readonly seed?: number;
+  readonly humanPlayerId?: PlayerId;
 }
 
 export interface MapDefinition {
@@ -122,6 +123,11 @@ export interface SaveGameData {
   readonly snapshot: SimulationSnapshot;
 }
 
+export interface MatchResult {
+  readonly outcome: 'victory' | 'defeat';
+  readonly winnerId: PlayerId;
+}
+
 export interface UISelectionState {
   readonly selectedUnitIds: readonly EntityId[];
   readonly selectedBuildingId?: EntityId;
@@ -141,6 +147,7 @@ export type SimulationEvent =
   | { readonly type: 'attack-issued'; readonly playerId: PlayerId; readonly unitIds: readonly EntityId[]; readonly targetId: EntityId }
   | { readonly type: 'projectile-fired'; readonly projectileId: EntityId; readonly ownerId: PlayerId; readonly targetId: EntityId }
   | { readonly type: 'entity-destroyed'; readonly entityId: EntityId; readonly ownerId: PlayerId }
+  | { readonly type: 'match-ended'; readonly result: MatchResult }
   | { readonly type: 'command-rejected'; readonly playerId: PlayerId; readonly reason: string };
 
 export interface CommandResult {
@@ -155,4 +162,5 @@ export interface SimulationSnapshot {
   readonly units: readonly UnitState[];
   readonly buildings: readonly BuildingState[];
   readonly projectiles: readonly ProjectileState[];
+  readonly result?: MatchResult;
 }
