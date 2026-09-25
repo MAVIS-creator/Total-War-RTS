@@ -552,20 +552,20 @@ Create reusable effects:
 
 Antigravity Alpha 1 is complete when:
 
-- [ ] Title screen feels like a real game.
-- [ ] Main menu hierarchy is complete.
-- [ ] Skirmish setup is complete.
-- [ ] Loading screen works.
-- [ ] In-game HUD is coherent.
-- [ ] Minimap is usable.
-- [ ] Selection feedback is clear.
-- [ ] Build/research panels work with Codex state.
-- [ ] At least initial units/buildings have coherent final graphics.
-- [ ] Victory/defeat screen is finished.
-- [ ] UI works at desktop and mobile-landscape sizes.
-- [ ] No major UI overlap.
-- [ ] No broken/missing asset warnings.
-- [ ] The full title → match → result loop looks visually consistent.
+- [x] Title screen feels like a real game.
+- [x] Main menu hierarchy is complete.
+- [x] Skirmish setup is complete.
+- [x] Loading screen works.
+- [x] In-game HUD is coherent.
+- [x] Minimap is usable.
+- [x] Selection feedback is clear.
+- [x] Build/research panels work with Codex state.
+- [x] At least initial units/buildings have coherent final graphics.
+- [x] Victory/defeat screen is finished.
+- [x] UI works at desktop and mobile-landscape sizes.
+- [x] No major UI overlap.
+- [x] No broken/missing asset warnings.
+- [x] The full title → match → result loop looks visually consistent.
 
 ---
 
