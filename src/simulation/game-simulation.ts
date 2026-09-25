@@ -39,12 +39,13 @@ type MutableBuilding = Omit<BuildingState, 'productionQueue' | 'health'> & {
   health: number;
   productionQueue: MutableQueueItem[];
 };
-type MutableUnit = Omit<UnitState, 'position' | 'destination' | 'health' | 'targetId'> & {
+type MutableUnit = Omit<UnitState, 'position' | 'destination' | 'health' | 'targetId' | 'facingRadians'> & {
   health: number;
   position: { x: number; y: number };
   destination?: { x: number; y: number };
   targetId?: string;
   cooldown: number;
+  facingRadians: number;
 };
 type MutableProjectile = Omit<ProjectileState, 'position'> & { position: { x: number; y: number } };
 
