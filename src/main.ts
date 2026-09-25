@@ -4,15 +4,18 @@ import { UIManager } from './ui/UIManager';
 import { soundSystem } from './audio/SoundSystem';
 import type { MatchStatistics } from './ui/screens/VictoryDefeatModal';
 import { UnitRenderer } from './rendering/UnitRenderer';
+import { BuildingRenderer } from './rendering/BuildingRenderer';
 
 declare global {
   interface Window {
     __ANTIGRAVITY_UNIT_RENDERER__?: typeof UnitRenderer;
+    __ANTIGRAVITY_BUILDING_RENDERER__?: typeof BuildingRenderer;
   }
 }
 
 if (typeof window !== 'undefined') {
   window.__ANTIGRAVITY_UNIT_RENDERER__ = UnitRenderer;
+  window.__ANTIGRAVITY_BUILDING_RENDERER__ = BuildingRenderer;
 }
 
 /**

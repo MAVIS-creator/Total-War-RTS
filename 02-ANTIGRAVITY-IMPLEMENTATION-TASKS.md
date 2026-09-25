@@ -445,23 +445,27 @@ Initial unit profiles configured:
 
 ## 19. Building Graphics Pipeline
 
+Data-driven isometric 2.5D hard-surface military sci-fi architecture (`BuildingRenderer.ts`, `BuildingComponentRenderer.ts`, `buildingProfiles.ts`):
+
 For each building:
 
-- [ ] Isometric base art.
-- [ ] Team-color areas.
-- [ ] Construction state.
-- [ ] Idle animation if needed.
-- [ ] Damaged state if used.
-- [ ] Destroyed state.
-- [ ] Portrait/icon.
+- [x] Isometric base art (volumetric shaded prisms and cylinders with 2.5D projection, concrete plinths, ambient occlusion ground shadows).
+- [x] Team-color areas (emissive team livery plates, collar bands, and insignia pads).
+- [x] Construction state (holographic nanite blueprint wireframe, ascending laser scan line, welding sparks, and progress % readout).
+- [x] Idle animation if needed (radar dishes, reciprocating drill shafts, plasma core pulses, overhead robotic welding gantries, rotating defense turrets, wind rotors, shield conduits).
+- [x] Damaged state if used (armor scorch decals, flickering flame cores, and billowing volumetric black smoke plumes).
+- [x] Destroyed state (scorched blast crater, shattered concrete slabs, bent rebar, and dying smoke wisps).
+- [x] Portrait/icon (high-resolution concept portraits in `/assets/portraits/` for headquarters, power cell, extractor, vehicle factory, and defense turret).
 
 Initial buildings:
 
-- [ ] Headquarters.
-- [ ] Power Cell.
-- [ ] Extractor.
-- [ ] Vehicle Factory.
-- [ ] Defense Turret.
+- [x] Headquarters (multi-tiered octagonal command fortress, revolving radar dish, communications antenna, cyan bridge observation strip).
+- [x] Power Cell (cylindrical containment chamber with pulsing cyan plasma core, radiator pylons, and steam exhaust vents).
+- [x] Extractor (heavy mining drill rig, hydraulic reciprocating drill shaft, mineral hopper, and ore dust puffs).
+- [x] Vehicle Factory (armored double-bay assembly hangar, traveling robotic gantry crane, hazard floor, and welding spark showers during production).
+- [x] Defense Turret (octagonal bunker pillbox, 360-degree rotating turret cap with smooth target tracking, twin railgun barrels, recoil, and muzzle flash).
+- [x] Power Matrix Expansion (Wind Turbine with spinning 2.5D blades, Fission Reactor with amber containment sphere, Fusion Plant with magnetic confinement toroid).
+- [x] Advanced Defense Expansion (Artillery Defense long-barrel siege cannon, Shield Node oscillating forcefield emitter).
 
 ---
 
