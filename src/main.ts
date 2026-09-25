@@ -4,6 +4,7 @@ export { GameSimulation } from '@/simulation/game-simulation';
 export { prototypeBuildings, prototypeResearch, prototypeTechLevels, prototypeUnits } from '@/data/prototype-content';
 export { getMap, mapCatalog } from '@/data/maps';
 export { createPhaserGame, SimulationScene } from '@/rendering/simulation-scene';
+export { GameStateMachine } from '@/core/game-state';
 
 /**
  * Migration foundation only. The legacy Canvas prototype remains the active
