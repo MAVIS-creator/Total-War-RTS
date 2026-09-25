@@ -7,6 +7,8 @@ import type {
   PlayerId,
   PlayerState,
   ProductionQueueItem,
+  ResearchDefinition,
+  ResearchProgress,
   SimulationSnapshot,
   SimulationEvent,
   UnitDefinition,
@@ -15,17 +17,20 @@ import type {
 } from '@/contracts';
 import { StableIdFactory } from '@/core/stable-id';
 import { SeededRandom } from '@/core/seeded-random';
-import { prototypeBuildings, prototypeUnits } from '@/data/prototype-content';
+import { prototypeBuildings, prototypeResearch, prototypeUnits } from '@/data/prototype-content';
 import { getMap } from '@/data/maps';
 import { isBlocked } from '@/simulation/map-loader';
 
 const FIXED_STEP_SECONDS = 1 / 20;
 const EPSILON = 0.000_001;
 
-type MutablePlayer = Omit<PlayerState, 'economy' | 'power' | 'population'> & {
+type MutableResearchProgress = { -readonly [Key in keyof ResearchProgress]: ResearchProgress[Key] };
+type MutablePlayer = Omit<PlayerState, 'economy' | 'power' | 'population' | 'research' | 'techLevel'> & {
+  techLevel: PlayerState['techLevel'];
   economy: { ore: number; orePerSecond: number };
   power: { generated: number; consumed: number };
   population: { used: number; reserved: number; cap: number };
+  research?: MutableResearchProgress;
 };
 type MutableQueueItem = { -readonly [Key in keyof ProductionQueueItem]: ProductionQueueItem[Key] };
 type MutableBuilding = Omit<BuildingState, 'productionQueue'> & { productionQueue: MutableQueueItem[] };
@@ -86,6 +91,18 @@ export class GameSimulation {
     return { accepted: true };
   }
 
+  public beginResearch(ownerId: PlayerId, definitionId: keyof typeof prototypeResearch): CommandResult {
+    const player = this.requirePlayer(ownerId);
+    const research = prototypeResearch[definitionId];
+    if (player.research) return this.reject(ownerId, 'Research is already in progress.');
+    if (research.targetTechLevel !== player.techLevel + 1) return this.reject(ownerId, 'Research prerequisites are not met.');
+    if (player.economy.ore < research.cost.ore) return this.reject(ownerId, 'Insufficient ore.');
+    player.economy.ore -= research.cost.ore;
+    player.research = { definitionId: research.id, progressSeconds: 0, researchSeconds: research.researchSeconds };
+    this.events.push({ type: 'research-started', playerId: ownerId, researchId: research.id });
+    return { accepted: true };
+  }
+
   public queueUnit(ownerId: PlayerId, factoryId: string, definitionId: keyof typeof prototypeUnits): CommandResult {
     const player = this.requirePlayer(ownerId);
     const factory = this.buildings.get(factoryId);
@@ -122,7 +139,7 @@ export class GameSimulation {
     return {
       tick: this.tickCount,
       settings: this.settings,
-      players: [...this.players.values()].map((player) => ({ ...player, economy: { ...player.economy }, power: { ...player.power }, population: { ...player.population } })),
+      players: [...this.players.values()].map((player) => ({ ...player, economy: { ...player.economy }, power: { ...player.power }, population: { ...player.population }, research: player.research ? { ...player.research } : undefined })),
       units: [...this.units.values()],
       buildings: [...this.buildings.values()].map((building) => ({ ...building, productionQueue: [...building.productionQueue] })),
     };
@@ -130,8 +147,22 @@ export class GameSimulation {
 
   private step(dt: number): void {
     for (const player of this.players.values()) player.economy.ore += player.economy.orePerSecond * dt;
+    for (const player of this.players.values()) this.advanceResearch(player, dt);
     for (const factory of this.buildings.values()) this.advanceFactory(factory, dt);
     this.tickCount += 1;
+  }
+
+  private advanceResearch(player: MutablePlayer, dt: number): void {
+    const progress = player.research;
+    if (!progress) return;
+    const multiplier = player.power.generated >= player.power.consumed ? 1 : 0.35;
+    progress.progressSeconds += dt * multiplier;
+    if (progress.progressSeconds + EPSILON < progress.researchSeconds) return;
+    const research = this.researchById(progress.definitionId);
+    player.techLevel = research.targetTechLevel;
+    player.research = undefined;
+    this.recalculatePlayer(player.id);
+    this.events.push({ type: 'research-completed', playerId: player.id, researchId: research.id });
   }
 
   private advanceFactory(factory: MutableBuilding, dt: number): void {
@@ -158,7 +189,8 @@ export class GameSimulation {
     for (const building of this.buildings.values()) {
       if (building.ownerId !== ownerId) continue;
       const definition = this.buildingById(building.definitionId);
-      orePerSecond += definition.orePerSecond ?? 0;
+      const baseOre = definition.orePerSecond ?? 0;
+      orePerSecond += definition.id === prototypeBuildings.hq.id ? baseOre + (player.techLevel - 1) * 250 : baseOre;
       generated += definition.powerGeneration ?? 0;
       consumed += definition.powerConsumption ?? 0;
     }
@@ -217,5 +249,11 @@ export class GameSimulation {
     const building = Object.values(prototypeBuildings).find((candidate) => candidate.id === id);
     if (!building) throw new Error(`Unknown building definition: ${id}`);
     return building;
+  }
+
+  private researchById(id: string): ResearchDefinition {
+    const research = Object.values(prototypeResearch).find((candidate) => candidate.id === id);
+    if (!research) throw new Error(`Unknown research definition: ${id}`);
+    return research;
   }
 }

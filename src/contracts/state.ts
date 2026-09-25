@@ -21,6 +21,12 @@ export interface PopulationState {
   readonly cap: number;
 }
 
+export interface ResearchProgress {
+  readonly definitionId: string;
+  readonly progressSeconds: number;
+  readonly researchSeconds: number;
+}
+
 export interface ProductionQueueItem {
   readonly definitionId: string;
   readonly progressSeconds: number;
@@ -54,6 +60,7 @@ export interface PlayerState {
   readonly economy: EconomyState;
   readonly power: PowerState;
   readonly population: PopulationState;
+  readonly research?: ResearchProgress;
 }
 
 export interface GameSettings {
@@ -116,6 +123,8 @@ export type CommandDefinition =
 export type SimulationEvent =
   | { readonly type: 'unit-queued'; readonly playerId: PlayerId; readonly factoryId: EntityId; readonly unitDefinitionId: string }
   | { readonly type: 'unit-completed'; readonly playerId: PlayerId; readonly factoryId: EntityId; readonly unitId: EntityId }
+  | { readonly type: 'research-started'; readonly playerId: PlayerId; readonly researchId: string }
+  | { readonly type: 'research-completed'; readonly playerId: PlayerId; readonly researchId: string }
   | { readonly type: 'command-rejected'; readonly playerId: PlayerId; readonly reason: string };
 
 export interface CommandResult {

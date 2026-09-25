@@ -21,6 +21,7 @@ export type {
   PopulationState,
   PowerState,
   ProductionQueueItem,
+  ResearchProgress,
   OreField,
   SimulationSnapshot,
   SpawnPoint,

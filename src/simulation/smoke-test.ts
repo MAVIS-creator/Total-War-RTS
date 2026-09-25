@@ -39,4 +39,16 @@ if (player.population.used !== 2 || player.population.reserved !== 0) throw new 
 if (simulation.snapshot().units.length !== 1) throw new Error('Expected one completed tank.');
 if (simulation.drainEvents().filter((event) => event.type === 'unit-completed').length !== 1) throw new Error('Expected one unit-completed event.');
 
+const researchSimulation = new GameSimulation({ playerCount: 2, populationCap: 10, mapId: 'frozen-front', seed: 7 });
+researchSimulation.addPlayer('research-player', 'Research Player', 50_000);
+researchSimulation.addBuilding('research-player', prototypeBuildings.hq, { x: 150, y: 150 });
+researchSimulation.addBuilding('research-player', prototypeBuildings.powercell, { x: 250, y: 150 });
+if (!researchSimulation.beginResearch('research-player', 'tech2').accepted) throw new Error('Expected Tech 2 research to start.');
+if (researchSimulation.drainEvents().filter((event) => event.type === 'research-started').length !== 1) throw new Error('Expected a research-started event.');
+researchSimulation.advance(12);
+const researchPlayer = researchSimulation.snapshot().players[0];
+if (!researchPlayer || researchPlayer.techLevel !== 2 || researchPlayer.research) throw new Error('Expected Tech 2 research to complete.');
+if (researchPlayer.economy.orePerSecond !== 1_300) throw new Error('Expected Tech 2 HQ income progression.');
+if (researchSimulation.drainEvents().filter((event) => event.type === 'research-completed').length !== 1) throw new Error('Expected a research-completed event.');
+
 console.log('Simulation smoke test passed.');

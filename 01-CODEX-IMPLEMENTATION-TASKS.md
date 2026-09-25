@@ -341,14 +341,14 @@ Tech 1
 → Tech 4
 ```
 
-- [ ] Research definitions are data-driven.
-- [ ] Prerequisites supported.
-- [ ] Research cost supported.
-- [ ] Research time supported.
-- [ ] Completed research stored per player.
-- [ ] Research effects applied once.
+- [x] Research definitions are data-driven.
+- [x] Prerequisites supported.
+- [x] Research cost supported.
+- [x] Research time supported.
+- [x] Completed research stored per player.
+- [x] Research effects applied once.
 - [ ] Save/load preserves research.
-- [ ] UI-readable progress exposed.
+- [x] UI-readable progress exposed.
 
 ### Tech 4 initial research
 - [ ] Nanocomposite Structures.
