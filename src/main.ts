@@ -1,0 +1,21 @@
+import Phaser from 'phaser';
+import type { SimulationSnapshot } from '@/contracts';
+
+/**
+ * Migration foundation only. The legacy Canvas prototype remains the active
+ * implementation while simulation and rendering are moved behind contracts.
+ */
+export interface GameFoundation {
+  readonly renderer: typeof Phaser;
+  readonly snapshotVersion: number;
+}
+
+export const createGameFoundation = (): GameFoundation => ({
+  renderer: Phaser,
+  snapshotVersion: 1,
+});
+
+export const isSimulationSnapshot = (value: SimulationSnapshot): boolean =>
+  value.tick >= 0 && value.players.length === value.settings.playerCount;
+
+void createGameFoundation();

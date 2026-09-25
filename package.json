@@ -1,0 +1,20 @@
+{
+  "name": "total-war-rts",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Total War RTS browser prototype migration foundation",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "phaser": "^3.90.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vite": "^7.1.7"
+  }
+}

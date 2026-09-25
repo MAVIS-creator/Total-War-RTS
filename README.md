@@ -2,7 +2,18 @@
 
 This repository currently contains a standalone HTML/JavaScript RTS prototype. It is the baseline for the planned Vite + TypeScript + Phaser 3 game; it is not yet that game.
 
-Open `index.html` in a modern desktop or Android browser.
+## Run the prototype
+
+Install dependencies once, then start the Vite development server:
+
+```bash
+npm install
+npm run dev
+```
+
+Open the local URL Vite displays (normally `http://localhost:5173`). `npm run build` creates a production build in `dist/`.
+
+The legacy gameplay implementation remains in `game.js` while the TypeScript/Phaser migration foundation is established under `src/`.
 
 ## Current prototype features
 
