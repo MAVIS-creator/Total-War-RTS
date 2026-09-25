@@ -229,28 +229,28 @@ Presentation responsibilities:
 
 ## 10. Selection Presentation
 
-- [ ] Selection ring.
-- [ ] Multi-select indicators.
-- [ ] Hover highlight.
-- [ ] Health bars.
-- [ ] Team-color indicators.
-- [ ] Selected entity panel.
-- [ ] Command availability state.
-- [ ] Attack cursor.
-- [ ] Move cursor.
-- [ ] Invalid-placement cursor.
+- [x] Selection ring.
+- [x] Multi-select indicators.
+- [x] Hover highlight.
+- [x] Health bars.
+- [x] Team-color indicators.
+- [x] Selected entity panel.
+- [x] Command availability state.
+- [x] Attack cursor.
+- [x] Move cursor.
+- [x] Invalid-placement cursor.
 
 ---
 
 ## 11. Building Placement Presentation
 
-- [ ] Ghost building.
-- [ ] Valid placement state.
-- [ ] Invalid placement state.
-- [ ] Footprint overlay.
-- [ ] Range overlay for defenses if available.
-- [ ] Construction progress visual.
-- [ ] Placement confirmation feedback.
+- [x] Ghost building.
+- [x] Valid placement state.
+- [x] Invalid placement state.
+- [x] Footprint overlay.
+- [x] Range overlay for defenses if available.
+- [x] Construction progress visual.
+- [x] Placement confirmation feedback.
 
 ---
 
@@ -258,23 +258,23 @@ Presentation responsibilities:
 
 Tabs should support:
 
-- [ ] Buildings.
-- [ ] Defense.
-- [ ] Units.
-- [ ] Research.
+- [x] Buildings.
+- [x] Defense.
+- [x] Units.
+- [x] Research.
 
 Each item:
 
-- [ ] Icon.
-- [ ] Name.
-- [ ] Ore cost.
-- [ ] Power impact.
-- [ ] Population cost where applicable.
-- [ ] Build/research time.
-- [ ] Prerequisites.
-- [ ] Locked state.
-- [ ] Tooltip.
-- [ ] Progress state.
+- [x] Icon.
+- [x] Name.
+- [x] Ore cost.
+- [x] Power impact.
+- [x] Population cost where applicable.
+- [x] Build/research time.
+- [x] Prerequisites.
+- [x] Locked state.
+- [x] Tooltip.
+- [x] Progress state.
 
 ---
 
@@ -282,27 +282,27 @@ Each item:
 
 Visual states:
 
-- [ ] Tech 1.
-- [ ] Tech 2.
-- [ ] Tech 3.
-- [ ] Tech 4.
+- [x] Tech 1.
+- [x] Tech 2.
+- [x] Tech 3.
+- [x] Tech 4.
 
 Tech 4 research icons:
 
-- [ ] Nanocomposite Structures.
-- [ ] Quantum Power Grid.
-- [ ] Advanced Extraction.
-- [ ] Hardened Defense Network.
-- [ ] Autonomous Repair.
-- [ ] Aegis Shield Lattice.
-- [ ] Hypervelocity Munitions.
+- [x] Nanocomposite Structures.
+- [x] Quantum Power Grid.
+- [x] Advanced Extraction.
+- [x] Hardened Defense Network.
+- [x] Autonomous Repair.
+- [x] Aegis Shield Lattice.
+- [x] Hypervelocity Munitions.
 
 Rules:
 
-- [ ] Research icons look like UI icons, not unit paintings.
-- [ ] Locked research is visually distinct.
-- [ ] Completed research is clearly marked.
-- [ ] Active research displays progress.
+- [x] Research icons look like UI icons, not unit paintings.
+- [x] Locked research is visually distinct.
+- [x] Completed research is clearly marked.
+- [x] Active research displays progress.
 
 ---
 
@@ -458,13 +458,13 @@ Initial buildings:
 
 ## 20. Team Color Shader / Mask
 
-- [ ] Team-color mask supported.
-- [ ] Neutral body remains neutral.
-- [ ] Color only intended armor/details.
-- [ ] Player 1 color.
-- [ ] Player 2 color.
-- [ ] Future Player 3/4 support.
-- [ ] Same colors used consistently in HUD/minimap/world.
+- [x] Team-color mask supported.
+- [x] Neutral body remains neutral.
+- [x] Color only intended armor/details.
+- [x] Player 1 color.
+- [x] Player 2 color.
+- [x] Future Player 3/4 support.
+- [x] Same colors used consistently in HUD/minimap/world.
 
 ---
 
@@ -472,40 +472,40 @@ Initial buildings:
 
 Create reusable effects:
 
-- [ ] Muzzle flash.
-- [ ] Bullet/tracer.
-- [ ] Shell projectile.
-- [ ] Missile trail.
-- [ ] Impact spark.
-- [ ] Small explosion.
-- [ ] Large explosion.
-- [ ] Smoke.
-- [ ] Fire.
-- [ ] Shield hit.
-- [ ] Shield bubble.
-- [ ] Repair effect.
-- [ ] Construction effect.
-- [ ] Research-complete effect.
+- [x] Muzzle flash.
+- [x] Bullet/tracer.
+- [x] Shell projectile.
+- [x] Missile trail.
+- [x] Impact spark.
+- [x] Small explosion.
+- [x] Large explosion.
+- [x] Smoke.
+- [x] Fire.
+- [x] Shield hit.
+- [x] Shield bubble.
+- [x] Repair effect.
+- [x] Construction effect.
+- [x] Research-complete effect.
 
 ---
 
 ## 22. Audio Presentation
 
-- [ ] Main menu ambience.
-- [ ] Button hover.
-- [ ] Button click.
-- [ ] Build placement.
-- [ ] Production complete.
-- [ ] Research complete.
-- [ ] Weapon sounds.
-- [ ] Explosions.
-- [ ] Alerts.
-- [ ] Victory.
-- [ ] Defeat.
+- [x] Main menu ambience.
+- [x] Button hover.
+- [x] Button click.
+- [x] Build placement.
+- [x] Production complete.
+- [x] Research complete.
+- [x] Weapon sounds.
+- [x] Explosions.
+- [x] Alerts.
+- [x] Victory.
+- [x] Defeat.
 
-- [ ] Audio settings control volume groups.
-- [ ] Sounds do not stack infinitely.
-- [ ] Off-screen combat audio is attenuated or limited.
+- [x] Audio settings control volume groups.
+- [x] Sounds do not stack infinitely.
+- [x] Off-screen combat audio is attenuated or limited.
 
 ---
 

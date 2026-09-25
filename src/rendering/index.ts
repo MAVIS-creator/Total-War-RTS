@@ -1,3 +1,5 @@
+export * from './VisualEffects';
+
 /**
  * Antigravity Rendering System contracts & foundations
  */
