@@ -9,7 +9,9 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "check": "tsc --noEmit",
-    "test:simulation": "tsx src/simulation/smoke-test.ts"
+    "test:simulation": "tsx src/simulation/smoke-test.ts",
+    "lint": "eslint src --max-warnings=0",
+    "format:check": "prettier --check src package.json tsconfig.json vite.config.ts eslint.config.js .prettierrc.json"
   },
   "dependencies": {
     "phaser": "^3.90.0"
@@ -17,6 +19,10 @@
   "devDependencies": {
     "tsx": "^4.20.6",
     "typescript": "^5.9.3",
-    "vite": "^7.1.7"
+    "vite": "^7.1.7",
+    "eslint": "^9.39.1",
+    "@eslint/js": "^9.39.1",
+    "typescript-eslint": "^8.46.0",
+    "prettier": "^3.6.2"
   }
 }

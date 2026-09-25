@@ -35,8 +35,17 @@ type MutablePlayer = Omit<PlayerState, 'economy' | 'power' | 'population' | 'res
   research?: MutableResearchProgress;
 };
 type MutableQueueItem = { -readonly [Key in keyof ProductionQueueItem]: ProductionQueueItem[Key] };
-type MutableBuilding = Omit<BuildingState, 'productionQueue' | 'health'> & { health: number; productionQueue: MutableQueueItem[] };
-type MutableUnit = Omit<UnitState, 'position' | 'destination' | 'health' | 'targetId'> & { health: number; position: { x: number; y: number }; destination?: { x: number; y: number }; targetId?: string; cooldown: number };
+type MutableBuilding = Omit<BuildingState, 'productionQueue' | 'health'> & {
+  health: number;
+  productionQueue: MutableQueueItem[];
+};
+type MutableUnit = Omit<UnitState, 'position' | 'destination' | 'health' | 'targetId'> & {
+  health: number;
+  position: { x: number; y: number };
+  destination?: { x: number; y: number };
+  targetId?: string;
+  cooldown: number;
+};
 type MutableProjectile = Omit<ProjectileState, 'position'> & { position: { x: number; y: number } };
 
 export class GameSimulation {
@@ -56,13 +65,16 @@ export class GameSimulation {
   public constructor(private readonly settings: GameSettings) {
     this.random = new SeededRandom(settings.seed ?? 1);
     this.map = getMap(settings.mapId);
-    if (this.map.playerCount !== settings.playerCount) throw new Error('Game settings player count does not match the selected map.');
+    if (this.map.playerCount !== settings.playerCount)
+      throw new Error('Game settings player count does not match the selected map.');
   }
 
   public addPlayer(id: PlayerId, name: string, ore: number, populationCap = this.settings.populationCap): void {
     if (this.players.has(id)) throw new Error(`Player already exists: ${id}`);
     this.players.set(id, {
-      id, name, techLevel: 1,
+      id,
+      name,
+      techLevel: 1,
       economy: { ore, orePerSecond: 0 },
       power: { generated: 0, consumed: 0 },
       population: { used: 0, reserved: 0, cap: populationCap },
@@ -72,24 +84,43 @@ export class GameSimulation {
   public addBuilding(ownerId: PlayerId, definition: BuildingDefinition, position: WorldPosition): string {
     this.requirePlayer(ownerId);
     const id = this.ids.next('building');
-    this.buildings.set(id, { id, ownerId, definitionId: definition.id, position, health: definition.health, maxHealth: definition.health, productionQueue: [] });
+    this.buildings.set(id, {
+      id,
+      ownerId,
+      definitionId: definition.id,
+      position,
+      health: definition.health,
+      maxHealth: definition.health,
+      productionQueue: [],
+    });
     if (definition.id === prototypeBuildings.hq.id) this.headquartersOwners.add(ownerId);
     this.recalculatePlayer(ownerId);
     return id;
   }
 
-  public validateBuildingPlacement(ownerId: PlayerId, definitionId: keyof typeof prototypeBuildings, position: WorldPosition): CommandResult {
+  public validateBuildingPlacement(
+    ownerId: PlayerId,
+    definitionId: keyof typeof prototypeBuildings,
+    position: WorldPosition,
+  ): CommandResult {
     const player = this.requirePlayer(ownerId);
     const definition = prototypeBuildings[definitionId];
     if (player.techLevel < definition.techLevel) return this.reject(ownerId, 'Technology requirement is not met.');
     if (player.economy.ore < definition.cost.ore) return this.reject(ownerId, 'Insufficient ore.');
-    if (!this.footprintIsInsideMap(definition, position)) return this.reject(ownerId, 'Building footprint is outside map bounds.');
-    if (!this.footprintIsPassable(definition, position)) return this.reject(ownerId, 'Building footprint overlaps blocked terrain.');
-    if (this.footprintOverlapsBuilding(definition, position)) return this.reject(ownerId, 'Building footprint overlaps an existing structure.');
+    if (!this.footprintIsInsideMap(definition, position))
+      return this.reject(ownerId, 'Building footprint is outside map bounds.');
+    if (!this.footprintIsPassable(definition, position))
+      return this.reject(ownerId, 'Building footprint overlaps blocked terrain.');
+    if (this.footprintOverlapsBuilding(definition, position))
+      return this.reject(ownerId, 'Building footprint overlaps an existing structure.');
     return { accepted: true };
   }
 
-  public placeBuilding(ownerId: PlayerId, definitionId: keyof typeof prototypeBuildings, position: WorldPosition): CommandResult {
+  public placeBuilding(
+    ownerId: PlayerId,
+    definitionId: keyof typeof prototypeBuildings,
+    position: WorldPosition,
+  ): CommandResult {
     const validation = this.validateBuildingPlacement(ownerId, definitionId, position);
     if (!validation.accepted) return validation;
     const definition = prototypeBuildings[definitionId];
@@ -103,7 +134,8 @@ export class GameSimulation {
     const player = this.requirePlayer(ownerId);
     const research = prototypeResearch[definitionId];
     if (player.research) return this.reject(ownerId, 'Research is already in progress.');
-    if (research.targetTechLevel !== player.techLevel + 1) return this.reject(ownerId, 'Research prerequisites are not met.');
+    if (research.targetTechLevel !== player.techLevel + 1)
+      return this.reject(ownerId, 'Research prerequisites are not met.');
     if (player.economy.ore < research.cost.ore) return this.reject(ownerId, 'Insufficient ore.');
     player.economy.ore -= research.cost.ore;
     player.research = { definitionId: research.id, progressSeconds: 0, researchSeconds: research.researchSeconds };
@@ -113,13 +145,23 @@ export class GameSimulation {
 
   public issueMove(ownerId: PlayerId, unitIds: readonly string[], destination: WorldPosition): CommandResult {
     if (unitIds.length === 0) return this.reject(ownerId, 'At least one unit must be selected.');
-    if (!this.positionIsInsideMap(destination) || isBlocked(this.map.terrain, destination)) return this.reject(ownerId, 'Destination is not passable.');
+    if (!this.positionIsInsideMap(destination) || isBlocked(this.map.terrain, destination))
+      return this.reject(ownerId, 'Destination is not passable.');
     const selectedUnits = unitIds.map((id) => this.units.get(id));
-    if (selectedUnits.some((unit) => !unit || unit.ownerId !== ownerId)) return this.reject(ownerId, 'Move orders require player-owned units.');
+    if (selectedUnits.some((unit) => !unit || unit.ownerId !== ownerId))
+      return this.reject(ownerId, 'Move orders require player-owned units.');
     for (const unit of selectedUnits) {
-      if (unit) { unit.destination = { ...destination }; unit.targetId = undefined; }
+      if (unit) {
+        unit.destination = { ...destination };
+        unit.targetId = undefined;
+      }
     }
-    this.events.push({ type: 'move-issued', playerId: ownerId, unitIds: [...unitIds], destination: { ...destination } });
+    this.events.push({
+      type: 'move-issued',
+      playerId: ownerId,
+      unitIds: [...unitIds],
+      destination: { ...destination },
+    });
     return { accepted: true };
   }
 
@@ -128,8 +170,13 @@ export class GameSimulation {
     const target = this.entity(targetId);
     if (!target || target.ownerId === ownerId) return this.reject(ownerId, 'Attack orders require an enemy target.');
     const attackers = unitIds.map((id) => this.units.get(id));
-    if (attackers.some((unit) => !unit || unit.ownerId !== ownerId)) return this.reject(ownerId, 'Attack orders require player-owned units.');
-    for (const attacker of attackers) if (attacker) { attacker.targetId = targetId; attacker.destination = undefined; }
+    if (attackers.some((unit) => !unit || unit.ownerId !== ownerId))
+      return this.reject(ownerId, 'Attack orders require player-owned units.');
+    for (const attacker of attackers)
+      if (attacker) {
+        attacker.targetId = targetId;
+        attacker.destination = undefined;
+      }
     this.events.push({ type: 'attack-issued', playerId: ownerId, unitIds: [...unitIds], targetId });
     return { accepted: true };
   }
@@ -139,14 +186,21 @@ export class GameSimulation {
     const factory = this.buildings.get(factoryId);
     const unit = prototypeUnits[definitionId];
     if (!factory || factory.ownerId !== ownerId) return this.reject(ownerId, 'A player-owned factory is required.');
-    if (factory.definitionId !== prototypeBuildings.factory.id) return this.reject(ownerId, 'Selected building cannot produce units.');
+    if (factory.definitionId !== prototypeBuildings.factory.id)
+      return this.reject(ownerId, 'Selected building cannot produce units.');
     if (player.techLevel < unit.techLevel) return this.reject(ownerId, 'Technology requirement is not met.');
     if (player.economy.ore < unit.cost.ore) return this.reject(ownerId, 'Insufficient ore.');
     const population = unit.cost.population ?? 0;
-    if (player.population.used + player.population.reserved + population > player.population.cap) return this.reject(ownerId, 'Population cap reached, including queued units.');
+    if (player.population.used + player.population.reserved + population > player.population.cap)
+      return this.reject(ownerId, 'Population cap reached, including queued units.');
     player.economy.ore -= unit.cost.ore;
     player.population.reserved += population;
-    factory.productionQueue.push({ definitionId: unit.id, progressSeconds: 0, buildSeconds: unit.buildSeconds, populationReserved: population });
+    factory.productionQueue.push({
+      definitionId: unit.id,
+      progressSeconds: 0,
+      buildSeconds: unit.buildSeconds,
+      populationReserved: population,
+    });
     this.events.push({ type: 'unit-queued', playerId: ownerId, factoryId, unitDefinitionId: unit.id });
     return { accepted: true };
   }
@@ -158,7 +212,8 @@ export class GameSimulation {
   }
 
   public advance(elapsedSeconds: number): void {
-    if (!Number.isFinite(elapsedSeconds) || elapsedSeconds < 0) throw new Error('Elapsed time must be a non-negative finite number.');
+    if (!Number.isFinite(elapsedSeconds) || elapsedSeconds < 0)
+      throw new Error('Elapsed time must be a non-negative finite number.');
     if (this.result) return;
     this.accumulator += elapsedSeconds;
     while (this.accumulator + EPSILON >= FIXED_STEP_SECONDS) {
@@ -171,10 +226,27 @@ export class GameSimulation {
     return {
       tick: this.tickCount,
       settings: this.settings,
-      players: [...this.players.values()].map((player) => ({ ...player, economy: { ...player.economy }, power: { ...player.power }, population: { ...player.population }, research: player.research ? { ...player.research } : undefined })),
-      units: [...this.units.values()].map((unit) => ({ ...unit, position: { ...unit.position }, destination: unit.destination ? { ...unit.destination } : undefined, targetId: unit.targetId })),
-      buildings: [...this.buildings.values()].map((building) => ({ ...building, productionQueue: [...building.productionQueue] })),
-      projectiles: [...this.projectiles.values()].map((projectile) => ({ ...projectile, position: { ...projectile.position } })),
+      players: [...this.players.values()].map((player) => ({
+        ...player,
+        economy: { ...player.economy },
+        power: { ...player.power },
+        population: { ...player.population },
+        research: player.research ? { ...player.research } : undefined,
+      })),
+      units: [...this.units.values()].map((unit) => ({
+        ...unit,
+        position: { ...unit.position },
+        destination: unit.destination ? { ...unit.destination } : undefined,
+        targetId: unit.targetId,
+      })),
+      buildings: [...this.buildings.values()].map((building) => ({
+        ...building,
+        productionQueue: [...building.productionQueue],
+      })),
+      projectiles: [...this.projectiles.values()].map((projectile) => ({
+        ...projectile,
+        position: { ...projectile.position },
+      })),
       result: this.result ? { ...this.result } : undefined,
     };
   }
@@ -213,7 +285,15 @@ export class GameSimulation {
     player.population.reserved -= item.populationReserved;
     player.population.used += item.populationReserved;
     const id = this.ids.next('unit');
-    this.units.set(id, { id, ownerId: factory.ownerId, definitionId: unit.id, position: { x: factory.position.x + 50, y: factory.position.y + this.random.between(-15, 15) }, health: unit.health, maxHealth: unit.health, cooldown: 0 });
+    this.units.set(id, {
+      id,
+      ownerId: factory.ownerId,
+      definitionId: unit.id,
+      position: { x: factory.position.x + 50, y: factory.position.y + this.random.between(-15, 15) },
+      health: unit.health,
+      maxHealth: unit.health,
+      cooldown: 0,
+    });
     this.events.push({ type: 'unit-completed', playerId: factory.ownerId, factoryId: factory.id, unitId: id });
   }
 
@@ -232,7 +312,14 @@ export class GameSimulation {
         if (unit.cooldown <= 0) {
           unit.cooldown = definition.weapon.reloadSeconds;
           const projectileId = this.ids.next('projectile');
-          this.projectiles.set(projectileId, { id: projectileId, ownerId: unit.ownerId, targetId: target.id, position: { ...unit.position }, damage: definition.weapon.damage, speed: definition.weapon.projectileSpeed ?? definition.weapon.range * 10 });
+          this.projectiles.set(projectileId, {
+            id: projectileId,
+            ownerId: unit.ownerId,
+            targetId: target.id,
+            position: { ...unit.position },
+            damage: definition.weapon.damage,
+            speed: definition.weapon.projectileSpeed ?? definition.weapon.range * 10,
+          });
           this.events.push({ type: 'projectile-fired', projectileId, ownerId: unit.ownerId, targetId: target.id });
         }
         return;
@@ -273,7 +360,10 @@ export class GameSimulation {
 
   private advanceProjectile(projectile: MutableProjectile, dt: number): void {
     const target = this.entity(projectile.targetId);
-    if (!target) { this.projectiles.delete(projectile.id); return; }
+    if (!target) {
+      this.projectiles.delete(projectile.id);
+      return;
+    }
     const deltaX = target.position.x - projectile.position.x;
     const deltaY = target.position.y - projectile.position.y;
     const distance = Math.hypot(deltaX, deltaY);
@@ -308,7 +398,11 @@ export class GameSimulation {
 
   private evaluateResult(): void {
     if (this.result || this.headquartersOwners.size < 2) return;
-    const survivingOwners = [...this.headquartersOwners].filter((ownerId) => [...this.buildings.values()].some((building) => building.ownerId === ownerId && building.definitionId === prototypeBuildings.hq.id));
+    const survivingOwners = [...this.headquartersOwners].filter((ownerId) =>
+      [...this.buildings.values()].some(
+        (building) => building.ownerId === ownerId && building.definitionId === prototypeBuildings.hq.id,
+      ),
+    );
     if (survivingOwners.length !== 1) return;
     const winnerId = survivingOwners[0];
     if (!winnerId) return;
@@ -337,7 +431,12 @@ export class GameSimulation {
   private footprintIsInsideMap(definition: BuildingDefinition, position: WorldPosition): boolean {
     const halfWidth = definition.footprint.width / 2;
     const halfHeight = definition.footprint.height / 2;
-    return position.x - halfWidth >= 0 && position.y - halfHeight >= 0 && position.x + halfWidth <= this.map.width && position.y + halfHeight <= this.map.height;
+    return (
+      position.x - halfWidth >= 0 &&
+      position.y - halfHeight >= 0 &&
+      position.x + halfWidth <= this.map.width &&
+      position.y + halfHeight <= this.map.height
+    );
   }
 
   private positionIsInsideMap(position: WorldPosition): boolean {
@@ -353,7 +452,8 @@ export class GameSimulation {
     const lastRow = Math.floor((position.y + halfHeight - EPSILON) / this.map.terrain.tileSize);
     for (let row = firstRow; row <= lastRow; row += 1) {
       for (let column = firstColumn; column <= lastColumn; column += 1) {
-        if (isBlocked(this.map.terrain, { x: column * this.map.terrain.tileSize, y: row * this.map.terrain.tileSize })) return false;
+        if (isBlocked(this.map.terrain, { x: column * this.map.terrain.tileSize, y: row * this.map.terrain.tileSize }))
+          return false;
       }
     }
     return true;
@@ -362,8 +462,10 @@ export class GameSimulation {
   private footprintOverlapsBuilding(definition: BuildingDefinition, position: WorldPosition): boolean {
     return [...this.buildings.values()].some((building) => {
       const existing = this.buildingById(building.definitionId);
-      return Math.abs(position.x - building.position.x) < (definition.footprint.width + existing.footprint.width) / 2
-        && Math.abs(position.y - building.position.y) < (definition.footprint.height + existing.footprint.height) / 2;
+      return (
+        Math.abs(position.x - building.position.x) < (definition.footprint.width + existing.footprint.width) / 2 &&
+        Math.abs(position.y - building.position.y) < (definition.footprint.height + existing.footprint.height) / 2
+      );
     });
   }
 

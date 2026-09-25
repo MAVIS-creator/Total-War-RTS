@@ -25,17 +25,28 @@ export const isBlocked = (terrain: TerrainGrid, position: WorldPosition): boolea
 const terrainValue = (value: unknown, width: number, height: number): TerrainGrid => {
   if (!isRecord(value)) throw new Error('Map terrain must be an object.');
   const tileSize = positiveNumber(value, 'tileSize');
-  if (!Array.isArray(value.rows) || value.rows.some((row) => typeof row !== 'string')) throw new Error('Map terrain rows must be strings.');
+  if (!Array.isArray(value.rows) || value.rows.some((row) => typeof row !== 'string'))
+    throw new Error('Map terrain rows must be strings.');
   const expectedColumns = width / tileSize;
   const expectedRows = height / tileSize;
-  if (!Number.isInteger(expectedColumns) || !Number.isInteger(expectedRows)) throw new Error('Map size must divide evenly by terrain tile size.');
-  if (value.rows.length !== expectedRows || value.rows.some((row) => row.length !== expectedColumns)) throw new Error('Terrain dimensions do not match map dimensions.');
-  if (value.rows.some((row) => [...row].some((tile) => tile !== TILE_GROUND && tile !== TILE_BLOCKED))) throw new Error('Terrain contains an unsupported tile.');
+  if (!Number.isInteger(expectedColumns) || !Number.isInteger(expectedRows))
+    throw new Error('Map size must divide evenly by terrain tile size.');
+  if (value.rows.length !== expectedRows || value.rows.some((row) => row.length !== expectedColumns))
+    throw new Error('Terrain dimensions do not match map dimensions.');
+  if (value.rows.some((row) => [...row].some((tile) => tile !== TILE_GROUND && tile !== TILE_BLOCKED)))
+    throw new Error('Terrain contains an unsupported tile.');
   return { tileSize, rows: value.rows };
 };
 
-const spawnPointsValue = (value: unknown, playerCount: 2 | 3 | 4, width: number, height: number, terrain: TerrainGrid): readonly SpawnPoint[] => {
-  if (!Array.isArray(value) || value.length !== playerCount) throw new Error('Map must include exactly one spawn point per player.');
+const spawnPointsValue = (
+  value: unknown,
+  playerCount: 2 | 3 | 4,
+  width: number,
+  height: number,
+  terrain: TerrainGrid,
+): readonly SpawnPoint[] => {
+  if (!Array.isArray(value) || value.length !== playerCount)
+    throw new Error('Map must include exactly one spawn point per player.');
   const spawnPoints = value.map((spawn) => {
     if (!isRecord(spawn)) throw new Error('Spawn point must be an object.');
     const playerIndex = nonNegativeInteger(spawn, 'playerIndex');
@@ -44,7 +55,8 @@ const spawnPointsValue = (value: unknown, playerCount: 2 | 3 | 4, width: number,
     return { playerIndex, position };
   });
   const playerIndexes = new Set(spawnPoints.map((spawn) => spawn.playerIndex));
-  if (playerIndexes.size !== playerCount || [...playerIndexes].some((index) => index >= playerCount)) throw new Error('Spawn player indexes must be unique and contiguous.');
+  if (playerIndexes.size !== playerCount || [...playerIndexes].some((index) => index >= playerCount))
+    throw new Error('Spawn player indexes must be unique and contiguous.');
   return spawnPoints;
 };
 
@@ -69,17 +81,20 @@ const positionValue = (value: unknown, width: number, height: number): WorldPosi
 const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null;
 const requiredString = (value: Record<string, unknown>, key: string): string => {
   const candidate = value[key];
-  if (typeof candidate !== 'string' || candidate.length === 0) throw new Error('Map ' + key + ' must be a non-empty string.');
+  if (typeof candidate !== 'string' || candidate.length === 0)
+    throw new Error('Map ' + key + ' must be a non-empty string.');
   return candidate;
 };
 const positiveNumber = (value: Record<string, unknown>, key: string): number => {
   const candidate = value[key];
-  if (typeof candidate !== 'number' || !Number.isFinite(candidate) || candidate <= 0) throw new Error('Map ' + key + ' must be positive.');
+  if (typeof candidate !== 'number' || !Number.isFinite(candidate) || candidate <= 0)
+    throw new Error('Map ' + key + ' must be positive.');
   return candidate;
 };
 const nonNegativeNumber = (value: Record<string, unknown>, key: string): number => {
   const candidate = value[key];
-  if (typeof candidate !== 'number' || !Number.isFinite(candidate) || candidate < 0) throw new Error('Map ' + key + ' must be non-negative.');
+  if (typeof candidate !== 'number' || !Number.isFinite(candidate) || candidate < 0)
+    throw new Error('Map ' + key + ' must be non-negative.');
   return candidate;
 };
 const nonNegativeInteger = (value: Record<string, unknown>, key: string): number => {

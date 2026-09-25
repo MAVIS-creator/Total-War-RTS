@@ -52,8 +52,8 @@ The simulation must remain independent from presentation.
 - [x] Add TypeScript.
 - [x] Add Phaser 3.
 - [x] Configure strict TypeScript.
-- [ ] Configure ESLint.
-- [ ] Configure Prettier.
+- [x] Configure ESLint.
+- [x] Configure Prettier.
 - [x] Configure path aliases.
 - [x] Create development script.
 - [x] Create production build script.

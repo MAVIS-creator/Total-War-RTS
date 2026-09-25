@@ -134,18 +134,58 @@ export interface UISelectionState {
 }
 
 export type CommandDefinition =
-  | { readonly type: 'queue-unit'; readonly playerId: PlayerId; readonly factoryId: EntityId; readonly unitDefinitionId: string }
-  | { readonly type: 'move'; readonly playerId: PlayerId; readonly unitIds: readonly EntityId[]; readonly destination: WorldPosition }
-  | { readonly type: 'attack'; readonly playerId: PlayerId; readonly unitIds: readonly EntityId[]; readonly targetId: EntityId };
+  | {
+      readonly type: 'queue-unit';
+      readonly playerId: PlayerId;
+      readonly factoryId: EntityId;
+      readonly unitDefinitionId: string;
+    }
+  | {
+      readonly type: 'move';
+      readonly playerId: PlayerId;
+      readonly unitIds: readonly EntityId[];
+      readonly destination: WorldPosition;
+    }
+  | {
+      readonly type: 'attack';
+      readonly playerId: PlayerId;
+      readonly unitIds: readonly EntityId[];
+      readonly targetId: EntityId;
+    };
 
 export type SimulationEvent =
-  | { readonly type: 'unit-queued'; readonly playerId: PlayerId; readonly factoryId: EntityId; readonly unitDefinitionId: string }
-  | { readonly type: 'unit-completed'; readonly playerId: PlayerId; readonly factoryId: EntityId; readonly unitId: EntityId }
+  | {
+      readonly type: 'unit-queued';
+      readonly playerId: PlayerId;
+      readonly factoryId: EntityId;
+      readonly unitDefinitionId: string;
+    }
+  | {
+      readonly type: 'unit-completed';
+      readonly playerId: PlayerId;
+      readonly factoryId: EntityId;
+      readonly unitId: EntityId;
+    }
   | { readonly type: 'research-started'; readonly playerId: PlayerId; readonly researchId: string }
   | { readonly type: 'research-completed'; readonly playerId: PlayerId; readonly researchId: string }
-  | { readonly type: 'move-issued'; readonly playerId: PlayerId; readonly unitIds: readonly EntityId[]; readonly destination: WorldPosition }
-  | { readonly type: 'attack-issued'; readonly playerId: PlayerId; readonly unitIds: readonly EntityId[]; readonly targetId: EntityId }
-  | { readonly type: 'projectile-fired'; readonly projectileId: EntityId; readonly ownerId: PlayerId; readonly targetId: EntityId }
+  | {
+      readonly type: 'move-issued';
+      readonly playerId: PlayerId;
+      readonly unitIds: readonly EntityId[];
+      readonly destination: WorldPosition;
+    }
+  | {
+      readonly type: 'attack-issued';
+      readonly playerId: PlayerId;
+      readonly unitIds: readonly EntityId[];
+      readonly targetId: EntityId;
+    }
+  | {
+      readonly type: 'projectile-fired';
+      readonly projectileId: EntityId;
+      readonly ownerId: PlayerId;
+      readonly targetId: EntityId;
+    }
   | { readonly type: 'entity-destroyed'; readonly entityId: EntityId; readonly ownerId: PlayerId }
   | { readonly type: 'match-ended'; readonly result: MatchResult }
   | { readonly type: 'command-rejected'; readonly playerId: PlayerId; readonly reason: string };
