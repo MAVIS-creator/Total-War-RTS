@@ -171,9 +171,9 @@ Suggested map structure:
 
 ### Units
 - [x] Position.
-- [ ] Rotation/facing.
+- [x] Rotation/facing.
 - [x] Health.
-- [ ] Armor.
+- [x] Armor.
 - [x] Owner.
 - [x] Movement speed.
 - [ ] Selection state.

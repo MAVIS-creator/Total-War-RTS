@@ -293,6 +293,7 @@ export class GameSimulation {
       health: unit.health,
       maxHealth: unit.health,
       cooldown: 0,
+      facingRadians: 0,
     });
     this.events.push({ type: 'unit-completed', playerId: factory.ownerId, factoryId: factory.id, unitId: id });
   }
@@ -331,6 +332,7 @@ export class GameSimulation {
     const definition = this.unitById(unit.definitionId);
     const deltaX = destination.x - unit.position.x;
     const deltaY = destination.y - unit.position.y;
+    unit.facingRadians = Math.atan2(deltaY, deltaX);
     const distance = Math.hypot(deltaX, deltaY);
     const step = definition.speed * dt;
     if (distance <= step + EPSILON) {

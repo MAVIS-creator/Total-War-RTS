@@ -26,6 +26,7 @@ export interface UnitDefinition {
   readonly cost: Cost;
   readonly buildSeconds: number;
   readonly health: number;
+  readonly armor?: number;
   readonly speed: number;
   readonly weapon: WeaponDefinition;
   readonly role: string;
@@ -37,6 +38,7 @@ export interface BuildingDefinition {
   readonly techLevel: TechLevel;
   readonly cost: Cost;
   readonly health: number;
+  readonly armor?: number;
   readonly footprint: Readonly<{ width: number; height: number }>;
   readonly powerGeneration?: number;
   readonly powerConsumption?: number;

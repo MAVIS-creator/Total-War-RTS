@@ -42,6 +42,7 @@ export interface UnitState {
   readonly health: number;
   readonly maxHealth: number;
   readonly destination?: WorldPosition;
+  readonly facingRadians: number;
   readonly targetId?: EntityId;
 }
 
