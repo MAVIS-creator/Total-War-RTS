@@ -43,6 +43,9 @@ export interface UnitState {
   readonly maxHealth: number;
   readonly destination?: WorldPosition;
   readonly facingRadians: number;
+  readonly selected: boolean;
+  readonly weaponSlots: readonly string[];
+  readonly lifeState: 'alive' | 'destroyed';
   readonly targetId?: EntityId;
 }
 
@@ -54,6 +57,9 @@ export interface BuildingState {
   readonly health: number;
   readonly maxHealth: number;
   readonly productionQueue: readonly ProductionQueueItem[];
+  readonly constructionProgress: number;
+  readonly researchIds: readonly string[];
+  readonly lifeState: 'alive' | 'destroyed';
 }
 
 export interface ProjectileState {

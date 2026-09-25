@@ -93,6 +93,9 @@ export class GameSimulation {
       health: definition.health,
       maxHealth: definition.health,
       productionQueue: [],
+      constructionProgress: 1,
+      researchIds: definition.id === prototypeBuildings.hq.id ? Object.keys(prototypeResearch) : [],
+      lifeState: 'alive',
     });
     if (definition.id === prototypeBuildings.hq.id) this.headquartersOwners.add(ownerId);
     this.recalculatePlayer(ownerId);
@@ -295,6 +298,9 @@ export class GameSimulation {
       maxHealth: unit.health,
       cooldown: 0,
       facingRadians: 0,
+      selected: false,
+      weaponSlots: [unit.id + ':primary'],
+      lifeState: 'alive',
     });
     this.events.push({ type: 'unit-completed', playerId: factory.ownerId, factoryId: factory.id, unitId: id });
   }
