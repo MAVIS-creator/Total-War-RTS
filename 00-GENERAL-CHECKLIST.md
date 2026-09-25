@@ -144,8 +144,8 @@ Title Screen
 
 Checklist:
 
-- [ ] Main menu works.
-- [ ] Skirmish setup works.
+- [x] Main menu works.
+- [x] Skirmish setup works.
 - [ ] One playable map loads.
 - [ ] Human player spawns correctly.
 - [ ] AI player spawns correctly.
@@ -169,8 +169,8 @@ Checklist:
 - [ ] AI can attack the player.
 - [ ] Victory condition works.
 - [ ] Defeat condition works.
-- [ ] Results screen works.
-- [ ] Match can return to menu cleanly.
+- [x] Results screen works.
+- [x] Match can return to menu cleanly.
 
 ---
 
