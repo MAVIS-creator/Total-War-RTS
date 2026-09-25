@@ -147,7 +147,7 @@ Codex does not need to style these screens.
 - [x] Collision/blocked cells supported.
 - [x] Spawn points supported.
 - [x] Ore fields supported.
-- [ ] Decorative props can be ignored by simulation.
+- [x] Decorative props can be ignored by simulation.
 - [x] Map loader validates data.
 - [x] At least one 1v1 map works.
 
