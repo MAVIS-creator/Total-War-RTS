@@ -26,39 +26,39 @@ The simulation must remain independent from presentation.
 
 ## 0. Baseline and execution order
 
-- [ ] Initialize Git, create the baseline commit, and tag it `prototype-baseline`.
-- [ ] Create `codex/core-engine` and `antigravity/visual-ui` branches.
-- [ ] Perform the audit and establish `/src/contracts` before Antigravity begins implementation.
-- [ ] Complete Vite, TypeScript, and Phaser foundations before future-feature work.
+- [x] Initialize Git, create the baseline commit, and tag it `prototype-baseline`.
+- [x] Create `codex/core-engine` and `antigravity/visual-ui` branches.
+- [x] Perform the audit and establish `/src/contracts` before Antigravity begins implementation.
+- [x] Complete Vite, TypeScript, and Phaser foundations before future-feature work.
 - [ ] Verify ground-unit and Tech 1–3 parity before implementing Tech 4, infantry, aircraft, or save/load.
-- [ ] At the end of every validated checkpoint, make a descriptive commit and push the active branch to GitHub before starting subsequent work.
+- [x] At the end of every validated checkpoint, make a descriptive commit and push the active branch to GitHub before starting subsequent work.
 
 ## 1. Audit Existing Prototype
 
-- [ ] Inspect every current HTML/JS/CSS file.
-- [ ] Document existing working mechanics.
-- [ ] Document broken/incomplete mechanics.
-- [ ] Identify reusable code.
-- [ ] Identify code that must be replaced.
-- [ ] Create `docs/prototype-audit.md`.
-- [ ] Tag/commit current state before refactoring.
-- [ ] Do not remove working behavior without replacement.
+- [x] Inspect every current HTML/JS/CSS file.
+- [x] Document existing working mechanics.
+- [x] Document broken/incomplete mechanics.
+- [x] Identify reusable code.
+- [x] Identify code that must be replaced.
+- [x] Create `docs/prototype-audit.md`.
+- [x] Tag/commit current state before refactoring.
+- [x] Do not remove working behavior without replacement.
 
 ---
 
 ## 2. Project Conversion
 
-- [ ] Convert project to Vite.
-- [ ] Add TypeScript.
-- [ ] Add Phaser 3.
-- [ ] Configure strict TypeScript.
+- [x] Convert project to Vite.
+- [x] Add TypeScript.
+- [x] Add Phaser 3.
+- [x] Configure strict TypeScript.
 - [ ] Configure ESLint.
 - [ ] Configure Prettier.
-- [ ] Configure path aliases.
-- [ ] Create development script.
-- [ ] Create production build script.
-- [ ] Verify `npm run dev`.
-- [ ] Verify `npm run build`.
+- [x] Configure path aliases.
+- [x] Create development script.
+- [x] Create production build script.
+- [x] Verify `npm run dev`.
+- [x] Verify `npm run build`.
 
 ---
 
@@ -80,13 +80,13 @@ Create:
 /tests
 ```
 
-- [ ] Game bootstrap created.
-- [ ] Scene-independent simulation root created.
-- [ ] Fixed timestep loop implemented.
+- [x] Game bootstrap created.
+- [x] Scene-independent simulation root created.
+- [x] Fixed timestep loop implemented.
 - [ ] Renderer reads simulation state.
-- [ ] Simulation never directly changes DOM.
+- [x] Simulation never directly changes DOM.
 - [ ] Event/message system defined.
-- [ ] Entity IDs are stable and unique.
+- [x] Entity IDs are stable and unique.
 - [ ] Deterministic random seed support added.
 
 ---
@@ -95,23 +95,23 @@ Create:
 
 Create strongly typed contracts:
 
-- [ ] `UnitDefinition`
-- [ ] `BuildingDefinition`
-- [ ] `WeaponDefinition`
-- [ ] `ResearchDefinition`
-- [ ] `PlayerState`
-- [ ] `EconomyState`
-- [ ] `PowerState`
-- [ ] `PopulationState`
-- [ ] `ProductionQueueItem`
+- [x] `UnitDefinition`
+- [x] `BuildingDefinition`
+- [x] `WeaponDefinition`
+- [x] `ResearchDefinition`
+- [x] `PlayerState`
+- [x] `EconomyState`
+- [x] `PowerState`
+- [x] `PopulationState`
+- [x] `ProductionQueueItem`
 - [ ] `MapDefinition`
 - [ ] `VictoryCondition`
-- [ ] `GameSettings`
+- [x] `GameSettings`
 - [ ] `DifficultyDefinition`
 - [ ] `SaveGameData`
 - [ ] `UISelectionState`
 - [ ] `CommandDefinition`
-- [ ] `TechLevelDefinition`
+- [x] `TechLevelDefinition`
 
 Rules:
 
