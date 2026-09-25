@@ -83,4 +83,15 @@ const combatEvents = combatSimulation.drainEvents();
 if (combatEvents.filter((event) => event.type === 'attack-issued').length !== 1) throw new Error('Expected one attack-issued event.');
 if (combatEvents.filter((event) => event.type === 'projectile-fired').length === 0) throw new Error('Expected projectile firing events.');
 
+const autoCombatSimulation = new GameSimulation({ playerCount: 2, populationCap: 10, mapId: 'frozen-front', seed: 4 });
+autoCombatSimulation.addPlayer('auto-attacker', 'Auto Attacker', 2_000);
+autoCombatSimulation.addPlayer('auto-defender', 'Auto Defender', 2_000);
+const autoFactory = autoCombatSimulation.addBuilding('auto-attacker', prototypeBuildings.factory, { x: 300, y: 300 });
+autoCombatSimulation.addBuilding('auto-attacker', prototypeBuildings.powercell, { x: 400, y: 300 });
+const autoTargetHq = autoCombatSimulation.addBuilding('auto-defender', prototypeBuildings.hq, { x: 500, y: 300 });
+if (!autoCombatSimulation.queueUnit('auto-attacker', autoFactory, 'tank').accepted) throw new Error('Expected tank queue for auto-targeting test.');
+autoCombatSimulation.advance(5);
+const autoDamagedHq = autoCombatSimulation.snapshot().buildings.find((building) => building.id === autoTargetHq);
+if (!autoDamagedHq || autoDamagedHq.health >= autoDamagedHq.maxHealth) throw new Error('Expected nearby enemy target to be acquired automatically.');
+
 console.log('Simulation smoke test passed.');

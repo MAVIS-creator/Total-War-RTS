@@ -248,7 +248,7 @@ Later:
 
 ## 11. Combat System
 
-- [ ] Target acquisition.
+- [x] Target acquisition.
 - [x] Range checking.
 - [x] Fire cooldown.
 - [x] Projectile creation.

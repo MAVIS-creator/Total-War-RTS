@@ -219,6 +219,10 @@ export class GameSimulation {
 
   private advanceUnit(unit: MutableUnit, dt: number): void {
     unit.cooldown = Math.max(0, unit.cooldown - dt);
+    if (!unit.targetId) {
+      const target = this.findNearestEnemy(unit);
+      if (target) unit.targetId = target.id;
+    }
     const target = unit.targetId ? this.entity(unit.targetId) : undefined;
     if (unit.targetId && !target) unit.targetId = undefined;
     if (target) {
@@ -250,6 +254,21 @@ export class GameSimulation {
     }
     unit.position.x += (deltaX / distance) * step;
     unit.position.y += (deltaY / distance) * step;
+  }
+
+  private findNearestEnemy(unit: MutableUnit): MutableUnit | MutableBuilding | undefined {
+    const range = this.unitById(unit.definitionId).weapon.range * 1.35;
+    let nearest: MutableUnit | MutableBuilding | undefined;
+    let nearestDistance = range;
+    for (const candidate of [...this.units.values(), ...this.buildings.values()]) {
+      if (candidate.ownerId === unit.ownerId || candidate.id === unit.id) continue;
+      const distance = Math.hypot(candidate.position.x - unit.position.x, candidate.position.y - unit.position.y);
+      if (distance < nearestDistance) {
+        nearest = candidate;
+        nearestDistance = distance;
+      }
+    }
+    return nearest;
   }
 
   private advanceProjectile(projectile: MutableProjectile, dt: number): void {
