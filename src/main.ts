@@ -3,6 +3,7 @@ import type { SimulationSnapshot } from '@/contracts';
 export { GameSimulation } from '@/simulation/game-simulation';
 export { prototypeBuildings, prototypeResearch, prototypeTechLevels, prototypeUnits } from '@/data/prototype-content';
 export { getMap, mapCatalog } from '@/data/maps';
+export { createPhaserGame, SimulationScene } from '@/rendering/simulation-scene';
 
 /**
  * Migration foundation only. The legacy Canvas prototype remains the active
