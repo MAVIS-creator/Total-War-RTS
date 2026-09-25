@@ -32,12 +32,12 @@ Target visual identity:
 
 ## 1. Audit Existing UI
 
-- [ ] Inspect current HTML/CSS UI.
-- [ ] Record reusable layout/components.
-- [ ] Record visual inconsistencies.
-- [ ] Record mobile/responsive problems.
-- [ ] Create `docs/ui-audit.md`.
-- [ ] Preserve any working UX behavior during replacement.
+- [x] Inspect current HTML/CSS UI.
+- [x] Record reusable layout/components.
+- [x] Record visual inconsistencies.
+- [x] Record mobile/responsive problems.
+- [x] Create `docs/ui-audit.md`.
+- [x] Preserve any working UX behavior during replacement.
 
 ---
 
