@@ -6,6 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "ui": "vite --open /ui-testbench.html",
+    "test:ui": "vite --open /ui-testbench.html",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "check": "tsc --noEmit"

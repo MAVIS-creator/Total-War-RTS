@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <title>Total War RTS — Standalone UI Testbench</title>
+    <link rel="stylesheet" href="/styles/theme.css" />
+    <link rel="stylesheet" href="/styles/components.css" />
+    <link rel="stylesheet" href="/styles/menu.css" />
+    <link rel="stylesheet" href="/styles/hud.css" />
+    <style>
+      :root {
+        --testbench-bg: rgba(10, 16, 24, 0.96);
+        --testbench-border: rgba(0, 210, 211, 0.4);
+      }
+      body {
+        margin: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        background: #080d14;
+        font-family: Inter, system-ui, Segoe UI, Arial, sans-serif;
+        color: #eef5ff;
+      }
+      /* Standalone background grid when no 3D/2D game canvas is active */
+      #testbench-backdrop {
+        position: fixed;
+        inset: 0;
+        background:
+          radial-gradient(circle at 50% 50%, rgba(20, 32, 48, 0.6) 0%, rgba(8, 13, 20, 0.95) 100%),
+          linear-gradient(rgba(0, 210, 211, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 210, 211, 0.05) 1px, transparent 1px);
+        background-size: 100% 100%, 48px 48px, 48px 48px;
+        z-index: 0;
+      }
+      /* Top Floating Testbench Control Dock */
+      #testbench-dock {
+        position: fixed;
+        top: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        background: var(--testbench-bg);
+        border: 1px solid var(--testbench-border);
+        border-radius: 6px;
+        padding: 6px 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.75), 0 0 16px rgba(0, 210, 211, 0.2);
+        max-width: calc(100vw - 16px);
+      }
+      .testbench-bar {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .testbench-title {
+        font-family: var(--maw-font-mono, monospace);
+        font-size: 10px;
+        color: var(--maw-cyan, #00d2d3);
+        letter-spacing: 0.15em;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .testbench-badge {
+        background: rgba(255, 153, 0, 0.15);
+        color: var(--maw-orange, #ff9900);
+        border: 1px solid var(--maw-orange);
+        padding: 1px 5px;
+        border-radius: 2px;
+        font-size: 9px;
+      }
+      .testbench-btn {
+        background: rgba(20, 30, 42, 0.9);
+        border: 1px solid var(--maw-border, #2b3b4e);
+        color: var(--maw-text, #cbd5e1);
+        padding: 4px 8px;
+        font-size: 11px;
+        font-family: var(--maw-font-mono, monospace);
+        cursor: pointer;
+        border-radius: 4px;
+        transition: all 120ms ease;
+      }
+      .testbench-btn:hover {
+        background: rgba(0, 210, 211, 0.15);
+        border-color: var(--maw-cyan, #00d2d3);
+        color: #fff;
+      }
+      .testbench-btn.active {
+        background: var(--maw-cyan, #00d2d3);
+        color: #000;
+        font-weight: 700;
+        border-color: #fff;
+      }
+      /* Collapsible Simulator Drawer */
+      #sim-drawer {
+        display: none;
+        margin-top: 6px;
+        padding-top: 6px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        gap: 6px;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      #sim-drawer.open {
+        display: flex;
+      }
+      .sim-label {
+        font-size: 10px;
+        font-family: var(--maw-font-mono, monospace);
+        color: var(--maw-text-muted, #94a3b8);
+        text-transform: uppercase;
+      }
+      /* Standalone minimap frame for testing HUD without canvas */
+      #minimapWrap {
+        display: none;
+      }
+      #hud {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="testbench-backdrop"></div>
+    <div id="ui-root"></div>
+
+    <!-- Floating Standalone UI Testbench Controller -->
+    <div id="testbench-dock" class="maw-bracket-box">
+      <div class="testbench-bar">
+        <div class="testbench-title">
+          <span>ANTIGRAVITY UI TESTBENCH</span>
+          <span class="testbench-badge">STANDALONE (NO BACKEND)</span>
+        </div>
+        <button class="testbench-btn active" id="btn-screen-menu">Main Menu</button>
+        <button class="testbench-btn" id="btn-screen-play">Play Modes</button>
+        <button class="testbench-btn" id="btn-screen-skirmish">Skirmish Setup</button>
+        <button class="testbench-btn" id="btn-screen-loading">Loading</button>
+        <button class="testbench-btn" id="btn-screen-hud">In-Game HUD</button>
+        <button class="testbench-btn" id="btn-screen-tactical">Pause Menu</button>
+        <button class="testbench-btn" id="btn-screen-saveload">Save/Load</button>
+        <button class="testbench-btn" id="btn-screen-index">Unit Index</button>
+        <button class="testbench-btn" id="btn-screen-settings">Settings</button>
+        <button class="testbench-btn" id="btn-screen-victory">Victory</button>
+        <button class="testbench-btn" id="btn-screen-defeat">Defeat</button>
+        <button class="testbench-btn" id="btn-toggle-sim" style="border-color:var(--maw-orange);color:var(--maw-orange-bright);">⚙ Simulator Controls</button>
+      </div>
+
+      <!-- Live Mock Simulator Controls -->
+      <div id="sim-drawer">
+        <span class="sim-label">Inject Telemetry:</span>
+        <button class="testbench-btn" id="sim-ore">+2,500 Ore</button>
+        <button class="testbench-btn" id="sim-power-deficit">Toggle Power Deficit</button>
+        <button class="testbench-btn" id="sim-tech-up">Cycle Tech Tier</button>
+        <button class="testbench-btn" id="sim-sel-tank">Select MBT Tank</button>
+        <button class="testbench-btn" id="sim-sel-jug">Select Juggernaut</button>
+        <button class="testbench-btn" id="sim-sel-factory">Select Factory</button>
+        <button class="testbench-btn" id="sim-sel-clear">Clear Selection</button>
+        <button class="testbench-btn" id="sim-alert-warn">+ Combat Alert</button>
+        <button class="testbench-btn" id="sim-alert-danger">+ Danger Alert</button>
+      </div>
+    </div>
+
+    <!-- Hidden native elements that HUDOverlay attaches to -->
+    <div id="minimapWrap" class="maw-minimap-frame maw-bracket-box">
+      <canvas id="minimap" width="292" height="196"></canvas>
+      <div id="miniLabel">Mock Recon Radar [SAT-LINK ACTIVE]</div>
+    </div>
+    <div id="hud" class="maw-action-dock maw-bracket-box">
+      <div class="tabs" id="tabs">
+        <button data-tab="build" class="active">BUILD</button>
+        <button data-tab="units">UNITS</button>
+        <button data-tab="defense">DEFENSE</button>
+        <button data-tab="tech">TECH</button>
+        <button data-tab="orders">ORDERS</button>
+      </div>
+      <div class="actions maw-action-scroll" id="actions"></div>
+    </div>
+
+    <script type="module" src="/src/testbench/mainTestbench.ts"></script>
+  </body>
+</html>
