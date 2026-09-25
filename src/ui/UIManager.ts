@@ -6,11 +6,20 @@ import { LoadingScreen } from './screens/LoadingScreen';
 import { SettingsModal } from './screens/SettingsModal';
 import { UnitIndexModal } from './screens/UnitIndexModal';
 import { AboutModal } from './screens/AboutModal';
+import { SaveLoadModal, type SaveSlotData } from './screens/SaveLoadModal';
+import { TacticalMenuModal, type TacticalMenuCallbacks } from './screens/TacticalMenuModal';
+import { VictoryDefeatModal, type MatchStatistics } from './screens/VictoryDefeatModal';
 
 export type ScreenState = 'main_menu' | 'play_menu' | 'skirmish_setup' | 'loading' | 'hud';
 
 export interface UIManagerCallbacks {
   onStartMatch: (config: ExtendedSkirmishConfig, contractSettings: GameSettings) => Promise<void> | void;
+  onRestartMatch?: () => void;
+  getCurrentMatchInfo?: () => {
+    mapName: string;
+    matchDuration: string;
+    gameState?: Record<string, unknown>;
+  };
 }
 
 export class UIManager {
@@ -36,6 +45,20 @@ export class UIManager {
 
     const menu = new MainMenu({
       onPlay: () => this.showPlayMenu(),
+      onResume: () => {
+        const latest = SaveLoadModal.getLatestSave();
+        if (latest) {
+          this.resumeFromSave(latest);
+        }
+      },
+      onLoadGame: () => {
+        new SaveLoadModal({
+          mode: 'load',
+          onLoad: (save) => {
+            this.resumeFromSave(save);
+          },
+        }).open();
+      },
       onUnitIndex: () => new UnitIndexModal().open(),
       onSettings: () => new SettingsModal().open(),
       onAbout: () => new AboutModal().open(),
@@ -43,6 +66,27 @@ export class UIManager {
 
     this.root.appendChild(menu.element);
     this.activeScreenComponent = menu;
+  }
+
+  resumeFromSave(save: SaveSlotData): void {
+    const isLarge = save.mapName.toLowerCase().includes('large');
+    const config: ExtendedSkirmishConfig = {
+      players: 2,
+      difficulty: 'normal',
+      landscape: 'temperate',
+      climate: 'clear',
+      mutator: 'standard',
+      victory: 'annihilation',
+      revealMap: 'fog',
+      mapSize: isLarge ? 'large' : 'medium',
+      populationCap: 1000,
+    };
+    const contractSettings: GameSettings = {
+      playerCount: 2,
+      populationCap: 1000,
+      mapId: save.mapName,
+    };
+    this.showLoadingScreen(config, contractSettings);
   }
 
   showPlayMenu(): void {
@@ -108,6 +152,50 @@ export class UIManager {
       this.activeScreenComponent.destroy();
       this.activeScreenComponent = null;
     }
+  }
+
+  openTacticalMenu(): void {
+    const tacticalCallbacks: TacticalMenuCallbacks = {
+      onResume: () => {
+        // Resumes match
+      },
+      onRestart: () => {
+        if (this.callbacks.onRestartMatch) {
+          this.callbacks.onRestartMatch();
+        }
+      },
+      onReturnToMenu: () => {
+        this.showMainMenu();
+      },
+      getCurrentMatchInfo: () => {
+        if (this.callbacks.getCurrentMatchInfo) {
+          return this.callbacks.getCurrentMatchInfo();
+        }
+        return {
+          mapName: 'Tactical Operation',
+          matchDuration: '00:00',
+        };
+      },
+      onLoadSave: (save) => {
+        this.resumeFromSave(save);
+      },
+    };
+
+    new TacticalMenuModal(tacticalCallbacks).open();
+  }
+
+  showMatchResult(stats: MatchStatistics): void {
+    const modal = new VictoryDefeatModal(stats, {
+      onRestart: () => {
+        if (this.callbacks.onRestartMatch) {
+          this.callbacks.onRestartMatch();
+        }
+      },
+      onReturnToMenu: () => {
+        this.showMainMenu();
+      },
+    });
+    modal.open();
   }
 
   getCurrentState(): ScreenState {

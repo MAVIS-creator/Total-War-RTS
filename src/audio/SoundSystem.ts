@@ -227,3 +227,5 @@ export class SoundSystem {
     }
   }
 }
+
+export const soundSystem = SoundSystem.get();

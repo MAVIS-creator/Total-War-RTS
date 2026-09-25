@@ -1,7 +1,11 @@
 import { Modal } from '../components/Modal';
+import { SaveLoadModal } from './SaveLoadModal';
+import { soundSystem } from '../../audio/SoundSystem';
 
 export interface MainMenuCallbacks {
   onPlay: () => void;
+  onResume?: () => void;
+  onLoadGame?: () => void;
   onUnitIndex: () => void;
   onSettings: () => void;
   onAbout: () => void;
@@ -60,14 +64,26 @@ export class MainMenu {
     const navList = document.createElement('div');
     navList.className = 'maw-nav-list';
 
-    // Buttons: PLAY, NEWSLETTER, UNIT INDEX, SETTINGS, ABOUT
-    const playBtn = this.createNavButton('Play', 'DEPLOY', callbacks.onPlay);
+    // Check if an active/valid save archive exists
+    if (SaveLoadModal.hasValidSave() && callbacks.onResume) {
+      const resumeBtn = this.createNavButton('Resume Game', 'ACTIVE', callbacks.onResume);
+      navList.appendChild(resumeBtn);
+    }
+
+    // Buttons: PLAY, LOAD ARCHIVE, NEWSLETTER, UNIT INDEX, SETTINGS, ABOUT
+    const playBtn = this.createNavButton('Deploy / Play', 'NEW', callbacks.onPlay);
+    navList.appendChild(playBtn);
+
+    if (callbacks.onLoadGame) {
+      const loadBtn = this.createNavButton('Load Archive', 'SLOTS', callbacks.onLoadGame);
+      navList.appendChild(loadBtn);
+    }
+
     const newsletterBtn = this.createNavButton('Newsletter', '', () => this.showNewsletterModal());
     const unitIndexBtn = this.createNavButton('Unit Index', 'DATABASE', callbacks.onUnitIndex);
     const settingsBtn = this.createNavButton('Settings', 'CONFIG', callbacks.onSettings);
     const aboutBtn = this.createNavButton('About', 'INFO', callbacks.onAbout);
 
-    navList.appendChild(playBtn);
     navList.appendChild(newsletterBtn);
     navList.appendChild(unitIndexBtn);
     navList.appendChild(settingsBtn);
@@ -87,7 +103,11 @@ export class MainMenu {
       <span>${title}</span>
       ${badgeText ? `<span class="maw-nav-badge">${badgeText}</span>` : ''}
     `;
-    btn.addEventListener('click', onClick);
+    btn.addEventListener('mouseenter', () => soundSystem.playHover());
+    btn.addEventListener('click', () => {
+      soundSystem.playClick();
+      onClick();
+    });
     return btn;
   }
 

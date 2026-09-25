@@ -378,15 +378,15 @@ Examples:
 
 ## 16. Save / Load Screens
 
-- [ ] Resume Game button shown only for valid unfinished match.
-- [ ] Load screen.
-- [ ] Save slots.
-- [ ] Timestamp.
-- [ ] Map name.
-- [ ] Match duration.
-- [ ] Delete confirmation.
-- [ ] Corrupt save feedback.
-- [ ] Cancel/back.
+- [x] Resume Game button shown only for valid unfinished match.
+- [x] Load screen.
+- [x] Save slots.
+- [x] Timestamp.
+- [x] Map name.
+- [x] Match duration.
+- [x] Delete confirmation.
+- [x] Corrupt save feedback.
+- [x] Cancel/back.
 
 ---
 

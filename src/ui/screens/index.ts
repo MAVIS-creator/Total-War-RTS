@@ -6,3 +6,5 @@ export * from './SettingsModal';
 export * from './UnitIndexModal';
 export * from './AboutModal';
 export * from './VictoryDefeatModal';
+export * from './SaveLoadModal';
+export * from './TacticalMenuModal';
