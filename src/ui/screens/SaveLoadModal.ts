@@ -1,6 +1,7 @@
 import { Modal } from '../components/Modal';
 import { Button } from '../components/Button';
 import { soundSystem } from '../../audio/SoundSystem';
+import { Icons } from '../icons/Icons';
 
 export interface SaveSlotData {
   id: string;
@@ -75,6 +76,7 @@ export class SaveLoadModal {
     const closeBtn = new Button({
       label: 'Cancel / Return',
       variant: 'default',
+      icon: Icons.Back(14),
       onClick: () => {
         soundSystem.playClick();
         this.close();
@@ -229,6 +231,7 @@ export class SaveLoadModal {
         const saveBtn = new Button({
           label: save ? 'Overwrite' : 'Save',
           variant: save ? 'default' : 'primary',
+          icon: Icons.Save(14),
           onClick: () => {
             if (save && !save.corrupt) {
               if (window.confirm(`Overwrite Register 0${i + 1} (${save.name})?`)) {
@@ -244,6 +247,7 @@ export class SaveLoadModal {
         const loadBtn = new Button({
           label: 'Load Match',
           variant: 'primary',
+          icon: Icons.Play(14),
           disabled: !save || !!save.corrupt,
           onClick: () => {
             if (save && !save.corrupt) {
@@ -260,6 +264,7 @@ export class SaveLoadModal {
         const deleteBtn = new Button({
           label: 'Delete',
           variant: 'danger',
+          icon: Icons.Trash(14),
           onClick: () => {
             if (window.confirm(`Delete Register 0${i + 1}? This action cannot be undone.`)) {
               this.deleteSlot(i);

@@ -1,6 +1,7 @@
 import { Modal } from '../components/Modal';
 import { SaveLoadModal } from './SaveLoadModal';
 import { soundSystem } from '../../audio/SoundSystem';
+import { Icons } from '../icons/Icons';
 
 export interface MainMenuCallbacks {
   onPlay: () => void;
@@ -33,7 +34,7 @@ export class MainMenu {
     topbar.className = 'maw-menu-topbar';
     topbar.innerHTML = `
       <div class="maw-commander-badge">
-        <div class="maw-commander-avatar">🪖</div>
+        <div class="maw-commander-avatar">${Icons.User(18, 'var(--maw-cyan)')}</div>
         <div class="maw-commander-info">
           <div class="maw-commander-name">
             Raven-7 <span class="maw-commander-rank">LVL 28</span>
@@ -42,8 +43,8 @@ export class MainMenu {
         </div>
       </div>
       <div class="maw-topbar-icons">
-        <button class="maw-icon-btn" title="Tactical Comms" type="button">📡</button>
-        <button class="maw-icon-btn" title="Alerts" type="button">🔔</button>
+        <button class="maw-icon-btn" title="Tactical Comms" type="button" aria-label="Tactical Comms">${Icons.Comms(15)}</button>
+        <button class="maw-icon-btn" title="Alerts" type="button" aria-label="Alerts">${Icons.Bell(15)}</button>
       </div>
     `;
     this.element.appendChild(topbar);
@@ -56,7 +57,7 @@ export class MainMenu {
     titleBlock.className = 'maw-title-block';
     titleBlock.innerHTML = `
       <div class="maw-title-logo-wrap">
-        <div class="maw-title-insignia"><span>⚔</span></div>
+        <div class="maw-title-insignia"><span>${Icons.Swords(24, 'var(--maw-orange)')}</span></div>
         <div>
           <h1 class="maw-title-main">TOTAL WAR</h1>
           <div class="maw-title-sub">REAL-TIME STRATEGY · SECTOR COMBAT</div>
@@ -96,10 +97,10 @@ export class MainMenu {
       continueCard.className = 'maw-continue-card maw-bracket-box';
       continueCard.innerHTML = `
         <div class="maw-continue-content">
-          <div class="maw-continue-label">⚡ CONTINUE CAMPAIGN</div>
+          <div class="maw-continue-label">${Icons.Ability(13, 'var(--maw-orange)')} <span>CONTINUE CAMPAIGN</span></div>
           <div class="maw-continue-meta">${latestSave.mapName} · ${latestSave.matchDuration}</div>
         </div>
-        <div class="maw-continue-chevron">›</div>
+        <div class="maw-continue-chevron">${Icons.ChevronRight(18, 'var(--maw-orange)')}</div>
       `;
       continueCard.addEventListener('mouseenter', () => soundSystem.playHover());
       continueCard.addEventListener('click', () => {
@@ -109,19 +110,19 @@ export class MainMenu {
       navList.appendChild(continueCard);
     }
 
-    // Buttons with tactical military icons
-    const playBtn = this.createNavButton('⚔', 'Skirmish / Deploy', 'ACTIVE', callbacks.onPlay);
+    // Buttons with tactical military vector icons
+    const playBtn = this.createNavButton(Icons.Swords(16, 'var(--maw-orange)'), 'Skirmish / Deploy', 'ACTIVE', callbacks.onPlay);
     navList.appendChild(playBtn);
 
     if (callbacks.onLoadGame) {
-      const loadBtn = this.createNavButton('💾', 'Load Archive', 'SLOTS', callbacks.onLoadGame);
+      const loadBtn = this.createNavButton(Icons.Save(16, 'var(--maw-cyan)'), 'Load Archive', 'SLOTS', callbacks.onLoadGame);
       navList.appendChild(loadBtn);
     }
 
-    const unitIndexBtn = this.createNavButton('🗂', 'Unit Database', 'INTEL', callbacks.onUnitIndex);
-    const settingsBtn = this.createNavButton('⚙', 'Settings', 'CONFIG', callbacks.onSettings);
-    const newsletterBtn = this.createNavButton('📡', 'Field Dispatch', '', () => this.showNewsletterModal());
-    const aboutBtn = this.createNavButton('ℹ', 'System Info', 'ABOUT', callbacks.onAbout);
+    const unitIndexBtn = this.createNavButton(Icons.Database(16, 'var(--maw-cyan)'), 'Unit Database', 'INTEL', callbacks.onUnitIndex);
+    const settingsBtn = this.createNavButton(Icons.Gear(16, 'var(--maw-cyan)'), 'Settings', 'CONFIG', callbacks.onSettings);
+    const newsletterBtn = this.createNavButton(Icons.Comms(16, 'var(--maw-cyan)'), 'Field Dispatch', '', () => this.showNewsletterModal());
+    const aboutBtn = this.createNavButton(Icons.Info(16, 'var(--maw-cyan)'), 'System Info', 'ABOUT', callbacks.onAbout);
 
     navList.appendChild(unitIndexBtn);
     navList.appendChild(settingsBtn);

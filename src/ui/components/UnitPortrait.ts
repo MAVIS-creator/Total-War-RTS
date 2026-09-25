@@ -1,3 +1,5 @@
+import { Icons } from '../icons/Icons';
+
 export interface UnitPortraitOptions {
   imageUrl?: string;
   fallbackText?: string;
@@ -46,7 +48,10 @@ export class UnitPortrait {
     if (options.rank && options.rank > 0) {
       this.rankEl = document.createElement('span');
       this.rankEl.className = 'maw-portrait__rank';
-      this.rankEl.textContent = '★'.repeat(options.rank);
+      this.rankEl.style.display = 'inline-flex';
+      this.rankEl.style.alignItems = 'center';
+      this.rankEl.style.gap = '1px';
+      this.rankEl.innerHTML = Array(options.rank).fill(Icons.Star(10, 'var(--maw-orange)')).join('');
       this.element.appendChild(this.rankEl);
     }
   }
@@ -56,11 +61,14 @@ export class UnitPortrait {
       if (!this.rankEl) {
         this.rankEl = document.createElement('span');
         this.rankEl.className = 'maw-portrait__rank';
+        this.rankEl.style.display = 'inline-flex';
+        this.rankEl.style.alignItems = 'center';
+        this.rankEl.style.gap = '1px';
         this.element.appendChild(this.rankEl);
       }
-      this.rankEl.textContent = '★'.repeat(rank);
+      this.rankEl.innerHTML = Array(rank).fill(Icons.Star(10, 'var(--maw-orange)')).join('');
     } else if (this.rankEl) {
-      this.rankEl.textContent = '';
+      this.rankEl.innerHTML = '';
     }
     return this;
   }

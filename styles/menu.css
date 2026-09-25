@@ -236,6 +236,9 @@
 }
 
 .maw-continue-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 14px;
   font-weight: 900;
   color: var(--maw-orange-bright);
@@ -250,7 +253,9 @@
 }
 
 .maw-continue-chevron {
-  font-size: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: var(--maw-orange-bright);
 }
 
@@ -282,10 +287,13 @@
 }
 
 .maw-nav-icon {
-  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
   color: var(--maw-cyan);
-  width: 20px;
-  text-align: center;
 }
 
 .maw-nav-btn::before {
@@ -421,7 +429,15 @@
 }
 
 .maw-slot-avatar {
-  font-size: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: rgba(14, 21, 29, 0.9);
+  border: 1px solid var(--maw-border);
+  border-radius: var(--maw-radius-sm);
+  flex-shrink: 0;
 }
 
 .maw-slot-info {

@@ -55,6 +55,9 @@
 }
 
 .maw-match-clock {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-family: var(--maw-font-mono);
   font-size: 12px;
   font-weight: 700;
@@ -323,6 +326,20 @@
 .maw-cmd-btn.orange-accent:hover {
   background: var(--maw-orange-bg);
   box-shadow: 0 0 10px rgba(255, 153, 0, 0.35);
+}
+
+.maw-cmd-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2px;
+}
+
+.maw-alert-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 /* ==========================================================================

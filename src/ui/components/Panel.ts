@@ -1,3 +1,5 @@
+import { Icons } from '../icons/Icons';
+
 export interface PanelOptions {
   title?: string;
   badge?: string;
@@ -38,7 +40,8 @@ export class Panel {
         closeBtn.className = 'maw-btn maw-btn--danger';
         closeBtn.style.minHeight = '24px';
         closeBtn.style.padding = '0 6px';
-        closeBtn.textContent = '✕';
+        closeBtn.innerHTML = Icons.Cancel(13, 'currentColor');
+        closeBtn.setAttribute('aria-label', 'Close dialog');
         closeBtn.onclick = () => {
           if (options.onClose) options.onClose();
         };

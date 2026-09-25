@@ -3,6 +3,7 @@ import { Button } from '../components/Button';
 import { SettingsModal } from './SettingsModal';
 import { SaveLoadModal, type SaveSlotData } from './SaveLoadModal';
 import { soundSystem } from '../../audio/SoundSystem';
+import { Icons } from '../icons/Icons';
 
 export interface TacticalMenuCallbacks {
   onResume: () => void;
@@ -35,6 +36,7 @@ export class TacticalMenuModal {
     const resumeBtn = new Button({
       label: 'Resume Match',
       variant: 'primary',
+      icon: Icons.Play(15, 'currentColor'),
       onClick: () => {
         soundSystem.playClick();
         this.modal.close();
@@ -45,6 +47,7 @@ export class TacticalMenuModal {
     const saveBtn = new Button({
       label: 'Save Tactical Archive',
       variant: 'default',
+      icon: Icons.Save(15, 'var(--maw-cyan)'),
       onClick: () => {
         soundSystem.playClick();
         const matchInfo = callbacks.getCurrentMatchInfo ? callbacks.getCurrentMatchInfo() : undefined;
@@ -58,6 +61,7 @@ export class TacticalMenuModal {
     const loadBtn = new Button({
       label: 'Load Archive',
       variant: 'default',
+      icon: Icons.Database(15, 'var(--maw-cyan)'),
       onClick: () => {
         soundSystem.playClick();
         new SaveLoadModal({
@@ -73,6 +77,7 @@ export class TacticalMenuModal {
     const settingsBtn = new Button({
       label: 'Audio & Graphics Config',
       variant: 'default',
+      icon: Icons.Gear(15, 'var(--maw-cyan)'),
       onClick: () => {
         soundSystem.playClick();
         new SettingsModal().open();
@@ -82,6 +87,7 @@ export class TacticalMenuModal {
     const restartBtn = new Button({
       label: 'Restart Operation',
       variant: 'default',
+      icon: Icons.Reset(15, 'var(--maw-orange)'),
       onClick: () => {
         if (window.confirm('Restart current skirmish operation? All current match progress will be reset.')) {
           soundSystem.playClick();
@@ -94,6 +100,7 @@ export class TacticalMenuModal {
     const exitBtn = new Button({
       label: 'Abort to Main Menu',
       variant: 'danger',
+      icon: Icons.Cancel(15, 'var(--maw-crimson)'),
       onClick: () => {
         if (window.confirm('Abandon battle and return to Main Menu?')) {
           soundSystem.playClick();

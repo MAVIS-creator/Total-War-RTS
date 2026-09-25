@@ -65,6 +65,7 @@ Own/create:
 - [x] Reusable ProgressBar component.
 - [x] Reusable UnitPortrait component.
 - [x] Reusable CommandButton component.
+- [x] Reusable Military Sci-Fi Vector SVG Icon System (`src/ui/icons/Icons.ts`).
 
 ---
 

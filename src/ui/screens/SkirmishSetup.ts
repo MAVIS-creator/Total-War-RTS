@@ -3,6 +3,7 @@ import { Button } from '../components/Button';
 import { Dropdown } from '../components/Dropdown';
 import { TeamColorPipeline } from '../../rendering/team/TeamColorPipeline';
 import { soundSystem } from '../../audio/SoundSystem';
+import { Icons } from '../icons/Icons';
 
 export interface ExtendedSkirmishConfig {
   players: 2 | 3 | 4;
@@ -95,7 +96,7 @@ export class SkirmishSetup {
     header.className = 'maw-skirmish-header';
     header.innerHTML = `
       <div class="maw-skirmish-title">
-        <span style="color:var(--maw-orange);font-size:20px;">⚔</span>
+        <span style="display:inline-flex;align-items:center;color:var(--maw-orange);">${Icons.Swords(20, 'var(--maw-orange)')}</span>
         <span>SKIRMISH SETUP</span>
       </div>
       <div style="font-family:var(--maw-font-mono);font-size:11px;color:var(--maw-cyan);letter-spacing:0.15em;">
@@ -127,13 +128,14 @@ export class SkirmishSetup {
     bottomBar.className = 'maw-skirmish-bottombar';
 
     const backBtn = new Button({
-      label: '‹ BACK',
+      label: 'BACK',
       variant: 'default',
       onClick: () => this.callbacks.onCancel(),
     });
+    backBtn.element.innerHTML = `<span style="display:inline-flex;align-items:center;gap:6px">${Icons.Back(14)} BACK</span>`;
 
     const resetBtn = new Button({
-      label: '↺ RESET DEFAULTS',
+      label: 'RESET DEFAULTS',
       variant: 'default',
       onClick: () => {
         soundSystem.playClick();
@@ -152,11 +154,12 @@ export class SkirmishSetup {
         this.renderConsole();
       },
     });
+    resetBtn.element.innerHTML = `<span style="display:inline-flex;align-items:center;gap:6px">${Icons.Reset(14)} RESET DEFAULTS</span>`;
 
     const launchBtn = document.createElement('button');
     launchBtn.type = 'button';
     launchBtn.className = 'maw-launch-btn maw-bracket-box';
-    launchBtn.innerHTML = `<span>⚔ LAUNCH MATCH</span>`;
+    launchBtn.innerHTML = `<span style="display:inline-flex;align-items:center;gap:8px">${Icons.Swords(18, 'var(--maw-orange)')} LAUNCH MATCH</span>`;
     launchBtn.addEventListener('mouseenter', () => soundSystem.playHover());
     launchBtn.addEventListener('click', () => {
       soundSystem.playClick();
@@ -188,10 +191,10 @@ export class SkirmishSetup {
     `;
 
     const playerConfigs = [
-      { num: 1, name: 'Commander (You)', type: 'Human', team: 1, faction: 'Terran Vanguard', avatar: '🦅', color: TeamColorPipeline.getPalette(0).primary },
-      { num: 2, name: 'AI Opponent Alpha', type: `AI · ${this.config.difficulty.toUpperCase()}`, team: 1, faction: 'Varkon Collective', avatar: '🔺', color: TeamColorPipeline.getPalette(1).primary },
-      { num: 3, name: 'AI Opponent Beta', type: `AI · ${this.config.difficulty.toUpperCase()}`, team: 2, faction: 'Helios Union', avatar: '⚙', color: TeamColorPipeline.getPalette(2).primary },
-      { num: 4, name: 'AI Opponent Gamma', type: `AI · ${this.config.difficulty.toUpperCase()}`, team: 2, faction: 'Nyx Syndicate', avatar: '💀', color: TeamColorPipeline.getPalette(3).primary },
+      { num: 1, name: 'Commander (You)', type: 'Human', team: 1, faction: 'Terran Vanguard', avatar: Icons.FactionTerran(18, TeamColorPipeline.getPalette(0).primary), color: TeamColorPipeline.getPalette(0).primary },
+      { num: 2, name: 'AI Opponent Alpha', type: `AI · ${this.config.difficulty.toUpperCase()}`, team: 1, faction: 'Varkon Collective', avatar: Icons.FactionVarkon(18, TeamColorPipeline.getPalette(1).primary), color: TeamColorPipeline.getPalette(1).primary },
+      { num: 3, name: 'AI Opponent Beta', type: `AI · ${this.config.difficulty.toUpperCase()}`, team: 2, faction: 'Helios Union', avatar: Icons.FactionHelios(18, TeamColorPipeline.getPalette(2).primary), color: TeamColorPipeline.getPalette(2).primary },
+      { num: 4, name: 'AI Opponent Gamma', type: `AI · ${this.config.difficulty.toUpperCase()}`, team: 2, faction: 'Nyx Syndicate', avatar: Icons.FactionNyx(18, TeamColorPipeline.getPalette(3).primary), color: TeamColorPipeline.getPalette(3).primary },
     ];
 
     const slotsWrap = document.createElement('div');
@@ -268,12 +271,12 @@ export class SkirmishSetup {
     const mapNav = document.createElement('div');
     mapNav.className = 'maw-map-nav';
     mapNav.innerHTML = `
-      <button class="maw-stepper-btn" id="prevBiomeBtn" type="button">‹ PREV</button>
+      <button class="maw-stepper-btn" id="prevBiomeBtn" type="button" style="display:inline-flex;align-items:center;gap:4px">${Icons.ChevronLeft(14)} PREV</button>
       <div style="text-align:center;">
         <div class="maw-map-name">${currentBiome.name}</div>
         <div style="font-size:10px;font-family:var(--maw-font-mono);color:var(--maw-text-muted);">${currentBiome.sector}</div>
       </div>
-      <button class="maw-stepper-btn" id="nextBiomeBtn" type="button">NEXT ›</button>
+      <button class="maw-stepper-btn" id="nextBiomeBtn" type="button" style="display:inline-flex;align-items:center;gap:4px">NEXT ${Icons.ChevronRight(14)}</button>
     `;
 
     mapNav.querySelector('#prevBiomeBtn')?.addEventListener('click', () => {

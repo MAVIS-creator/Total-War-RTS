@@ -1,4 +1,5 @@
 import { Modal } from '../components/Modal';
+import { Icons } from '../icons/Icons';
 
 export interface PlayMenuCallbacks {
   onSkirmish: () => void;
@@ -42,15 +43,15 @@ export class PlayMenu {
     navList.className = 'maw-nav-list';
 
     // Campaign (Coming Soon)
-    const campaignBtn = this.createNavButton('Campaign', 'COMING SOON', true, () => {});
+    const campaignBtn = this.createNavButton(Icons.Star(16, 'var(--maw-text-dim)'), 'Campaign', 'COMING SOON', true, () => {});
     // Skirmish
-    const skirmishBtn = this.createNavButton('Skirmish', 'ACTIVE', false, callbacks.onSkirmish);
+    const skirmishBtn = this.createNavButton(Icons.Swords(16, 'var(--maw-orange)'), 'Skirmish', 'ACTIVE', false, callbacks.onSkirmish);
     // Multiplayer (Coming Soon)
-    const multiBtn = this.createNavButton('Multiplayer', 'COMING SOON', true, () => {});
+    const multiBtn = this.createNavButton(Icons.Multiplayer(16, 'var(--maw-text-dim)'), 'Multiplayer', 'COMING SOON', true, () => {});
     // Tutorial
-    const tutorialBtn = this.createNavButton('Tutorial', 'BRIEFING', false, () => this.showTutorialModal());
+    const tutorialBtn = this.createNavButton(Icons.Book(16, 'var(--maw-cyan)'), 'Tutorial', 'BRIEFING', false, () => this.showTutorialModal());
     // Cancel / Return
-    const backBtn = this.createNavButton('Cancel', 'RETURN', false, callbacks.onBack);
+    const backBtn = this.createNavButton(Icons.Back(16, 'var(--maw-text-muted)'), 'Cancel', 'RETURN', false, callbacks.onBack);
 
     navList.appendChild(campaignBtn);
     navList.appendChild(skirmishBtn);
@@ -63,6 +64,7 @@ export class PlayMenu {
   }
 
   private createNavButton(
+    iconSvg: string,
     title: string,
     badgeText: string,
     disabled: boolean,
@@ -73,6 +75,7 @@ export class PlayMenu {
     btn.className = 'maw-nav-btn maw-bracket-box';
     btn.disabled = disabled;
     btn.innerHTML = `
+      <span class="maw-nav-icon">${iconSvg}</span>
       <span>${title}</span>
       ${badgeText ? `<span class="maw-nav-badge">${badgeText}</span>` : ''}
     `;

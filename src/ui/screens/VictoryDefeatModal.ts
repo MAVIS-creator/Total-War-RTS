@@ -1,5 +1,6 @@
 import { Modal } from '../components/Modal';
 import { Button } from '../components/Button';
+import { Icons } from '../icons/Icons';
 
 export interface MatchStatistics {
   victory: boolean;
@@ -49,7 +50,7 @@ export class VictoryDefeatModal {
         <tr><td>Armored Units Fabricated</td><td>${stats.unitsBuilt.toLocaleString()}</td></tr>
         <tr><td>Casualties / Units Lost</td><td>${stats.unitsLost.toLocaleString()}</td></tr>
         <tr><td>Hostile Structures Destroyed</td><td>${stats.buildingsDestroyed.toLocaleString()}</td></tr>
-        <tr><td>Total Ore Gathered</td><td>₿${stats.oreGathered.toLocaleString()}</td></tr>
+        <tr><td>Total Ore Gathered</td><td>${Icons.Ore(12, 'var(--maw-ore)')} ${stats.oreGathered.toLocaleString()}</td></tr>
       </table>
     `;
 
@@ -63,6 +64,7 @@ export class VictoryDefeatModal {
     const restartBtn = new Button({
       label: 'Restart Match',
       variant: 'default',
+      icon: Icons.Reset(14),
       onClick: () => {
         this.modal.close();
         callbacks.onRestart();
@@ -72,6 +74,7 @@ export class VictoryDefeatModal {
     const menuBtn = new Button({
       label: 'Return To Main Menu',
       variant: 'primary',
+      icon: Icons.Back(14),
       onClick: () => {
         this.modal.close();
         callbacks.onReturnToMenu();

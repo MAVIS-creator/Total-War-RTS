@@ -1,6 +1,7 @@
 import { Modal } from '../components/Modal';
 import { Tabs } from '../components/Tabs';
 import { UnitPortrait } from '../components/UnitPortrait';
+import { Icons } from '../icons/Icons';
 
 interface EntityDoc {
   name: string;
@@ -106,7 +107,7 @@ export class UnitIndexModal {
       details.innerHTML = `
         <div style="display:flex;justify-content:space-between;align-items:center">
           <b style="color:var(--maw-text-bright);font-size:14px;text-transform:uppercase">${item.name}</b>
-          <span style="font-family:var(--maw-font-mono);font-size:11px;color:var(--maw-ore)">₿${item.cost.toLocaleString()}</span>
+          <span style="font-family:var(--maw-font-mono);font-size:11px;color:var(--maw-ore);display:inline-flex;align-items:center;gap:4px">${Icons.Ore(11, 'var(--maw-ore)')} ${item.cost.toLocaleString()}</span>
         </div>
         <div style="font-family:var(--maw-font-mono);font-size:11px;color:var(--maw-cyan);margin:2px 0">
           ROLE: ${item.role} · HP: ${item.hp.toLocaleString()} · TECH TIER ${item.tech}

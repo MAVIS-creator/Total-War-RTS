@@ -27,6 +27,13 @@
   transition: var(--maw-transition);
 }
 
+.maw-btn__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
 .maw-btn:hover:not(:disabled) {
   background: var(--maw-bg-panel-elevated);
   border-color: var(--maw-cyan);

@@ -4,6 +4,7 @@ import { UnitPortrait } from './components/UnitPortrait';
 import { Button } from './components/Button';
 import { VictoryDefeatModal, type MatchStatistics } from './screens/VictoryDefeatModal';
 import { soundSystem } from '../audio/SoundSystem';
+import { Icons } from './icons/Icons';
 
 declare global {
   interface Window {
@@ -63,7 +64,7 @@ export class HUDOverlay {
     const brand = document.createElement('div');
     brand.className = 'maw-topbar-brand';
     brand.innerHTML = `
-      <span class="maw-brand-badge">⚔</span>
+      <span class="maw-brand-badge">${Icons.Swords(16, 'var(--maw-orange)')}</span>
       <span>TOTAL WAR</span>
     `;
     topbar.appendChild(brand);
@@ -89,7 +90,7 @@ export class HUDOverlay {
 
     this.clockEl = document.createElement('div');
     this.clockEl.className = 'maw-match-clock';
-    this.clockEl.textContent = '⏱ 00:00';
+    this.clockEl.innerHTML = `${Icons.Clock(13, 'var(--maw-cyan)')} <span>00:00</span>`;
     controls.appendChild(this.clockEl);
 
     const menuBtn = new Button({
@@ -108,25 +109,26 @@ export class HUDOverlay {
     this.objectivesPanel.className = 'maw-objectives-panel maw-bracket-box';
     this.objectivesPanel.innerHTML = `
       <div class="maw-objectives-header">
-        <span>⭐ MAIN OBJECTIVES</span>
+        <span style="display:inline-flex;align-items:center;gap:6px">${Icons.Star(13, 'var(--maw-orange)')} MAIN OBJECTIVES</span>
         <span style="font-size:10px;color:var(--maw-cyan);">ACTIVE</span>
       </div>
       <div class="maw-objective-item">
-        <span class="maw-obj-check">✓</span>
+        <span class="maw-obj-check">${Icons.Check(13, 'var(--maw-cyan)')}</span>
         <span>Secure forward extraction base</span>
       </div>
       <div class="maw-objective-item">
-        <span class="maw-obj-pending">▢</span>
+        <span class="maw-obj-pending">${Icons.SquarePending(13, 'var(--maw-text-muted)')}</span>
         <span>Neutralize hostile command citadel</span>
       </div>
       <div class="maw-objectives-header" style="margin-top:4px;">
-        <span>◇ OPTIONAL OBJECTIVES</span>
+        <span style="display:inline-flex;align-items:center;gap:6px">${Icons.Diamond(12, 'var(--maw-cyan)')} OPTIONAL OBJECTIVES</span>
       </div>
       <div class="maw-objective-item">
-        <span class="maw-obj-pending">▢</span>
+        <span class="maw-obj-pending">${Icons.SquarePending(13, 'var(--maw-text-muted)')}</span>
         <span>Capture secondary energy nodes (0/2)</span>
       </div>
     `;
+    this.root.appendChild(this.objectivesPanel);
     this.root.appendChild(this.objectivesPanel);
 
     // 3. Alerts Feed (Top Right)
@@ -188,21 +190,21 @@ export class HUDOverlay {
       tooltip: string;
       isOrange?: boolean;
     }> = [
-      { label: 'ATTACK', icon: '🎯', hotkey: 'A', tooltip: 'Direct units to engage hostiles with weapon fire [A]' },
-      { label: 'MOVE', icon: '⏩', hotkey: 'M', tooltip: 'Reposition units to designated coordinates [M]' },
-      { label: 'GUARD', icon: '🛡', hotkey: 'G', tooltip: 'Escort allied target or patrol perimeter [G]' },
-      { label: 'HOLD', icon: '✋', hotkey: 'H', tooltip: 'Hold position and maintain fire envelope [H / S]' },
-      { label: 'PATROL', icon: '🔄', hotkey: 'P', tooltip: 'Cycle surveillance route between points [P]' },
-      { label: 'CANCEL', icon: '✕', hotkey: 'Esc', isOrange: true, tooltip: 'Cancel orders and clear selection [Esc]' },
-      { label: 'ABILITY', icon: '⚡', hotkey: 'Q', tooltip: 'Deploy special unit capability or nanites [Q]' },
-      { label: 'RETREAT', icon: '⏬', hotkey: 'R', tooltip: 'Emergency tactical withdrawal to base [R]' },
+      { label: 'ATTACK', icon: Icons.Attack(15), hotkey: 'A', tooltip: 'Direct units to engage hostiles with weapon fire [A]' },
+      { label: 'MOVE', icon: Icons.Move(15), hotkey: 'M', tooltip: 'Reposition units to designated coordinates [M]' },
+      { label: 'GUARD', icon: Icons.Guard(15), hotkey: 'G', tooltip: 'Escort allied target or patrol perimeter [G]' },
+      { label: 'HOLD', icon: Icons.Hold(15), hotkey: 'H', tooltip: 'Hold position and maintain fire envelope [H / S]' },
+      { label: 'PATROL', icon: Icons.Patrol(15), hotkey: 'P', tooltip: 'Cycle surveillance route between points [P]' },
+      { label: 'CANCEL', icon: Icons.Cancel(15, 'var(--maw-orange)'), hotkey: 'Esc', isOrange: true, tooltip: 'Cancel orders and clear selection [Esc]' },
+      { label: 'ABILITY', icon: Icons.Ability(15), hotkey: 'Q', tooltip: 'Deploy special unit capability or nanites [Q]' },
+      { label: 'RETREAT', icon: Icons.Retreat(15), hotkey: 'R', tooltip: 'Emergency tactical withdrawal to base [R]' },
     ];
 
     commands.forEach((cmd) => {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = `maw-cmd-btn ${cmd.isOrange ? 'orange-accent' : ''}`;
-      btn.innerHTML = `<span>${cmd.icon}</span><span>${cmd.label}</span>`;
+      btn.innerHTML = `<span class="maw-cmd-icon">${cmd.icon}</span><span>${cmd.label}</span>`;
       btn.setAttribute('data-tooltip', cmd.tooltip);
       btn.setAttribute('aria-label', `${cmd.label} order, hotkey ${cmd.hotkey}`);
 
@@ -298,7 +300,7 @@ export class HUDOverlay {
   }
 
   updateClock(durationStr: string): void {
-    this.clockEl.textContent = `⏱ ${durationStr}`;
+    this.clockEl.innerHTML = `${Icons.Clock(13, 'var(--maw-cyan)')} <span>${durationStr}</span>`;
   }
 
   updateSelection(
@@ -341,8 +343,14 @@ export class HUDOverlay {
   addAlert(text: string, type: 'danger' | 'warning' | 'info' | 'success' = 'info'): void {
     const alert = document.createElement('div');
     alert.className = `maw-alert-item maw-alert-item--${type}`;
-    const icon = type === 'danger' ? '⚠' : type === 'warning' ? '⚡' : type === 'success' ? '✔' : 'ℹ';
-    alert.innerHTML = `<span>${icon}</span><span>${text}</span>`;
+    const icon = type === 'danger'
+      ? Icons.Danger(14, 'var(--maw-crimson)')
+      : type === 'warning'
+        ? Icons.Warning(14, 'var(--maw-orange)')
+        : type === 'success'
+          ? Icons.Check(14, 'var(--maw-good, #67e8b5)')
+          : Icons.Info(14, 'var(--maw-cyan)');
+    alert.innerHTML = `<span class="maw-alert-icon">${icon}</span><span>${text}</span>`;
     this.alertsFeed.appendChild(alert);
 
     // Auto dismiss after 4 seconds
