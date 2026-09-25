@@ -7,11 +7,13 @@ import type {
   PlayerState,
   ProductionQueueItem,
   SimulationSnapshot,
+  SimulationEvent,
   UnitDefinition,
   UnitState,
   WorldPosition,
 } from '@/contracts';
 import { StableIdFactory } from '@/core/stable-id';
+import { SeededRandom } from '@/core/seeded-random';
 import { prototypeBuildings, prototypeUnits } from '@/data/prototype-content';
 
 const FIXED_STEP_SECONDS = 1 / 20;
@@ -27,13 +29,17 @@ type MutableBuilding = Omit<BuildingState, 'productionQueue'> & { productionQueu
 
 export class GameSimulation {
   private readonly ids = new StableIdFactory();
+  private readonly random: SeededRandom;
   private readonly players = new Map<PlayerId, MutablePlayer>();
   private readonly units = new Map<string, UnitState>();
   private readonly buildings = new Map<string, MutableBuilding>();
+  private events: SimulationEvent[] = [];
   private accumulator = 0;
   private tickCount = 0;
 
-  public constructor(private readonly settings: GameSettings) {}
+  public constructor(private readonly settings: GameSettings) {
+    this.random = new SeededRandom(settings.seed ?? 1);
+  }
 
   public addPlayer(id: PlayerId, name: string, ore: number, populationCap = this.settings.populationCap): void {
     if (this.players.has(id)) throw new Error(`Player already exists: ${id}`);
@@ -57,16 +63,23 @@ export class GameSimulation {
     const player = this.requirePlayer(ownerId);
     const factory = this.buildings.get(factoryId);
     const unit = prototypeUnits[definitionId];
-    if (!factory || factory.ownerId !== ownerId) return { accepted: false, reason: 'A player-owned factory is required.' };
-    if (factory.definitionId !== prototypeBuildings.factory.id) return { accepted: false, reason: 'Selected building cannot produce units.' };
-    if (player.techLevel < unit.techLevel) return { accepted: false, reason: 'Technology requirement is not met.' };
-    if (player.economy.ore < unit.cost.ore) return { accepted: false, reason: 'Insufficient ore.' };
+    if (!factory || factory.ownerId !== ownerId) return this.reject(ownerId, 'A player-owned factory is required.');
+    if (factory.definitionId !== prototypeBuildings.factory.id) return this.reject(ownerId, 'Selected building cannot produce units.');
+    if (player.techLevel < unit.techLevel) return this.reject(ownerId, 'Technology requirement is not met.');
+    if (player.economy.ore < unit.cost.ore) return this.reject(ownerId, 'Insufficient ore.');
     const population = unit.cost.population ?? 0;
-    if (player.population.used + player.population.reserved + population > player.population.cap) return { accepted: false, reason: 'Population cap reached, including queued units.' };
+    if (player.population.used + player.population.reserved + population > player.population.cap) return this.reject(ownerId, 'Population cap reached, including queued units.');
     player.economy.ore -= unit.cost.ore;
     player.population.reserved += population;
     factory.productionQueue.push({ definitionId: unit.id, progressSeconds: 0, buildSeconds: unit.buildSeconds, populationReserved: population });
+    this.events.push({ type: 'unit-queued', playerId: ownerId, factoryId, unitDefinitionId: unit.id });
     return { accepted: true };
+  }
+
+  public drainEvents(): readonly SimulationEvent[] {
+    const events = this.events;
+    this.events = [];
+    return events;
   }
 
   public advance(elapsedSeconds: number): void {
@@ -106,7 +119,8 @@ export class GameSimulation {
     player.population.reserved -= item.populationReserved;
     player.population.used += item.populationReserved;
     const id = this.ids.next('unit');
-    this.units.set(id, { id, ownerId: factory.ownerId, definitionId: unit.id, position: { x: factory.position.x + 50, y: factory.position.y }, health: unit.health, maxHealth: unit.health });
+    this.units.set(id, { id, ownerId: factory.ownerId, definitionId: unit.id, position: { x: factory.position.x + 50, y: factory.position.y + this.random.between(-15, 15) }, health: unit.health, maxHealth: unit.health });
+    this.events.push({ type: 'unit-completed', playerId: factory.ownerId, factoryId: factory.id, unitId: id });
   }
 
   private recalculatePlayer(ownerId: PlayerId): void {
@@ -130,6 +144,11 @@ export class GameSimulation {
     const player = this.players.get(id);
     if (!player) throw new Error(`Unknown player: ${id}`);
     return player;
+  }
+
+  private reject(playerId: PlayerId, reason: string): CommandResult {
+    this.events.push({ type: 'command-rejected', playerId, reason });
+    return { accepted: false, reason };
   }
 
   private unitById(id: string): UnitDefinition {

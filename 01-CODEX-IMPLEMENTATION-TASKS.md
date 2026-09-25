@@ -85,9 +85,9 @@ Create:
 - [x] Fixed timestep loop implemented.
 - [ ] Renderer reads simulation state.
 - [x] Simulation never directly changes DOM.
-- [ ] Event/message system defined.
+- [x] Event/message system defined.
 - [x] Entity IDs are stable and unique.
-- [ ] Deterministic random seed support added.
+- [x] Deterministic random seed support added.
 
 ---
 
@@ -104,13 +104,13 @@ Create strongly typed contracts:
 - [x] `PowerState`
 - [x] `PopulationState`
 - [x] `ProductionQueueItem`
-- [ ] `MapDefinition`
-- [ ] `VictoryCondition`
+- [x] `MapDefinition`
+- [x] `VictoryCondition`
 - [x] `GameSettings`
-- [ ] `DifficultyDefinition`
-- [ ] `SaveGameData`
-- [ ] `UISelectionState`
-- [ ] `CommandDefinition`
+- [x] `DifficultyDefinition`
+- [x] `SaveGameData`
+- [x] `UISelectionState`
+- [x] `CommandDefinition`
 - [x] `TechLevelDefinition`
 
 Rules:

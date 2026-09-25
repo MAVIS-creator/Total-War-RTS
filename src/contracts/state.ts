@@ -60,7 +60,46 @@ export interface GameSettings {
   readonly playerCount: 2 | 3 | 4;
   readonly populationCap: number;
   readonly mapId: string;
+  readonly seed?: number;
 }
+
+export interface MapDefinition {
+  readonly id: string;
+  readonly name: string;
+  readonly width: number;
+  readonly height: number;
+  readonly playerCount: 2 | 3 | 4;
+  readonly spawnPoints: readonly WorldPosition[];
+}
+
+export type VictoryCondition = 'destroy-headquarters' | 'annihilation' | 'timed-score' | 'control-points';
+
+export interface DifficultyDefinition {
+  readonly id: string;
+  readonly reactionDelaySeconds: number;
+  readonly aggression: number;
+  readonly expansionTendency: number;
+  readonly attackGroupThreshold: number;
+}
+
+export interface SaveGameData {
+  readonly version: number;
+  readonly snapshot: SimulationSnapshot;
+}
+
+export interface UISelectionState {
+  readonly selectedUnitIds: readonly EntityId[];
+  readonly selectedBuildingId?: EntityId;
+}
+
+export type CommandDefinition =
+  | { readonly type: 'queue-unit'; readonly playerId: PlayerId; readonly factoryId: EntityId; readonly unitDefinitionId: string }
+  | { readonly type: 'move'; readonly playerId: PlayerId; readonly unitIds: readonly EntityId[]; readonly destination: WorldPosition };
+
+export type SimulationEvent =
+  | { readonly type: 'unit-queued'; readonly playerId: PlayerId; readonly factoryId: EntityId; readonly unitDefinitionId: string }
+  | { readonly type: 'unit-completed'; readonly playerId: PlayerId; readonly factoryId: EntityId; readonly unitId: EntityId }
+  | { readonly type: 'command-rejected'; readonly playerId: PlayerId; readonly reason: string };
 
 export interface CommandResult {
   readonly accepted: boolean;
