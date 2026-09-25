@@ -87,25 +87,25 @@ ABOUT
 
 Checklist:
 
-- [ ] Full-screen battlefield background.
-- [ ] Soldier/commander visual on left.
-- [ ] Vehicles/aircraft integrated in background.
-- [ ] Metallic title treatment.
-- [ ] Right-side menu panel.
-- [ ] Cyan/steel buttons.
-- [ ] Hover state.
-- [ ] Pressed state.
-- [ ] Disabled state.
-- [ ] Keyboard/controller focus state.
-- [ ] Subtle smoke/cloud animation.
-- [ ] Subtle ambient sound.
-- [ ] Social/language area if retained.
-- [ ] Responsive layout.
+- [x] Full-screen battlefield background.
+- [x] Soldier/commander visual on left.
+- [x] Vehicles/aircraft integrated in background.
+- [x] Metallic title treatment.
+- [x] Right-side menu panel.
+- [x] Cyan/steel buttons.
+- [x] Hover state.
+- [x] Pressed state.
+- [x] Disabled state.
+- [x] Keyboard/controller focus state.
+- [x] Subtle smoke/cloud animation.
+- [x] Subtle ambient sound.
+- [x] Social/language area if retained.
+- [x] Responsive layout.
 
 Do not:
-- [ ] Bake dynamic menu text into the background image.
-- [ ] Use proprietary MAW3 title/menu artwork directly.
-- [ ] Overuse neon glow.
+- [x] Bake dynamic menu text into the background image.
+- [x] Use proprietary MAW3 title/menu artwork directly.
+- [x] Overuse neon glow.
 
 ---
 
@@ -113,15 +113,15 @@ Do not:
 
 Implement visual screens for:
 
-- [ ] Campaign.
-- [ ] Skirmish.
-- [ ] Multiplayer.
-- [ ] Tutorial.
-- [ ] Cancel.
+- [x] Campaign.
+- [x] Skirmish.
+- [x] Multiplayer.
+- [x] Tutorial.
+- [x] Cancel.
 
 For Alpha:
-- [ ] Campaign can show `COMING SOON`.
-- [ ] Multiplayer can show `COMING SOON`.
+- [x] Campaign can show `COMING SOON`.
+- [x] Multiplayer can show `COMING SOON`.
 
 ---
 
@@ -129,20 +129,20 @@ For Alpha:
 
 Fields:
 
-- [ ] Players.
-- [ ] Difficulty.
-- [ ] Landscape.
-- [ ] Climate.
-- [ ] Next.
-- [ ] Cancel.
+- [x] Players.
+- [x] Difficulty.
+- [x] Landscape.
+- [x] Climate.
+- [x] Next.
+- [x] Cancel.
 
 Requirements:
 
-- [ ] Uses game settings contract.
-- [ ] Dropdowns styled consistently.
-- [ ] Current selection clearly visible.
-- [ ] Disabled options visibly disabled.
-- [ ] Works at desktop and mobile widths.
+- [x] Uses game settings contract.
+- [x] Dropdowns styled consistently.
+- [x] Current selection clearly visible.
+- [x] Disabled options visibly disabled.
+- [x] Works at desktop and mobile widths.
 
 ---
 
@@ -150,29 +150,29 @@ Requirements:
 
 Fields:
 
-- [ ] Mutator.
-- [ ] Victory.
-- [ ] Reveal Map.
-- [ ] Map Size.
-- [ ] Start.
-- [ ] Cancel.
+- [x] Mutator.
+- [x] Victory.
+- [x] Reveal Map.
+- [x] Map Size.
+- [x] Start.
+- [x] Cancel.
 
-- [ ] Start calls engine using the selected settings.
-- [ ] Loading transition begins only after engine confirms.
-- [ ] Invalid combination displays clear feedback.
+- [x] Start calls engine using the selected settings.
+- [x] Loading transition begins only after engine confirms.
+- [x] Invalid combination displays clear feedback.
 
 ---
 
 ## 7. Loading Screen
 
-- [ ] Background image.
-- [ ] Map name.
-- [ ] Climate.
-- [ ] Player count.
-- [ ] Loading progress.
-- [ ] Rotating gameplay tip.
-- [ ] Smooth transition into game.
-- [ ] Never fake 100% before game is actually ready.
+- [x] Background image.
+- [x] Map name.
+- [x] Climate.
+- [x] Player count.
+- [x] Loading progress.
+- [x] Rotating gameplay tip.
+- [x] Smooth transition into game.
+- [x] Never fake 100% before game is actually ready.
 
 ---
 
@@ -308,24 +308,24 @@ Rules:
 
 ## 14. Unit Index
 
-- [ ] Category tabs.
-- [ ] Unit list.
-- [ ] Building list.
-- [ ] Portrait.
-- [ ] Description.
-- [ ] HP.
-- [ ] Cost.
-- [ ] Speed.
-- [ ] Damage.
-- [ ] Range.
-- [ ] Tech level.
-- [ ] Role.
-- [ ] Close/back navigation.
+- [x] Category tabs.
+- [x] Unit list.
+- [x] Building list.
+- [x] Portrait.
+- [x] Description.
+- [x] HP.
+- [x] Cost.
+- [x] Speed.
+- [x] Damage.
+- [x] Range.
+- [x] Tech level.
+- [x] Role.
+- [x] Close/back navigation.
 
 Visual direction:
-- [ ] Technical blue/steel information panel.
-- [ ] Clear table-like layout.
-- [ ] Strong readability.
+- [x] Technical blue/steel information panel.
+- [x] Clear table-like layout.
+- [x] Strong readability.
 
 ---
 
@@ -333,38 +333,38 @@ Visual direction:
 
 Create categories:
 
-- [ ] Game.
-- [ ] Controls.
-- [ ] Graphics.
-- [ ] Sound.
-- [ ] Advanced.
-- [ ] Done.
+- [x] Game.
+- [x] Controls.
+- [x] Graphics.
+- [x] Sound.
+- [x] Advanced.
+- [x] Done.
 
 Do not invent functionality Codex has not exposed.
 
 Examples:
 
 ### Controls
-- [ ] Edge scroll.
-- [ ] Drag-pan.
-- [ ] Touch controls.
-- [ ] Selection behavior.
+- [x] Edge scroll.
+- [x] Drag-pan.
+- [x] Touch controls.
+- [x] Selection behavior.
 
 ### Graphics
-- [ ] Resolution scale.
-- [ ] Particles.
-- [ ] HP bars.
-- [ ] Effects quality.
+- [x] Resolution scale.
+- [x] Particles.
+- [x] HP bars.
+- [x] Effects quality.
 
 ### Sound
-- [ ] Music volume.
-- [ ] SFX volume.
-- [ ] Voice volume.
+- [x] Music volume.
+- [x] SFX volume.
+- [x] Voice volume.
 
 ### Advanced
-- [ ] Debug FPS toggle if exposed.
-- [ ] UI scale.
-- [ ] Camera sensitivity.
+- [x] Debug FPS toggle if exposed.
+- [x] UI scale.
+- [x] Camera sensitivity.
 
 ---
 

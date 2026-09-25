@@ -4,6 +4,9 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 <title>Total War RTS Prototype 0.2</title>
+<link rel="stylesheet" href="/styles/theme.css" />
+<link rel="stylesheet" href="/styles/components.css" />
+<link rel="stylesheet" href="/styles/menu.css" />
 <style>
 :root{--bg:#0d1218;--panel:#141c26;--panel2:#1a2531;--line:#2b3b4e;--text:#eef5ff;--muted:#9fb0c5;--accent:#63b3ff;--good:#67e8b5;--warn:#ffd166;--danger:#ff7575}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;color:var(--text)}
@@ -14,13 +17,15 @@ button,select{font:inherit}button{min-height:42px;border:1px solid #34485f;backg
 #selectedPanel{position:fixed;left:10px;bottom:112px;width:min(310px,calc(100vw - 20px));background:rgba(14,21,29,.94);border:1px solid var(--line);border-radius:11px;padding:9px 10px;z-index:6;font-size:12px}.selTitle{font-weight:850}.selMeta{color:var(--muted);margin-top:2px}.barline{height:5px;background:#111923;border-radius:99px;overflow:hidden;margin-top:7px}.barline>i{display:block;height:100%;background:var(--good);width:0}.selActions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 #hud{position:fixed;left:8px;right:8px;bottom:8px;background:rgba(13,20,28,.97);border:1px solid var(--line);border-radius:13px;padding:7px;z-index:8}.tabs{display:flex;gap:5px;margin-bottom:6px;overflow-x:auto}.tabs button{min-width:74px;min-height:36px}.actions{display:flex;gap:6px;overflow-x:auto;padding-bottom:1px}.actions button{min-width:108px;white-space:nowrap}.actions small{display:block;color:var(--muted);font-weight:600;margin-top:2px}.locked{opacity:.45}
 #message{position:fixed;top:60px;left:50%;transform:translateX(-50%);background:rgba(8,12,17,.93);border:1px solid var(--line);padding:8px 12px;border-radius:9px;font-size:12px;display:none;z-index:20;max-width:min(520px,90vw);text-align:center}
-#startOverlay{position:fixed;inset:0;background:rgba(3,7,10,.91);display:grid;place-items:center;z-index:30;padding:14px}.card{width:min(620px,100%);background:#121a23;border:1px solid #34485e;border-radius:18px;padding:22px;box-shadow:0 20px 70px rgba(0,0,0,.45)}.card h1{margin:0 0 5px;font-size:26px}.card p{margin:7px 0;color:var(--muted);line-height:1.5}.setup{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:16px 0}.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}.field select{width:100%;min-height:42px;border-radius:9px;border:1px solid #34485f;background:#182430;color:var(--text);padding:0 9px}.launch{width:100%;font-size:14px;background:#203a55}
+#startOverlay{display:none !important}
+.card{width:min(620px,100%);background:#121a23;border:1px solid #34485e;border-radius:18px;padding:22px;box-shadow:0 20px 70px rgba(0,0,0,.45)}.card h1{margin:0 0 5px;font-size:26px}.card p{margin:7px 0;color:var(--muted);line-height:1.5}.setup{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:16px 0}.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}.field select{width:100%;min-height:42px;border-radius:9px;border:1px solid #34485f;background:#182430;color:var(--text);padding:0 9px}.launch{width:100%;font-size:14px;background:#203a55}
 #help{position:fixed;left:10px;top:58px;max-width:360px;background:rgba(12,18,24,.9);border:1px solid var(--line);border-radius:10px;padding:8px 10px;color:var(--muted);font-size:11px;line-height:1.42;z-index:4}
 @media(max-width:760px){#help{display:none}#minimapWrap{width:126px;top:54px}#minimap{width:112px;height:76px}.chip{font-size:10px;padding:5px 7px}#selectedPanel{bottom:106px;width:240px;padding:7px;font-size:11px}.tabs button{min-width:66px}.actions button{min-width:98px}.setup{grid-template-columns:1fr}.card{padding:17px}.card h1{font-size:22px}}
 @media(max-width:430px){#selectedPanel{display:none}#minimapWrap{top:83px}.actions button{min-width:92px;font-size:10px}}
 </style>
 </head>
 <body>
+<div id="ui-root"></div>
 <canvas id="game"></canvas>
 <div id="topbar">
   <div class="chip"><b>ORE</b> <span id="ore">0</span></div>
