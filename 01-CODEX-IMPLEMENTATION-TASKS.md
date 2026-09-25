@@ -125,15 +125,15 @@ Rules:
 
 Provide engine state for:
 
-- [ ] Boot.
-- [ ] Main Menu.
-- [ ] Skirmish Setup.
-- [ ] Loading.
-- [ ] Game.
-- [ ] Paused.
-- [ ] Victory.
-- [ ] Defeat.
-- [ ] Return to Menu.
+- [x] Boot.
+- [x] Main Menu.
+- [x] Skirmish Setup.
+- [x] Loading.
+- [x] Game.
+- [x] Paused.
+- [x] Victory.
+- [x] Defeat.
+- [x] Return to Menu.
 
 Codex does not need to style these screens.
 
