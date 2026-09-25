@@ -5,3 +5,4 @@ export * from './LoadingScreen';
 export * from './SettingsModal';
 export * from './UnitIndexModal';
 export * from './AboutModal';
+export * from './VictoryDefeatModal';

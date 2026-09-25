@@ -192,23 +192,23 @@ Production Queue
 
 Checklist:
 
-- [ ] Ore counter.
-- [ ] Power counter.
-- [ ] Population counter.
-- [ ] Tech indicator.
-- [ ] Minimap frame.
-- [ ] Selected unit portrait.
-- [ ] Unit/building name.
-- [ ] HP bar.
-- [ ] Armor/stat summary.
-- [ ] Command buttons.
-- [ ] Build tabs.
-- [ ] Research tabs.
-- [ ] Production queue.
-- [ ] Research progress.
-- [ ] Tooltips.
-- [ ] Pause/menu button.
-- [ ] Notifications.
+- [x] Ore counter.
+- [x] Power counter.
+- [x] Population counter.
+- [x] Tech indicator.
+- [x] Minimap frame.
+- [x] Selected unit portrait.
+- [x] Unit/building name.
+- [x] HP bar.
+- [x] Armor/stat summary.
+- [x] Command buttons.
+- [x] Build tabs.
+- [x] Research tabs.
+- [x] Production queue.
+- [x] Research progress.
+- [x] Tooltips.
+- [x] Pause/menu button.
+- [x] Notifications.
 
 ---
 
@@ -216,14 +216,14 @@ Checklist:
 
 Presentation responsibilities:
 
-- [ ] Render map overview.
-- [ ] Show player's units.
-- [ ] Show enemy units only when visible.
-- [ ] Show buildings.
-- [ ] Show camera viewport rectangle.
-- [ ] Click minimap to move camera.
-- [ ] Team colors match battlefield.
-- [ ] Scale properly at different resolutions.
+- [x] Render map overview.
+- [x] Show player's units.
+- [x] Show enemy units only when visible.
+- [x] Show buildings.
+- [x] Show camera viewport rectangle.
+- [x] Click minimap to move camera.
+- [x] Team colors match battlefield.
+- [x] Scale properly at different resolutions.
 
 ---
 
@@ -384,15 +384,15 @@ Examples:
 
 ## 17. Victory / Defeat Screens
 
-- [ ] Victory presentation.
-- [ ] Defeat presentation.
-- [ ] Match duration.
-- [ ] Units built.
-- [ ] Units lost.
-- [ ] Buildings destroyed.
-- [ ] Ore gathered.
-- [ ] Return to menu.
-- [ ] Restart match if supported.
+- [x] Victory presentation.
+- [x] Defeat presentation.
+- [x] Match duration.
+- [x] Units built.
+- [x] Units lost.
+- [x] Buildings destroyed.
+- [x] Ore gathered.
+- [x] Return to menu.
+- [x] Restart match if supported.
 
 ---
 
@@ -511,15 +511,15 @@ Create reusable effects:
 
 ## 23. Responsive / Mobile
 
-- [ ] HUD scales to desktop.
-- [ ] HUD scales to tablet.
-- [ ] HUD scales to mobile landscape.
-- [ ] Touch targets large enough.
-- [ ] Minimap remains usable.
-- [ ] Bottom/right panels do not cover critical battlefield area.
-- [ ] Text remains readable.
-- [ ] No overflow beyond viewport.
-- [ ] Safe areas respected.
+- [x] HUD scales to desktop.
+- [x] HUD scales to tablet.
+- [x] HUD scales to mobile landscape.
+- [x] Touch targets large enough.
+- [x] Minimap remains usable.
+- [x] Bottom/right panels do not cover critical battlefield area.
+- [x] Text remains readable.
+- [x] No overflow beyond viewport.
+- [x] Safe areas respected.
 
 ---
 

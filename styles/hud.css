@@ -1,0 +1,222 @@
+/**
+ * Military Sci-Fi In-Game HUD, Minimap & Combat Telemetry Styles
+ */
+
+/* ==========================================================================
+   TOPBAR RESOURCE HUD
+   ========================================================================== */
+.maw-topbar {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.maw-resource-group {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  pointer-events: auto;
+  flex-wrap: wrap;
+}
+
+.maw-topbar-controls {
+  display: flex;
+  gap: 6px;
+  pointer-events: auto;
+}
+
+/* ==========================================================================
+   MINIMAP HOUSING
+   ========================================================================== */
+.maw-minimap-frame {
+  position: fixed;
+  top: 56px;
+  right: 12px;
+  background: var(--maw-bg-panel);
+  border: 1px solid var(--maw-border-bright);
+  padding: 6px;
+  z-index: 12;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+}
+
+.maw-minimap-header {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--maw-font-mono);
+  font-size: 10px;
+  color: var(--maw-cyan);
+  margin-bottom: 4px;
+  letter-spacing: 0.08em;
+}
+
+/* ==========================================================================
+   SELECTION PANEL (FIXED & RESPONSIVE)
+   ========================================================================== */
+.maw-selection-panel {
+  position: fixed;
+  bottom: 84px;
+  left: 12px;
+  width: min(340px, calc(100vw - 24px));
+  background: var(--maw-bg-panel);
+  border: 1px solid var(--maw-border-bright);
+  padding: 10px;
+  z-index: 14;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.maw-selection-top {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.maw-selection-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.maw-selection-title {
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--maw-text-bright);
+  letter-spacing: 0.05em;
+}
+
+.maw-selection-meta {
+  font-size: 11px;
+  color: var(--maw-text-muted);
+  font-family: var(--maw-font-mono);
+}
+
+.maw-selection-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+/* ==========================================================================
+   BOTTOM ACTION DOCK (BUILD / UNITS / DEFENSE / TECH / ORDERS)
+   ========================================================================== */
+.maw-action-dock {
+  position: fixed;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  background: var(--maw-bg-panel);
+  border: 1px solid var(--maw-border);
+  padding: 6px 8px;
+  z-index: 16;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.maw-action-scroll {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--maw-border-steel) transparent;
+}
+
+/* ==========================================================================
+   VICTORY / DEFEAT MODAL PRESENTATION
+   ========================================================================== */
+.maw-match-result {
+  text-align: center;
+  padding: 12px;
+}
+
+.maw-result-badge {
+  display: inline-block;
+  font-family: var(--maw-font-sans);
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.maw-result-badge--victory {
+  color: var(--maw-good);
+  text-shadow: 0 0 16px rgba(29, 209, 161, 0.4);
+}
+
+.maw-result-badge--defeat {
+  color: var(--maw-danger);
+  text-shadow: 0 0 16px rgba(255, 107, 107, 0.4);
+}
+
+.maw-stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 12px;
+}
+
+.maw-stats-table th,
+.maw-stats-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--maw-border);
+  text-align: left;
+}
+
+.maw-stats-table th {
+  color: var(--maw-text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+}
+
+.maw-stats-table td:last-child {
+  text-align: right;
+  font-family: var(--maw-font-mono);
+  color: var(--maw-text-bright);
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (PREVENTS HIDING SELECTION ON MOBILE)
+   ========================================================================== */
+@media (max-width: 600px) {
+  .maw-topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .maw-minimap-frame {
+    top: 50px;
+    right: 6px;
+    padding: 4px;
+    transform: scale(0.85);
+    transform-origin: top right;
+  }
+  .maw-selection-panel {
+    bottom: 92px;
+    left: 6px;
+    right: 6px;
+    width: auto;
+    padding: 6px;
+  }
+  .maw-action-dock {
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+    padding: 4px;
+  }
+}
