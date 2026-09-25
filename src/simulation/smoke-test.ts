@@ -79,6 +79,8 @@ if (!attacker || !combatSimulation.issueAttack('attacker', [attacker.id], target
 combatSimulation.advance(2);
 const damagedHq = combatSimulation.snapshot().buildings.find((building) => building.id === targetHq);
 if (!damagedHq || damagedHq.health >= damagedHq.maxHealth) throw new Error('Expected attack order to damage the target.');
-if (combatSimulation.drainEvents().filter((event) => event.type === 'attack-issued').length !== 1) throw new Error('Expected one attack-issued event.');
+const combatEvents = combatSimulation.drainEvents();
+if (combatEvents.filter((event) => event.type === 'attack-issued').length !== 1) throw new Error('Expected one attack-issued event.');
+if (combatEvents.filter((event) => event.type === 'projectile-fired').length === 0) throw new Error('Expected projectile firing events.');
 
 console.log('Simulation smoke test passed.');

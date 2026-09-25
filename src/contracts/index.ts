@@ -21,6 +21,7 @@ export type {
   PopulationState,
   PowerState,
   ProductionQueueItem,
+  ProjectileState,
   ResearchProgress,
   OreField,
   SimulationSnapshot,

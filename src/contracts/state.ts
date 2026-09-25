@@ -55,6 +55,15 @@ export interface BuildingState {
   readonly productionQueue: readonly ProductionQueueItem[];
 }
 
+export interface ProjectileState {
+  readonly id: EntityId;
+  readonly ownerId: PlayerId;
+  readonly targetId: EntityId;
+  readonly position: WorldPosition;
+  readonly damage: number;
+  readonly speed: number;
+}
+
 export interface PlayerState {
   readonly id: PlayerId;
   readonly name: string;
@@ -130,6 +139,7 @@ export type SimulationEvent =
   | { readonly type: 'research-completed'; readonly playerId: PlayerId; readonly researchId: string }
   | { readonly type: 'move-issued'; readonly playerId: PlayerId; readonly unitIds: readonly EntityId[]; readonly destination: WorldPosition }
   | { readonly type: 'attack-issued'; readonly playerId: PlayerId; readonly unitIds: readonly EntityId[]; readonly targetId: EntityId }
+  | { readonly type: 'projectile-fired'; readonly projectileId: EntityId; readonly ownerId: PlayerId; readonly targetId: EntityId }
   | { readonly type: 'entity-destroyed'; readonly entityId: EntityId; readonly ownerId: PlayerId }
   | { readonly type: 'command-rejected'; readonly playerId: PlayerId; readonly reason: string };
 
@@ -144,4 +154,5 @@ export interface SimulationSnapshot {
   readonly players: readonly PlayerState[];
   readonly units: readonly UnitState[];
   readonly buildings: readonly BuildingState[];
+  readonly projectiles: readonly ProjectileState[];
 }

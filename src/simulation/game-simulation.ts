@@ -7,6 +7,7 @@ import type {
   PlayerId,
   PlayerState,
   ProductionQueueItem,
+  ProjectileState,
   ResearchDefinition,
   ResearchProgress,
   SimulationSnapshot,
@@ -35,6 +36,7 @@ type MutablePlayer = Omit<PlayerState, 'economy' | 'power' | 'population' | 'res
 type MutableQueueItem = { -readonly [Key in keyof ProductionQueueItem]: ProductionQueueItem[Key] };
 type MutableBuilding = Omit<BuildingState, 'productionQueue' | 'health'> & { health: number; productionQueue: MutableQueueItem[] };
 type MutableUnit = Omit<UnitState, 'position' | 'destination' | 'health' | 'targetId'> & { health: number; position: { x: number; y: number }; destination?: { x: number; y: number }; targetId?: string; cooldown: number };
+type MutableProjectile = Omit<ProjectileState, 'position'> & { position: { x: number; y: number } };
 
 export class GameSimulation {
   private readonly ids = new StableIdFactory();
@@ -43,6 +45,7 @@ export class GameSimulation {
   private readonly players = new Map<PlayerId, MutablePlayer>();
   private readonly units = new Map<string, MutableUnit>();
   private readonly buildings = new Map<string, MutableBuilding>();
+  private readonly projectiles = new Map<string, MutableProjectile>();
   private events: SimulationEvent[] = [];
   private accumulator = 0;
   private tickCount = 0;
@@ -166,6 +169,7 @@ export class GameSimulation {
       players: [...this.players.values()].map((player) => ({ ...player, economy: { ...player.economy }, power: { ...player.power }, population: { ...player.population }, research: player.research ? { ...player.research } : undefined })),
       units: [...this.units.values()].map((unit) => ({ ...unit, position: { ...unit.position }, destination: unit.destination ? { ...unit.destination } : undefined, targetId: unit.targetId })),
       buildings: [...this.buildings.values()].map((building) => ({ ...building, productionQueue: [...building.productionQueue] })),
+      projectiles: [...this.projectiles.values()].map((projectile) => ({ ...projectile, position: { ...projectile.position } })),
     };
   }
 
@@ -174,6 +178,7 @@ export class GameSimulation {
     for (const player of this.players.values()) this.advanceResearch(player, dt);
     for (const factory of this.buildings.values()) this.advanceFactory(factory, dt);
     for (const unit of this.units.values()) this.advanceUnit(unit, dt);
+    for (const projectile of this.projectiles.values()) this.advanceProjectile(projectile, dt);
     this.tickCount += 1;
   }
 
@@ -216,7 +221,9 @@ export class GameSimulation {
       if (targetDistance <= definition.weapon.range) {
         if (unit.cooldown <= 0) {
           unit.cooldown = definition.weapon.reloadSeconds;
-          this.damageEntity(target.id, definition.weapon.damage);
+          const projectileId = this.ids.next('projectile');
+          this.projectiles.set(projectileId, { id: projectileId, ownerId: unit.ownerId, targetId: target.id, position: { ...unit.position }, damage: definition.weapon.damage, speed: definition.weapon.projectileSpeed ?? definition.weapon.range * 10 });
+          this.events.push({ type: 'projectile-fired', projectileId, ownerId: unit.ownerId, targetId: target.id });
         }
         return;
       }
@@ -237,6 +244,22 @@ export class GameSimulation {
     }
     unit.position.x += (deltaX / distance) * step;
     unit.position.y += (deltaY / distance) * step;
+  }
+
+  private advanceProjectile(projectile: MutableProjectile, dt: number): void {
+    const target = this.entity(projectile.targetId);
+    if (!target) { this.projectiles.delete(projectile.id); return; }
+    const deltaX = target.position.x - projectile.position.x;
+    const deltaY = target.position.y - projectile.position.y;
+    const distance = Math.hypot(deltaX, deltaY);
+    const step = projectile.speed * dt;
+    if (distance <= step + EPSILON) {
+      this.projectiles.delete(projectile.id);
+      this.damageEntity(target.id, projectile.damage);
+      return;
+    }
+    projectile.position.x += (deltaX / distance) * step;
+    projectile.position.y += (deltaY / distance) * step;
   }
 
   private entity(id: string): MutableUnit | MutableBuilding | undefined {

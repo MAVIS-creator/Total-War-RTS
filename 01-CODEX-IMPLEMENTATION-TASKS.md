@@ -251,7 +251,7 @@ Later:
 - [ ] Target acquisition.
 - [x] Range checking.
 - [x] Fire cooldown.
-- [ ] Projectile creation.
+- [x] Projectile creation.
 - [ ] Hitscan option.
 - [x] Damage.
 - [ ] Armor/resistance.
