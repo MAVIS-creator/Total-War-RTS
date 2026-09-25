@@ -57,7 +57,7 @@ export class LoadingScreen {
     barHeader.style.color = 'var(--maw-text-muted)';
 
     const label = document.createElement('span');
-    label.textContent = 'SYSTEM TELEMETRY SYNCHRONIZING...';
+    label.textContent = 'PRESENTATION LOADING TRANSITION...';
 
     this.progressText = document.createElement('span');
     this.progressText.style.color = 'var(--maw-cyan-bright)';

@@ -1,5 +1,9 @@
 import type { ResearchDefinition } from '@/contracts';
 
+/**
+ * Target UI Presentation / Mock Data for Tech 1–4.
+ * Authoritative gameplay logic and simulation rules are owned and executed by Codex.
+ */
 export interface TechItemData extends ResearchDefinition {
   readonly iconSymbol: string;
   readonly category: 'tech_level' | 'upgrade' | 'doctrine';
@@ -32,21 +36,24 @@ export const TECH_PROGRESSION: Record<number, TechItemData> = {
   4: {
     id: 'tech_4',
     name: 'Tech 4 — Apex Protocol',
-    targetTechLevel: 3, // Contract TechLevel is 1 | 2 | 3
+    targetTechLevel: 4,
     cost: { ore: 48000 },
     researchSeconds: 30,
     prerequisites: ['tech_3'],
     iconSymbol: '❖',
     category: 'tech_level',
-    unlockedDescription: 'Unlocks strategic Tech 4 research upgrades, advanced military automation, and supreme combat doctrines.',
+    unlockedDescription: 'Target presentation state: unlocks Tech 4 research upgrades, advanced military automation, and supreme combat doctrines.',
   },
 };
 
+/**
+ * Tech 4 Research Upgrades (Target presentation backlog items)
+ */
 export const TECH_4_RESEARCH: Record<string, TechItemData> = {
   nanocomposite: {
     id: 'res_nanocomposite',
     name: 'Nanocomposite Structures',
-    targetTechLevel: 3,
+    targetTechLevel: 4,
     cost: { ore: 18000 },
     researchSeconds: 18,
     prerequisites: ['tech_4'],
@@ -57,7 +64,7 @@ export const TECH_4_RESEARCH: Record<string, TechItemData> = {
   quantum_grid: {
     id: 'res_quantum_grid',
     name: 'Quantum Power Grid',
-    targetTechLevel: 3,
+    targetTechLevel: 4,
     cost: { ore: 16000 },
     researchSeconds: 16,
     prerequisites: ['tech_4'],
@@ -68,7 +75,7 @@ export const TECH_4_RESEARCH: Record<string, TechItemData> = {
   advanced_extraction: {
     id: 'res_advanced_extraction',
     name: 'Advanced Extraction',
-    targetTechLevel: 3,
+    targetTechLevel: 4,
     cost: { ore: 20000 },
     researchSeconds: 20,
     prerequisites: ['tech_4'],
@@ -79,7 +86,7 @@ export const TECH_4_RESEARCH: Record<string, TechItemData> = {
   hardened_defense: {
     id: 'res_hardened_defense',
     name: 'Hardened Defense Network',
-    targetTechLevel: 3,
+    targetTechLevel: 4,
     cost: { ore: 22000 },
     researchSeconds: 22,
     prerequisites: ['tech_4'],
@@ -90,7 +97,7 @@ export const TECH_4_RESEARCH: Record<string, TechItemData> = {
   autonomous_repair: {
     id: 'res_autonomous_repair',
     name: 'Autonomous Repair',
-    targetTechLevel: 3,
+    targetTechLevel: 4,
     cost: { ore: 24000 },
     researchSeconds: 24,
     prerequisites: ['tech_4'],
@@ -101,7 +108,7 @@ export const TECH_4_RESEARCH: Record<string, TechItemData> = {
   aegis_shield: {
     id: 'res_aegis_shield',
     name: 'Aegis Shield Lattice',
-    targetTechLevel: 3,
+    targetTechLevel: 4,
     cost: { ore: 32000 },
     researchSeconds: 28,
     prerequisites: ['tech_4'],
@@ -112,7 +119,7 @@ export const TECH_4_RESEARCH: Record<string, TechItemData> = {
   hypervelocity_munitions: {
     id: 'res_hypervelocity',
     name: 'Hypervelocity Munitions',
-    targetTechLevel: 3,
+    targetTechLevel: 4,
     cost: { ore: 30000 },
     researchSeconds: 26,
     prerequisites: ['tech_4'],

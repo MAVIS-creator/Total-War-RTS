@@ -87,9 +87,10 @@ ABOUT
 
 Checklist:
 
-- [x] Full-screen battlefield background.
-- [x] Soldier/commander visual on left.
-- [x] Vehicles/aircraft integrated in background.
+- [x] Canvas atmosphere & particle animation background.
+- [ ] Full-screen battlefield background art (awaiting concept/art assets).
+- [ ] Soldier/commander visual on left.
+- [ ] Vehicles/aircraft integrated in background.
 - [x] Metallic title treatment.
 - [x] Right-side menu panel.
 - [x] Cyan/steel buttons.
@@ -97,8 +98,8 @@ Checklist:
 - [x] Pressed state.
 - [x] Disabled state.
 - [x] Keyboard/controller focus state.
-- [x] Subtle smoke/cloud animation.
-- [x] Subtle ambient sound.
+- [x] Subtle smoke/cloud animation (canvas-driven).
+- [ ] Subtle ambient sound (procedural UI synthesizer in place, ambient music track pending).
 - [x] Social/language area if retained.
 - [x] Responsive layout.
 
@@ -165,14 +166,14 @@ Fields:
 
 ## 7. Loading Screen
 
-- [x] Background image.
+- [ ] Background image (awaiting concept/art assets).
 - [x] Map name.
 - [x] Climate.
 - [x] Player count.
-- [x] Loading progress.
+- [x] Loading progress presentation bar.
 - [x] Rotating gameplay tip.
 - [x] Smooth transition into game.
-- [x] Never fake 100% before game is actually ready.
+- [ ] Never fake 100% before game is actually ready (presentation transition timer in place; awaiting authoritative engine progress events from Codex).
 
 ---
 
@@ -190,25 +191,28 @@ Build / Research
 Production Queue
 ```
 
-Checklist:
+Checklist (Component Library Scaffold & Styles):
 
-- [x] Ore counter.
-- [x] Power counter.
-- [x] Population counter.
-- [x] Tech indicator.
-- [x] Minimap frame.
-- [x] Selected unit portrait.
-- [x] Unit/building name.
-- [x] HP bar.
-- [x] Armor/stat summary.
-- [x] Command buttons.
-- [x] Build tabs.
-- [x] Research tabs.
-- [x] Production queue.
-- [x] Research progress.
-- [x] Tooltips.
+- [x] Ore counter component.
+- [x] Power counter component.
+- [x] Population counter component.
+- [x] Tech indicator component.
+- [x] Minimap frame styling.
+- [x] Selected unit portrait component.
+- [x] Unit/building name display component.
+- [x] HP bar component.
+- [x] Armor/stat summary layout.
+- [x] Command buttons component.
+- [x] Build tabs component.
+- [x] Research tabs component.
+- [x] Production queue layout.
+- [x] Research progress layout.
+- [x] Tooltips component.
 - [x] Pause/menu button.
-- [x] Notifications.
+- [x] Notifications styling.
+
+Live Simulation Bindings:
+- [ ] Live HUD binding to Codex SimulationSnapshot (legacy prototype HUD active in game.js until Codex exposes snapshot hooks).
 
 ---
 
@@ -216,93 +220,97 @@ Checklist:
 
 Presentation responsibilities:
 
-- [x] Render map overview.
-- [x] Show player's units.
-- [x] Show enemy units only when visible.
-- [x] Show buildings.
-- [x] Show camera viewport rectangle.
-- [x] Click minimap to move camera.
-- [x] Team colors match battlefield.
+- [x] Render map overview (legacy prototype canvas).
+- [x] Show player's units (legacy prototype canvas).
+- [x] Show enemy units only when visible (legacy prototype canvas).
+- [x] Show buildings (legacy prototype canvas).
+- [x] Show camera viewport rectangle (legacy prototype canvas).
+- [x] Click minimap to move camera (legacy prototype canvas).
+- [x] Team colors match battlefield (legacy prototype canvas).
 - [x] Scale properly at different resolutions.
+- [ ] Phaser-integrated minimap renderer with modern styling (awaiting Codex engine migration).
 
 ---
 
 ## 10. Selection Presentation
 
-- [x] Selection ring.
-- [x] Multi-select indicators.
-- [x] Hover highlight.
-- [x] Health bars.
-- [x] Team-color indicators.
-- [x] Selected entity panel.
-- [x] Command availability state.
-- [x] Attack cursor.
-- [x] Move cursor.
-- [x] Invalid-placement cursor.
+- [x] Selection reticle helper routines (VisualEffects.ts).
+- [ ] Live selection ring integration in game scene (awaiting Codex engine rendering).
+- [ ] Multi-select indicators on canvas.
+- [ ] Hover highlight on entities.
+- [x] Health bars rendering helper (VisualEffects.ts).
+- [ ] Team-color indicators on entities.
+- [x] Selected entity panel component (Command/selection layout).
+- [ ] Command availability state bound to engine state.
+- [ ] Custom attack cursor asset.
+- [ ] Custom move cursor asset.
+- [ ] Custom invalid-placement cursor asset.
 
 ---
 
 ## 11. Building Placement Presentation
 
-- [x] Ghost building.
-- [x] Valid placement state.
-- [x] Invalid placement state.
-- [x] Footprint overlay.
-- [x] Range overlay for defenses if available.
-- [x] Construction progress visual.
-- [x] Placement confirmation feedback.
+- [x] Ghost building drawing helper (VisualEffects.ts).
+- [x] Valid placement state styling.
+- [x] Invalid placement state styling.
+- [ ] Live footprint overlay on game grid.
+- [x] Range overlay for defenses helper (VisualEffects.ts).
+- [ ] Construction progress visual on world entities.
+- [x] Placement confirmation audio feedback (SoundSystem.ts).
 
 ---
 
 ## 12. Build / Research Interface
 
-Tabs should support:
+Tabs support (Component Library Scaffold):
 
-- [x] Buildings.
-- [x] Defense.
-- [x] Units.
-- [x] Research.
+- [x] Buildings tab.
+- [x] Defense tab.
+- [x] Units tab.
+- [x] Research tab.
 
-Each item:
+Each item display:
 
-- [x] Icon.
+- [x] Icon / symbol display.
 - [x] Name.
-- [x] Ore cost.
-- [x] Power impact.
-- [x] Population cost where applicable.
-- [x] Build/research time.
-- [x] Prerequisites.
-- [x] Locked state.
-- [x] Tooltip.
-- [x] Progress state.
+- [x] Ore cost formatting.
+- [x] Power impact formatting.
+- [x] Population cost formatting.
+- [x] Build/research time display.
+- [x] Prerequisites display.
+- [x] Locked state styling.
+- [x] Tooltip support.
+- [x] Progress state bar.
+- [ ] Live binding to Codex production queues (awaiting engine hookup).
 
 ---
 
 ## 13. Tech Presentation
 
-Visual states:
+Visual states (Target Presentation / Mock Catalog):
 
-- [x] Tech 1.
-- [x] Tech 2.
-- [x] Tech 3.
-- [x] Tech 4.
+- [x] Tech 1 catalog data.
+- [x] Tech 2 catalog data.
+- [x] Tech 3 catalog data.
+- [x] Tech 4 target presentation data.
 
-Tech 4 research icons:
+Tech 4 research catalog:
 
-- [x] Nanocomposite Structures.
-- [x] Quantum Power Grid.
-- [x] Advanced Extraction.
-- [x] Hardened Defense Network.
-- [x] Autonomous Repair.
-- [x] Aegis Shield Lattice.
-- [x] Hypervelocity Munitions.
+- [x] Nanocomposite Structures definition.
+- [x] Quantum Power Grid definition.
+- [x] Advanced Extraction definition.
+- [x] Hardened Defense Network definition.
+- [x] Autonomous Repair definition.
+- [x] Aegis Shield Lattice definition.
+- [x] Hypervelocity Munitions definition.
 
 Rules:
 
-- [x] Research icons look like UI icons, not unit paintings.
+- [x] Research icons look like UI icons (symbolic badges).
 - [x] Locked research is visually distinct.
 - [x] Completed research is clearly marked.
-- [x] Active research displays progress.
+- [ ] Active research displays progress from live engine simulation.
+- [ ] Final rendered vector/bitmap research icons (symbolic badges currently used).
 
 ---
 
@@ -458,54 +466,58 @@ Initial buildings:
 
 ## 20. Team Color Shader / Mask
 
-- [x] Team-color mask supported.
-- [x] Neutral body remains neutral.
-- [x] Color only intended armor/details.
-- [x] Player 1 color.
-- [x] Player 2 color.
-- [x] Future Player 3/4 support.
-- [x] Same colors used consistently in HUD/minimap/world.
+- [ ] Team-color shader (Phaser WebGL custom pipeline).
+- [x] CSS theme variables and palette definitions for Player 1 (cyan) and Player 2 (crimson).
+- [x] Future Player 3/4 palette mappings.
+- [ ] Texture masks for unit and building sprite sheets (awaiting 3D/sprite pipeline).
+- [x] Same colors used consistently across UI and CSS components.
 
 ---
 
 ## 21. Effects
 
-Create reusable effects:
+Procedural 2D Canvas Helpers (VisualEffects.ts):
+- [x] Range rings helper.
+- [x] Segmented health bars helper.
+- [x] Blueprint placement ghost helper.
+- [x] Selection reticle helper.
 
-- [x] Muzzle flash.
-- [x] Bullet/tracer.
-- [x] Shell projectile.
-- [x] Missile trail.
-- [x] Impact spark.
-- [x] Small explosion.
-- [x] Large explosion.
-- [x] Smoke.
-- [x] Fire.
-- [x] Shield hit.
-- [x] Shield bubble.
-- [x] Repair effect.
-- [x] Construction effect.
-- [x] Research-complete effect.
+Phaser Particle / VFX Pipeline (awaiting game scene integration):
+- [ ] Muzzle flash.
+- [ ] Bullet/tracer.
+- [ ] Shell projectile.
+- [ ] Missile trail.
+- [ ] Impact spark.
+- [ ] Small explosion.
+- [ ] Large explosion.
+- [ ] Smoke.
+- [ ] Fire.
+- [ ] Shield hit.
+- [ ] Shield bubble.
+- [ ] Repair effect.
+- [ ] Construction effect.
+- [ ] Research-complete effect.
 
 ---
 
 ## 22. Audio Presentation
 
-- [x] Main menu ambience.
-- [x] Button hover.
-- [x] Button click.
-- [x] Build placement.
-- [x] Production complete.
-- [x] Research complete.
-- [x] Weapon sounds.
-- [x] Explosions.
-- [x] Alerts.
-- [x] Victory.
-- [x] Defeat.
+Web Audio Procedural Sound Synthesizer (SoundSystem.ts):
+- [ ] Main menu ambient music track (synthesizer provides interactive UI audio; ambient track pending).
+- [x] Button hover tone.
+- [x] Button click tone.
+- [x] Build placement tone.
+- [ ] Production complete voice/chime.
+- [ ] Research complete chime.
+- [ ] Weapon sounds.
+- [x] Explosion synthesis.
+- [x] Alert sirens / tones.
+- [x] Victory fanfare synthesis.
+- [x] Defeat tone synthesis.
 
-- [x] Audio settings control volume groups.
-- [x] Sounds do not stack infinitely.
-- [x] Off-screen combat audio is attenuated or limited.
+- [x] Audio settings control volume groups (master, sfx, music).
+- [x] Sounds do not stack infinitely (rate-limiting / cooldowns in SoundSystem).
+- [ ] Off-screen combat audio attenuation (requires world coordinate simulation hook).
 
 ---
 
@@ -550,22 +562,22 @@ Create reusable effects:
 
 ## 26. Antigravity Milestone Acceptance
 
-Antigravity Alpha 1 is complete when:
+Antigravity Alpha 1 UI Foundation is complete when:
 
-- [x] Title screen feels like a real game.
-- [x] Main menu hierarchy is complete.
-- [x] Skirmish setup is complete.
-- [x] Loading screen works.
-- [x] In-game HUD is coherent.
-- [x] Minimap is usable.
-- [x] Selection feedback is clear.
-- [x] Build/research panels work with Codex state.
-- [x] At least initial units/buildings have coherent final graphics.
-- [x] Victory/defeat screen is finished.
+- [x] Title screen feels like a real game (atmospheric canvas animation, military sci-fi styling).
+- [x] Main menu hierarchy is complete (Play, Skirmish Setup, Unit Index, Settings, About).
+- [x] Skirmish setup is complete (two-page flow, binds into GameSettings).
+- [x] Loading screen works (presentation loading transition into match).
+- [ ] In-game HUD is coherent (UI library and styling ready; live binding awaiting Codex simulation snapshot).
+- [x] Minimap is usable (legacy prototype minimap functional; modern styling awaiting engine migration).
+- [ ] Selection feedback is clear (VisualEffects helpers ready; in-game binding awaiting Codex engine).
+- [ ] Build/research panels work with Codex state (component scaffold complete; live binding awaiting Codex).
+- [ ] At least initial units/buildings have coherent final graphics (awaiting isometric render/sprite pipeline).
+- [x] Victory/defeat screen is finished (modal presentation and stats summary complete).
 - [x] UI works at desktop and mobile-landscape sizes.
 - [x] No major UI overlap.
 - [x] No broken/missing asset warnings.
-- [x] The full title → match → result loop looks visually consistent.
+- [ ] The full title → match → result loop looks visually consistent (UI flow complete, waiting for full Phaser/sprite migration).
 
 ---
 

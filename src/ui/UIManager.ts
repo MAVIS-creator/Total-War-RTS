@@ -86,7 +86,7 @@ export class UIManager {
     this.root.appendChild(loading.element);
     this.activeScreenComponent = loading;
 
-    // Simulate verified engine loading pipeline with real progress updates
+    // Presentation loading transition: provides a visual briefing transition until Codex exposes real engine initialization progress events
     let progress = 0;
     const interval = window.setInterval(() => {
       progress += 20;

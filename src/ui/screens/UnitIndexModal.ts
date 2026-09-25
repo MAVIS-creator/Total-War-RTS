@@ -36,7 +36,15 @@ export class UnitIndexModal {
   private activeCategory: 'unit' | 'building' | 'defense' = 'unit';
 
   constructor() {
-    this.modal = new Modal({ title: 'Armament & Blueprint Index', badge: 'DATABASE' });
+    this.modal = new Modal({ title: 'Armament & Blueprint Index', badge: 'PREVIEW REFERENCE' });
+
+    const note = document.createElement('div');
+    note.style.fontSize = '11px';
+    note.style.fontFamily = 'var(--maw-font-mono)';
+    note.style.color = 'var(--maw-text-dim)';
+    note.style.marginBottom = '10px';
+    note.textContent = 'Preview database: values reflect current prototype baseline. Will bind to authoritative Codex engine contracts once established.';
+    this.modal.panel.body.appendChild(note);
 
     this.tabs = new Tabs({
       tabs: [
