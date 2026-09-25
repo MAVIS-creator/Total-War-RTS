@@ -404,41 +404,42 @@ Examples:
 
 ---
 
-## 18. Unit Graphics Pipeline
+## 18. Unit Graphics and Animation Pipeline
 
-Do not create random painted sprites.
-
-Pipeline:
-
+Core Principle:
 ```text
-3D-style master
-→ isometric render
-→ directional frames
-→ sprite sheet
-→ atlas
-→ Phaser
+Unit Definition → Visual Profile → Animation Capabilities → Reusable Presentation Components → Phaser/Canvas
 ```
 
-For each unit:
+Architecture:
+- Data-driven `UnitVisualProfile` with extensible `movementType` (`infantry | tracked | wheeled | hover | air | walker | static`).
+- Modular capabilities: `directionalMovement`, `rotatingTurret`, `multiTurret`, `recoil`, `muzzleFlash`, `projectileTrail`, `constructionAnimation`, `repairAnimation`, `deployAnimation`, `engineEffect`, `damageSmoke`, `deathAnimation`, `radarRotation`, `shieldPulse`.
+- Component hierarchy: `Body` + `MovementVisual` + `VisualWeaponMount[]` + `VisualUtilityComponent[]` + `DamageEffectController` + `Shadow`.
+- Scale-aware composite entities supporting multi-weapon mounts with independent or slaved targeting (e.g. Mega Tanks, AA vehicles).
+- Zero hardcoded type switches (`no if (unit.type === "tank")`); new unit classes register visual definitions.
 
-- [x] Neutral hard-surface material.
-- [x] Team-color mask.
-- [x] Strong silhouette.
-- [x] Readable at game scale.
-- [x] Consistent isometric camera.
-- [x] Directional frames.
-- [x] Wreck/death state.
-- [x] Portrait.
-- [x] Build icon.
+Checklist:
 
-Initial units:
+- [x] Neutral hard-surface material & sub-pixel alignment.
+- [x] Team-color masks (Player 1 cyan `#00d2ff`, Player 2 crimson `#ff3366`, Player 3 amber, Player 4 emerald).
+- [x] Strong silhouette & readable military sci-fi design.
+- [x] Consistent isometric camera & directional ground drop shadows with altitude offset.
+- [x] Continuous directional frames & independent turret rotation (zero wobble/snap).
+- [x] Wreck/death state (staged charred armor debris, craters, and ember sparks).
+- [x] High-definition concept portraits in `/public/assets/portraits/` with tactical HUD telemetry.
+- [x] Extensible unit definitions & component-based renderer (`UnitRenderer.ts`, `UnitComponentRenderer.ts`, `unitProfiles.ts`).
 
-- [x] Scout.
-- [x] Infantry.
-- [x] Tank.
-- [x] Artillery.
-- [x] Interceptor.
-- [x] Bomber.
+Initial unit profiles configured:
+
+- [x] Scout (6-wheeled buggy, surveillance radar, twin repeaters).
+- [x] Infantry / Mech (mechanized exoskeleton, glowing cyan visor, rail rifle).
+- [x] Combat Engineer (exoskeleton, articulated tool arm, welding arc beam).
+- [x] Cruiser MBT (sloped composite armor, caterpillar tracks, rotating turret, recoil rail cannon).
+- [x] Heavy Breakout Tank (reinforced hull, heavy rotating turret, dual tracks).
+- [x] Siege Artillery (hydraulic stabilizing outriggers, rotating elevated siege cannon, recoil).
+- [x] Interceptor Jet (supersonic delta wing, twin cyan plasma thruster wash, canards).
+- [x] Strategic Bomber (flying wing stealth airframe, plasma ordnance dispenser).
+- [x] Experimental Juggernaut (super-heavy quad hull, multi-turret: primary twin siege cannon + secondary AA turret + radar).
 
 ---
 
