@@ -170,26 +170,26 @@ Suggested map structure:
 ## 7. Entity System
 
 ### Units
-- [ ] Position.
+- [x] Position.
 - [ ] Rotation/facing.
-- [ ] Health.
+- [x] Health.
 - [ ] Armor.
-- [ ] Owner.
-- [ ] Movement speed.
+- [x] Owner.
+- [x] Movement speed.
 - [ ] Selection state.
-- [ ] Orders.
+- [x] Orders.
 - [ ] Weapon slots.
 - [ ] Death state.
 
 ### Buildings
-- [ ] Position.
-- [ ] Footprint.
-- [ ] Health.
-- [ ] Owner.
+- [x] Position.
+- [x] Footprint.
+- [x] Health.
+- [x] Owner.
 - [ ] Construction progress.
-- [ ] Production capability.
+- [x] Production capability.
 - [ ] Research capability.
-- [ ] Power state.
+- [x] Power state.
 - [ ] Destruction state.
 
 ---
@@ -200,13 +200,13 @@ Suggested map structure:
 - [ ] Shift-add selection.
 - [ ] Box select.
 - [ ] Deselect.
-- [ ] Right-click move.
+- [x] Right-click move.
 - [ ] Right-click attack.
 - [ ] Stop.
 - [ ] Hold position.
 - [ ] Set rally point.
 - [ ] Contextual cursor state exposed to UI.
-- [ ] Command validation lives in engine.
+- [x] Command validation lives in engine.
 
 Later:
 - [ ] Attack move.
@@ -230,7 +230,7 @@ Engine integration only:
 ## 10. Movement / Pathfinding
 
 - [ ] Grid/nav system selected.
-- [ ] Units can reach valid destinations.
+- [x] Units can reach valid destinations.
 - [ ] Buildings block movement.
 - [ ] Units do not permanently overlap buildings.
 - [ ] Repathing throttled.

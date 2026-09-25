@@ -34,13 +34,14 @@ type MutablePlayer = Omit<PlayerState, 'economy' | 'power' | 'population' | 'res
 };
 type MutableQueueItem = { -readonly [Key in keyof ProductionQueueItem]: ProductionQueueItem[Key] };
 type MutableBuilding = Omit<BuildingState, 'productionQueue'> & { productionQueue: MutableQueueItem[] };
+type MutableUnit = Omit<UnitState, 'position' | 'destination'> & { position: { x: number; y: number }; destination?: { x: number; y: number } };
 
 export class GameSimulation {
   private readonly ids = new StableIdFactory();
   private readonly random: SeededRandom;
   private readonly map: MapDefinition;
   private readonly players = new Map<PlayerId, MutablePlayer>();
-  private readonly units = new Map<string, UnitState>();
+  private readonly units = new Map<string, MutableUnit>();
   private readonly buildings = new Map<string, MutableBuilding>();
   private events: SimulationEvent[] = [];
   private accumulator = 0;
@@ -103,6 +104,18 @@ export class GameSimulation {
     return { accepted: true };
   }
 
+  public issueMove(ownerId: PlayerId, unitIds: readonly string[], destination: WorldPosition): CommandResult {
+    if (unitIds.length === 0) return this.reject(ownerId, 'At least one unit must be selected.');
+    if (!this.positionIsInsideMap(destination) || isBlocked(this.map.terrain, destination)) return this.reject(ownerId, 'Destination is not passable.');
+    const selectedUnits = unitIds.map((id) => this.units.get(id));
+    if (selectedUnits.some((unit) => !unit || unit.ownerId !== ownerId)) return this.reject(ownerId, 'Move orders require player-owned units.');
+    for (const unit of selectedUnits) {
+      if (unit) unit.destination = { ...destination };
+    }
+    this.events.push({ type: 'move-issued', playerId: ownerId, unitIds: [...unitIds], destination: { ...destination } });
+    return { accepted: true };
+  }
+
   public queueUnit(ownerId: PlayerId, factoryId: string, definitionId: keyof typeof prototypeUnits): CommandResult {
     const player = this.requirePlayer(ownerId);
     const factory = this.buildings.get(factoryId);
@@ -140,7 +153,7 @@ export class GameSimulation {
       tick: this.tickCount,
       settings: this.settings,
       players: [...this.players.values()].map((player) => ({ ...player, economy: { ...player.economy }, power: { ...player.power }, population: { ...player.population }, research: player.research ? { ...player.research } : undefined })),
-      units: [...this.units.values()],
+      units: [...this.units.values()].map((unit) => ({ ...unit, position: { ...unit.position }, destination: unit.destination ? { ...unit.destination } : undefined })),
       buildings: [...this.buildings.values()].map((building) => ({ ...building, productionQueue: [...building.productionQueue] })),
     };
   }
@@ -149,6 +162,7 @@ export class GameSimulation {
     for (const player of this.players.values()) player.economy.ore += player.economy.orePerSecond * dt;
     for (const player of this.players.values()) this.advanceResearch(player, dt);
     for (const factory of this.buildings.values()) this.advanceFactory(factory, dt);
+    for (const unit of this.units.values()) this.advanceUnit(unit, dt);
     this.tickCount += 1;
   }
 
@@ -181,6 +195,24 @@ export class GameSimulation {
     this.events.push({ type: 'unit-completed', playerId: factory.ownerId, factoryId: factory.id, unitId: id });
   }
 
+  private advanceUnit(unit: MutableUnit, dt: number): void {
+    const destination = unit.destination;
+    if (!destination) return;
+    const definition = this.unitById(unit.definitionId);
+    const deltaX = destination.x - unit.position.x;
+    const deltaY = destination.y - unit.position.y;
+    const distance = Math.hypot(deltaX, deltaY);
+    const step = definition.speed * dt;
+    if (distance <= step + EPSILON) {
+      unit.position.x = destination.x;
+      unit.position.y = destination.y;
+      unit.destination = undefined;
+      return;
+    }
+    unit.position.x += (deltaX / distance) * step;
+    unit.position.y += (deltaY / distance) * step;
+  }
+
   private recalculatePlayer(ownerId: PlayerId): void {
     const player = this.requirePlayer(ownerId);
     let orePerSecond = 0;
@@ -203,6 +235,10 @@ export class GameSimulation {
     const halfWidth = definition.footprint.width / 2;
     const halfHeight = definition.footprint.height / 2;
     return position.x - halfWidth >= 0 && position.y - halfHeight >= 0 && position.x + halfWidth <= this.map.width && position.y + halfHeight <= this.map.height;
+  }
+
+  private positionIsInsideMap(position: WorldPosition): boolean {
+    return position.x >= 0 && position.y >= 0 && position.x < this.map.width && position.y < this.map.height;
   }
 
   private footprintIsPassable(definition: BuildingDefinition, position: WorldPosition): boolean {

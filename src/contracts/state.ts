@@ -41,6 +41,7 @@ export interface UnitState {
   readonly position: WorldPosition;
   readonly health: number;
   readonly maxHealth: number;
+  readonly destination?: WorldPosition;
 }
 
 export interface BuildingState {
@@ -125,6 +126,7 @@ export type SimulationEvent =
   | { readonly type: 'unit-completed'; readonly playerId: PlayerId; readonly factoryId: EntityId; readonly unitId: EntityId }
   | { readonly type: 'research-started'; readonly playerId: PlayerId; readonly researchId: string }
   | { readonly type: 'research-completed'; readonly playerId: PlayerId; readonly researchId: string }
+  | { readonly type: 'move-issued'; readonly playerId: PlayerId; readonly unitIds: readonly EntityId[]; readonly destination: WorldPosition }
   | { readonly type: 'command-rejected'; readonly playerId: PlayerId; readonly reason: string };
 
 export interface CommandResult {

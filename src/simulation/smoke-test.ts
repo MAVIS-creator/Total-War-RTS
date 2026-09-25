@@ -51,4 +51,19 @@ if (!researchPlayer || researchPlayer.techLevel !== 2 || researchPlayer.research
 if (researchPlayer.economy.orePerSecond !== 1_300) throw new Error('Expected Tech 2 HQ income progression.');
 if (researchSimulation.drainEvents().filter((event) => event.type === 'research-completed').length !== 1) throw new Error('Expected a research-completed event.');
 
+const movementSimulation = new GameSimulation({ playerCount: 2, populationCap: 10, mapId: 'frozen-front', seed: 9 });
+movementSimulation.addPlayer('move-player', 'Move Player', 2_000);
+const movementFactory = movementSimulation.addBuilding('move-player', prototypeBuildings.factory, { x: 300, y: 300 });
+movementSimulation.addBuilding('move-player', prototypeBuildings.powercell, { x: 400, y: 300 });
+if (!movementSimulation.queueUnit('move-player', movementFactory, 'scout').accepted) throw new Error('Expected scout queue for movement test.');
+movementSimulation.advance(3);
+const movingUnit = movementSimulation.snapshot().units[0];
+if (!movingUnit) throw new Error('Expected a completed scout for movement test.');
+if (!movementSimulation.issueMove('move-player', [movingUnit.id], { x: 500, y: 500 }).accepted) throw new Error('Expected move order to be accepted.');
+if (movementSimulation.issueMove('move-player', [movingUnit.id], { x: 225, y: 125 }).accepted) throw new Error('Expected blocked move destination to be rejected.');
+movementSimulation.advance(4);
+const movedUnit = movementSimulation.snapshot().units[0];
+if (!movedUnit || Math.hypot(movedUnit.position.x - 500, movedUnit.position.y - 500) > 0.01 || movedUnit.destination) throw new Error('Expected unit to complete its move order.');
+if (movementSimulation.drainEvents().filter((event) => event.type === 'move-issued').length !== 1) throw new Error('Expected one move-issued event.');
+
 console.log('Simulation smoke test passed.');
