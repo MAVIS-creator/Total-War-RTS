@@ -5,6 +5,22 @@ import { Button } from './components/Button';
 import { VictoryDefeatModal, type MatchStatistics } from './screens/VictoryDefeatModal';
 import { soundSystem } from '../audio/SoundSystem';
 
+declare global {
+  interface Window {
+    __ANTIGRAVITY_HUD__?: HUDOverlay;
+    __ANTIGRAVITY_GAME__?: {
+      stopUnits: () => void;
+      deselectAll: () => void;
+      retreatUnits: () => void;
+      setAttackMode: () => void;
+      setMoveMode: () => void;
+      upgradeSelectedBuilding: () => void;
+      getSelectedUnits: () => unknown[];
+      getSelectedBuilding: () => unknown;
+    };
+  }
+}
+
 export interface HUDCallbacks {
   onPauseMenu: () => void;
   onRestart: () => void;
@@ -193,6 +209,17 @@ export class HUDOverlay {
       btn.addEventListener('mouseenter', () => soundSystem.playHover());
       btn.addEventListener('click', () => {
         soundSystem.playClick();
+        if (cmd.label === 'HOLD') {
+          window.__ANTIGRAVITY_GAME__?.stopUnits();
+        } else if (cmd.label === 'CANCEL') {
+          window.__ANTIGRAVITY_GAME__?.deselectAll();
+        } else if (cmd.label === 'RETREAT') {
+          window.__ANTIGRAVITY_GAME__?.retreatUnits();
+        } else if (cmd.label === 'ATTACK') {
+          window.__ANTIGRAVITY_GAME__?.setAttackMode();
+        } else if (cmd.label === 'MOVE') {
+          window.__ANTIGRAVITY_GAME__?.setMoveMode();
+        }
         this.addAlert(`Command issued: ${cmd.label}`, cmd.isOrange ? 'warning' : 'info');
       });
 
@@ -227,11 +254,24 @@ export class HUDOverlay {
     if (!this.root.parentElement) {
       parent.appendChild(this.root);
       window.addEventListener('keydown', this.handleKeyDown);
+      window.__ANTIGRAVITY_HUD__ = this;
+      const miniWrap = document.getElementById('minimapWrap');
+      if (miniWrap) miniWrap.style.display = 'block';
+      const hudBar = document.getElementById('hud');
+      if (hudBar) hudBar.style.display = 'flex';
     }
   }
 
   unmount(): void {
     window.removeEventListener('keydown', this.handleKeyDown);
+    if (window.__ANTIGRAVITY_HUD__ === this) {
+      window.__ANTIGRAVITY_HUD__ = undefined;
+    }
+    const miniWrap = document.getElementById('minimapWrap');
+    if (miniWrap) miniWrap.style.display = 'none';
+    const hudBar = document.getElementById('hud');
+    if (hudBar) hudBar.style.display = 'none';
+
     if (this.root.parentElement) {
       this.root.parentElement.removeChild(this.root);
     }

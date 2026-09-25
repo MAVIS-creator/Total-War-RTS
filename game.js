@@ -1237,6 +1237,7 @@ function update(dt) {
       incomeClock -= 1;
       updateEconomy();
     }
+    updateUI();
   }
   if (aiClock >= 1.15) {
     aiClock = 0;
@@ -1429,42 +1430,141 @@ function selectedSummary() {
 }
 function updateSelectedPanel() {
   const s = selectedSummary();
-  $("selTitle").textContent = s.title;
-  $("selMeta").textContent = s.meta;
-  $("selHp").style.width = s.hp * 100 + "%";
+  if ($("selTitle")) $("selTitle").textContent = s.title;
+  if ($("selMeta")) $("selMeta").textContent = s.meta;
+  if ($("selHp")) $("selHp").style.width = s.hp * 100 + "%";
   const box = $("selActions");
-  box.innerHTML = "";
-  if (
-    selectedBuilding &&
-    selectedBuilding.team === 0 &&
-    selectedBuilding.upgradeable
-  ) {
-    const b = document.createElement("button");
-    b.textContent = selectedBuilding.canUpgrade()
-      ? `Upgrade L${selectedBuilding.level + 1} · ₿${selectedBuilding.upgradeCost().toLocaleString()}`
-      : "Upgrade locked/max";
-    b.disabled = !selectedBuilding.canUpgrade();
-    b.onclick = upgradeSelected;
-    box.appendChild(b);
+  if (box) {
+    box.innerHTML = "";
+    if (
+      selectedBuilding &&
+      selectedBuilding.team === 0 &&
+      selectedBuilding.upgradeable
+    ) {
+      const b = document.createElement("button");
+      b.textContent = selectedBuilding.canUpgrade()
+        ? `Upgrade L${selectedBuilding.level + 1} · ₿${selectedBuilding.upgradeCost().toLocaleString()}`
+        : "Upgrade locked/max";
+      b.disabled = !selectedBuilding.canUpgrade();
+      b.onclick = upgradeSelected;
+      box.appendChild(b);
+    }
+    if (selectedUnits.size === 1) {
+      const u = [...selectedUnits][0];
+      const t = document.createElement("button");
+      t.textContent = u.veterancy();
+      t.disabled = true;
+      box.appendChild(t);
+    }
   }
-  if (selectedUnits.size === 1) {
-    const u = [...selectedUnits][0];
-    const t = document.createElement("button");
-    t.textContent = u.veterancy();
-    t.disabled = true;
-    box.appendChild(t);
+
+  // Update Antigravity modern HUD Selection Panel with portrait and telemetry
+  if (typeof window !== "undefined" && window.__ANTIGRAVITY_HUD__) {
+    if (selectedBuilding && alive(selectedBuilding)) {
+      const b = selectedBuilding;
+      const portraitMap = {
+        hq: "/assets/portraits/headquarters.jpg",
+        powercell: "/assets/portraits/power_cell.jpg",
+        extractor: "/assets/portraits/extractor.jpg",
+        factory: "/assets/portraits/vehicle_factory.jpg",
+        turret: "/assets/portraits/defense_turret.jpg",
+        wind: "/assets/portraits/power_cell.jpg",
+        reactor: "/assets/portraits/power_cell.jpg",
+        fusion: "/assets/portraits/power_cell.jpg",
+        artilleryTurret: "/assets/portraits/defense_turret.jpg",
+        shield: "/assets/portraits/defense_turret.jpg",
+      };
+      window.__ANTIGRAVITY_HUD__.updateSelection(
+        b.name,
+        `Level ${b.level} · ${TEAM_NAMES[b.team]}`,
+        b.hp / b.maxHp,
+        b.level,
+        b.tech,
+        portraitMap[b.type] || "/assets/portraits/headquarters.jpg",
+        {
+          atk: b.damage || 0,
+          rng: b.range || 0,
+          arm: Math.round(b.maxHp / 100),
+          spd: 0,
+        },
+      );
+    } else if (selectedUnits.size === 1) {
+      const u = [...selectedUnits][0];
+      const portraitMap = {
+        scout: "/assets/portraits/scout.jpg",
+        tank: "/assets/portraits/tank.jpg",
+        heavy: "/assets/portraits/heavy_tank.jpg",
+        artillery: "/assets/portraits/artillery.jpg",
+        juggernaut: "/assets/portraits/juggernaut.jpg",
+      };
+      window.__ANTIGRAVITY_HUD__.updateSelection(
+        u.name,
+        `${u.veterancy()} · ${u.role}`,
+        u.hp / u.maxHp,
+        u.rank,
+        u.tech,
+        portraitMap[u.type] || "/assets/portraits/tank.jpg",
+        {
+          atk: Math.round(u.damage * (1 + u.rank * 0.04)),
+          rng: u.range,
+          arm: Math.round(u.maxHp / 20),
+          spd: u.speed,
+        },
+      );
+    } else if (selectedUnits.size > 1) {
+      window.__ANTIGRAVITY_HUD__.updateSelection(
+        s.title,
+        s.meta,
+        s.hp,
+        0,
+        1,
+        undefined,
+        undefined,
+      );
+    } else {
+      window.__ANTIGRAVITY_HUD__.updateSelection(
+        "Tactical Grid",
+        "Awaiting entity selection",
+        0,
+        0,
+        1,
+        undefined,
+        undefined,
+      );
+    }
   }
 }
 function updateUI() {
   const p = teamPower(0);
-  $("ore").textContent = Math.floor(resources[0]).toLocaleString();
-  $("power").textContent =
-    `${p.use.toLocaleString()} / ${p.gen.toLocaleString()}${p.use > p.gen ? " ⚠" : ""}`;
-  $("pop").textContent = `${teamPop(0)} / ${popLimit}`;
-  $("tech").textContent = techProgress[0]
+  const ore = Math.floor(resources[0]);
+  const powerUse = p.use;
+  const powerGen = p.gen;
+  const pop = teamPop(0);
+  const popCap = popLimit;
+  const techStr = techProgress[0]
     ? `${tech[0]} → ${techProgress[0].next}`
     : tech[0];
-  $("sel").textContent = selectedUnits.size;
+  const selCount = selectedUnits.size;
+
+  if ($("ore")) $("ore").textContent = ore.toLocaleString();
+  if ($("power"))
+    $("power").textContent =
+      `${powerUse.toLocaleString()} / ${powerGen.toLocaleString()}${powerUse > powerGen ? " ⚠" : ""}`;
+  if ($("pop")) $("pop").textContent = `${pop} / ${popCap}`;
+  if ($("tech")) $("tech").textContent = techStr;
+  if ($("sel")) $("sel").textContent = selCount;
+
+  if (typeof window !== "undefined" && window.__ANTIGRAVITY_HUD__) {
+    window.__ANTIGRAVITY_HUD__.updateResources(
+      ore,
+      powerUse,
+      powerGen,
+      pop,
+      popCap,
+      techStr,
+      selCount,
+    );
+  }
   updateSelectedPanel();
 }
 
@@ -1783,3 +1883,38 @@ canvas.addEventListener(
 
 renderActions();
 updateUI();
+
+window.__ANTIGRAVITY_GAME__ = {
+  stopUnits: () => {
+    for (const u of selectedUnits) {
+      u.tx = u.x;
+      u.ty = u.y;
+      u.target = null;
+    }
+    showMsg("Units holding position.");
+  },
+  deselectAll: () => {
+    selectedUnits.clear();
+    selectedBuilding = null;
+    updateSelectedPanel();
+  },
+  retreatUnits: () => {
+    const base = hq(0);
+    if (base && selectedUnits.size) {
+      issueMove([...selectedUnits], base.x + 80, base.y + 80);
+      showMsg("Tactical retreat ordered to Headquarters.");
+    }
+  },
+  setAttackMode: () => {
+    showMsg("Attack mode active — select target or ground.");
+  },
+  setMoveMode: () => {
+    showMsg("Move mode active — tap ground destination.");
+  },
+  upgradeSelectedBuilding: () => {
+    upgradeSelected();
+  },
+  getSelectedUnits: () => [...selectedUnits],
+  getSelectedBuilding: () => selectedBuilding,
+};
+
