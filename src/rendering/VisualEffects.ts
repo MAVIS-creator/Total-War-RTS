@@ -171,4 +171,58 @@ export class VisualEffects {
     ctx.stroke();
     ctx.restore();
   }
+
+  /**
+   * Spawn a directional muzzle flash effect
+   */
+  static spawnMuzzleFlash(x: number, y: number, angle: number, size?: number, color?: string): void {
+    if (typeof window !== 'undefined' && window.__ANTIGRAVITY_EFFECTS__) {
+      window.__ANTIGRAVITY_EFFECTS__.spawnMuzzleFlash(x, y, angle, size, color);
+    }
+  }
+
+  /**
+   * Spawn an explosion effect (small or large)
+   */
+  static spawnExplosion(x: number, y: number, size?: number, isLarge?: boolean): void {
+    if (typeof window !== 'undefined' && window.__ANTIGRAVITY_EFFECTS__) {
+      window.__ANTIGRAVITY_EFFECTS__.spawnExplosion(x, y, size, isLarge);
+    }
+  }
+
+  /**
+   * Spawn high-velocity impact sparks
+   */
+  static spawnImpactSparks(x: number, y: number, normalAngle?: number, count?: number, color?: string): void {
+    if (typeof window !== 'undefined' && window.__ANTIGRAVITY_EFFECTS__) {
+      window.__ANTIGRAVITY_EFFECTS__.spawnImpactSparks(x, y, normalAngle, count, color);
+    }
+  }
+
+  /**
+   * Spawn shield ripple hit effect
+   */
+  static spawnShieldHit(x: number, y: number, radius: number, hitAngle: number, color?: string): void {
+    if (typeof window !== 'undefined' && window.__ANTIGRAVITY_EFFECTS__) {
+      window.__ANTIGRAVITY_EFFECTS__.spawnShieldHit(x, y, radius, hitAngle, color);
+    }
+  }
+
+  /**
+   * Spawn articulated nanite repair or construction welding beam
+   */
+  static spawnRepairBeam(sx: number, sy: number, tx: number, ty: number, color?: string): void {
+    if (typeof window !== 'undefined' && window.__ANTIGRAVITY_EFFECTS__) {
+      window.__ANTIGRAVITY_EFFECTS__.spawnRepairBeam(sx, sy, tx, ty, color);
+    }
+  }
+
+  /**
+   * Spawn holographic research beacon
+   */
+  static spawnResearchBeacon(x: number, y: number, maxRadius?: number): void {
+    if (typeof window !== 'undefined' && window.__ANTIGRAVITY_EFFECTS__) {
+      window.__ANTIGRAVITY_EFFECTS__.spawnResearchBeacon(x, y, maxRadius);
+    }
+  }
 }

@@ -20,3 +20,5 @@ export interface VisualEffect {
   readonly y: number;
   readonly duration: number;
 }
+
+export * from './EffectsPipeline';

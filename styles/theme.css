@@ -25,6 +25,34 @@
   --maw-cyan-bg: rgba(0, 210, 211, 0.08);
   --maw-cyan-glow: 0 0 12px rgba(0, 210, 211, 0.35);
 
+  /* Primary Action & Selection Orange Accents (Reference Pack Standard) */
+  --maw-orange: #ff9900;
+  --maw-orange-bright: #ffaa22;
+  --maw-orange-dim: #b36b00;
+  --maw-orange-bg: rgba(255, 153, 0, 0.12);
+  --maw-orange-glow: 0 0 16px rgba(255, 153, 0, 0.45);
+
+  /* Multi-Player Team Palettes */
+  --maw-team-0-primary: #00d2ff;
+  --maw-team-0-bright: #63e2ff;
+  --maw-team-0-glow: rgba(0, 210, 255, 0.45);
+  --maw-team-0-dark: #005f73;
+
+  --maw-team-1-primary: #ff3366;
+  --maw-team-1-bright: #ff6688;
+  --maw-team-1-glow: rgba(255, 51, 102, 0.45);
+  --maw-team-1-dark: #800020;
+
+  --maw-team-2-primary: #feca57;
+  --maw-team-2-bright: #ffd266;
+  --maw-team-2-glow: rgba(254, 202, 87, 0.45);
+  --maw-team-2-dark: #805500;
+
+  --maw-team-3-primary: #b197fc;
+  --maw-team-3-bright: #d0bfff;
+  --maw-team-3-glow: rgba(177, 151, 252, 0.45);
+  --maw-team-3-dark: #3b2466;
+
   /* Status & Combat Telemetry */
   --maw-good: #1dd1a1;
   --maw-good-dim: rgba(29, 209, 161, 0.15);

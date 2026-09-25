@@ -1,4 +1,5 @@
 import type { UnitVisualProfile, VisualWeaponMount, VisualUtilityComponent } from './UnitVisualProfile';
+import { TeamColorPipeline } from '../team/TeamColorPipeline';
 
 export interface UnitRenderState {
   readonly x: number;
@@ -27,13 +28,6 @@ export interface RenderContext {
 }
 
 export class UnitComponentRenderer {
-  private static readonly TEAM_PALETTE: Record<number, { primary: string; bright: string; glow: string; dark: string }> = {
-    0: { primary: '#00d2ff', bright: '#63e2ff', glow: 'rgba(0, 210, 255, 0.45)', dark: '#005f73' }, // Player 1 (Cyan)
-    1: { primary: '#ff3366', bright: '#ff6688', glow: 'rgba(255, 51, 102, 0.45)', dark: '#800020' }, // Player 2 (Crimson)
-    2: { primary: '#ffaa00', bright: '#ffd266', glow: 'rgba(255, 170, 0, 0.45)', dark: '#805500' }, // Player 3 (Amber)
-    3: { primary: '#00ff88', bright: '#66ffa3', glow: 'rgba(0, 255, 136, 0.45)', dark: '#008044' }, // Player 4 (Emerald)
-  };
-
   private static readonly STEEL_BASE = '#1e2631';
   private static readonly STEEL_DARK = '#121820';
   private static readonly STEEL_LIGHT = '#344152';
@@ -48,9 +42,7 @@ export class UnitComponentRenderer {
     const { ctx, camera, screenPos, isSelected, time } = rc;
     const zoom = camera.zoom;
     const r = Math.max(8, profile.baseRadius * zoom);
-    const team = this.TEAM_PALETTE[state.team] ?? this.TEAM_PALETTE[0] ?? {
-      primary: '#00d2ff', bright: '#63e2ff', glow: 'rgba(0, 210, 255, 0.45)', dark: '#005f73',
-    };
+    const team = TeamColorPipeline.getPalette(state.team);
 
     // 1. Smooth Directional Movement & Orientation
     const dx = state.tx - state.x;

@@ -9,6 +9,7 @@ import { AboutModal } from './screens/AboutModal';
 import { SaveLoadModal, type SaveSlotData } from './screens/SaveLoadModal';
 import { TacticalMenuModal, type TacticalMenuCallbacks } from './screens/TacticalMenuModal';
 import { VictoryDefeatModal, type MatchStatistics } from './screens/VictoryDefeatModal';
+import { HUDOverlay } from './HUDOverlay';
 
 export type ScreenState = 'main_menu' | 'play_menu' | 'skirmish_setup' | 'loading' | 'hud';
 
@@ -26,6 +27,7 @@ export class UIManager {
   readonly root: HTMLElement;
   private currentScreenState: ScreenState = 'main_menu';
   private activeScreenComponent: { destroy: () => void; element: HTMLElement } | null = null;
+  private hudOverlay: HUDOverlay | null = null;
   private callbacks: UIManagerCallbacks;
 
   constructor(callbacks: UIManagerCallbacks) {
@@ -37,6 +39,10 @@ export class UIManager {
       document.body.appendChild(rootEl);
     }
     this.root = rootEl;
+  }
+
+  getCurrentState(): ScreenState {
+    return this.currentScreenState;
   }
 
   showMainMenu(): void {
@@ -141,13 +147,27 @@ export class UIManager {
         setTimeout(async () => {
           this.clearActive();
           this.currentScreenState = 'hud';
+          this.hudOverlay = new HUDOverlay({
+            onPauseMenu: () => this.openTacticalMenu(),
+            onRestart: () => this.callbacks.onRestartMatch?.(),
+            onReturnToMenu: () => this.showMainMenu(),
+          });
+          this.hudOverlay.mount(this.root);
           await this.callbacks.onStartMatch(config, contractSettings);
         }, 300);
       }
     }, 120);
   }
 
+  getHUDOverlay(): HUDOverlay | null {
+    return this.hudOverlay;
+  }
+
   private clearActive(): void {
+    if (this.hudOverlay) {
+      this.hudOverlay.unmount();
+      this.hudOverlay = null;
+    }
     if (this.activeScreenComponent) {
       this.activeScreenComponent.destroy();
       this.activeScreenComponent = null;
@@ -197,8 +217,5 @@ export class UIManager {
     });
     modal.open();
   }
-
-  getCurrentState(): ScreenState {
-    return this.currentScreenState;
-  }
 }
+

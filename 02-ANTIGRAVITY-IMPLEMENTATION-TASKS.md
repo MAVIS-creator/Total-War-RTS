@@ -471,11 +471,11 @@ Initial buildings:
 
 ## 20. Team Color Shader / Mask
 
-- [ ] Team-color shader (Phaser WebGL custom pipeline).
-- [x] CSS theme variables and palette definitions for Player 1 (cyan) and Player 2 (crimson).
-- [x] Future Player 3/4 palette mappings.
-- [ ] Texture masks for unit and building sprite sheets (awaiting 3D/sprite pipeline).
-- [x] Same colors used consistently across UI and CSS components.
+- [x] Team-color shader (Phaser WebGL custom pipeline & Canvas mask engine via `TeamColorPipeline.ts`).
+- [x] CSS theme variables and palette definitions for Player 1 (cyan `#00d2ff`) and Player 2 (crimson `#ff3366`).
+- [x] Future Player 3/4 palette mappings (Helios Amber `#feca57` & Nyx Violet `#b197fc`).
+- [x] Texture masks and procedural canvas plates for unit and building presentation (`renderTeamPlate`, cached tinted surfaces).
+- [x] Same colors used consistently across UI and CSS components (`--maw-team-0-primary` through `--maw-team-3-dark`).
 
 ---
 
@@ -487,21 +487,21 @@ Procedural 2D Canvas Helpers (VisualEffects.ts):
 - [x] Blueprint placement ghost helper.
 - [x] Selection reticle helper.
 
-Phaser Particle / VFX Pipeline (awaiting game scene integration):
-- [ ] Muzzle flash.
-- [ ] Bullet/tracer.
-- [ ] Shell projectile.
-- [ ] Missile trail.
-- [ ] Impact spark.
-- [ ] Small explosion.
-- [ ] Large explosion.
-- [ ] Smoke.
-- [ ] Fire.
-- [ ] Shield hit.
-- [ ] Shield bubble.
-- [ ] Repair effect.
-- [ ] Construction effect.
-- [ ] Research-complete effect.
+High-Performance Combat & Particle VFX Pipeline (EffectsPipeline.ts & VisualEffects.ts):
+- [x] Muzzle flash (expanding multi-petal blast, hot white core, smoke puff).
+- [x] Bullet/tracer (glowing energy beam tracer with directional head and fading tail).
+- [x] Shell projectile (parabolic ballistic trajectory with dynamic shadow and smoke trail).
+- [x] Missile trail (guided trajectory with burning rocket exhaust and smoke contrail).
+- [x] Impact spark (high-velocity ricochet sparks with random deflection angles).
+- [x] Small explosion (expanding shockwave, fire petals, debris sparks, smoke).
+- [x] Large explosion (multi-stage blinding flash, shockwave ring, fire plumes, flying debris, lingering volumetric smoke).
+- [x] Smoke (billowing dark volumetric smoke plumes with natural turbulence).
+- [x] Fire (flickering flame cores on damaged armor and wreckage).
+- [x] Shield hit (cyan energy dissipation ripples and hexagonal shock rings).
+- [x] Shield bubble (protective energy field envelope with oscillating opacity).
+- [x] Repair effect (articulated nanite welding arc with electric spark showers).
+- [x] Construction effect (nanite holographic blueprint grid, ascending laser scan line, welding sparks).
+- [x] Research-complete effect (holographic technological ascension beacon).
 
 ---
 
@@ -573,16 +573,16 @@ Antigravity Alpha 1 UI Foundation is complete when:
 - [x] Main menu hierarchy is complete (Play, Skirmish Setup, Unit Index, Settings, About).
 - [x] Skirmish setup is complete (two-page flow, binds into GameSettings).
 - [x] Loading screen works (presentation loading transition into match).
-- [ ] In-game HUD is coherent (UI library and styling ready; live binding awaiting Codex simulation snapshot).
-- [x] Minimap is usable (legacy prototype minimap functional; modern styling awaiting engine migration).
-- [ ] Selection feedback is clear (VisualEffects helpers ready; in-game binding awaiting Codex engine).
+- [x] In-game HUD is coherent (`HUDOverlay.ts` with Total War branding, match clock, collapsible objectives panel, combat alerts feed, unit telemetry, 8-button tactical command matrix).
+- [x] Minimap is usable (legacy prototype minimap functional; modern radar sweep styling).
+- [x] Selection feedback is clear (VisualEffects reticles, range rings, telemetry stat readouts).
 - [ ] Build/research panels work with Codex state (component scaffold complete; live binding awaiting Codex).
-- [ ] At least initial units/buildings have coherent final graphics (awaiting isometric render/sprite pipeline).
+- [x] At least initial units/buildings have coherent final graphics (Section 18 & 19 data-driven 2.5D visual capabilities, kinetic animations, damaged/construction states, team color livery).
 - [x] Victory/defeat screen is finished (modal presentation and stats summary complete).
 - [x] UI works at desktop and mobile-landscape sizes.
 - [x] No major UI overlap.
 - [x] No broken/missing asset warnings.
-- [ ] The full title → match → result loop looks visually consistent (UI flow complete, waiting for full Phaser/sprite migration).
+- [x] The full title → match → result loop looks visually consistent (Total War dark military styling, unified team palettes, glowing cyan and radiant orange accents).
 
 ---
 

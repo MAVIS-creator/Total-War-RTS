@@ -28,6 +28,26 @@ export class MainMenu {
     this.ctx = this.canvas.getContext('2d');
     this.element.appendChild(this.canvas);
 
+    // Topbar with Commander profile badge (per Total War reference pack 02_main_menu_screen)
+    const topbar = document.createElement('div');
+    topbar.className = 'maw-menu-topbar';
+    topbar.innerHTML = `
+      <div class="maw-commander-badge">
+        <div class="maw-commander-avatar">🪖</div>
+        <div class="maw-commander-info">
+          <div class="maw-commander-name">
+            Raven-7 <span class="maw-commander-rank">LVL 28</span>
+          </div>
+          <div class="maw-commander-bar"><i></i></div>
+        </div>
+      </div>
+      <div class="maw-topbar-icons">
+        <button class="maw-icon-btn" title="Tactical Comms" type="button">📡</button>
+        <button class="maw-icon-btn" title="Alerts" type="button">🔔</button>
+      </div>
+    `;
+    this.element.appendChild(topbar);
+
     // Left visual/title hero
     const hero = document.createElement('div');
     hero.className = 'maw-menu-hero';
@@ -35,8 +55,13 @@ export class MainMenu {
     const titleBlock = document.createElement('div');
     titleBlock.className = 'maw-title-block';
     titleBlock.innerHTML = `
-      <h1 class="maw-title-main">MACHINES AT WAR</h1>
-      <div class="maw-title-sub">TOTAL WAR RTS PROTOTYPE 0.2</div>
+      <div class="maw-title-logo-wrap">
+        <div class="maw-title-insignia"><span>⚔</span></div>
+        <div>
+          <h1 class="maw-title-main">TOTAL WAR</h1>
+          <div class="maw-title-sub">REAL-TIME STRATEGY · SECTOR COMBAT</div>
+        </div>
+      </div>
       <div class="maw-title-desc">
         Command tactical ground armor, establish reinforced forward bases, research advanced military technologies, and defeat hostile forces across contested battlegrounds.
       </div>
@@ -64,29 +89,43 @@ export class MainMenu {
     const navList = document.createElement('div');
     navList.className = 'maw-nav-list';
 
-    // Check if an active/valid save archive exists
-    if (SaveLoadModal.hasValidSave() && callbacks.onResume) {
-      const resumeBtn = this.createNavButton('Resume Game', 'ACTIVE', callbacks.onResume);
-      navList.appendChild(resumeBtn);
+    // Check if an active/valid save archive exists (Reference Pack Continue card)
+    const latestSave = SaveLoadModal.getLatestSave();
+    if (latestSave && callbacks.onResume) {
+      const continueCard = document.createElement('div');
+      continueCard.className = 'maw-continue-card maw-bracket-box';
+      continueCard.innerHTML = `
+        <div class="maw-continue-content">
+          <div class="maw-continue-label">⚡ CONTINUE CAMPAIGN</div>
+          <div class="maw-continue-meta">${latestSave.mapName} · ${latestSave.matchDuration}</div>
+        </div>
+        <div class="maw-continue-chevron">›</div>
+      `;
+      continueCard.addEventListener('mouseenter', () => soundSystem.playHover());
+      continueCard.addEventListener('click', () => {
+        soundSystem.playClick();
+        callbacks.onResume?.();
+      });
+      navList.appendChild(continueCard);
     }
 
-    // Buttons: PLAY, LOAD ARCHIVE, NEWSLETTER, UNIT INDEX, SETTINGS, ABOUT
-    const playBtn = this.createNavButton('Deploy / Play', 'NEW', callbacks.onPlay);
+    // Buttons with tactical military icons
+    const playBtn = this.createNavButton('⚔', 'Skirmish / Deploy', 'ACTIVE', callbacks.onPlay);
     navList.appendChild(playBtn);
 
     if (callbacks.onLoadGame) {
-      const loadBtn = this.createNavButton('Load Archive', 'SLOTS', callbacks.onLoadGame);
+      const loadBtn = this.createNavButton('💾', 'Load Archive', 'SLOTS', callbacks.onLoadGame);
       navList.appendChild(loadBtn);
     }
 
-    const newsletterBtn = this.createNavButton('Newsletter', '', () => this.showNewsletterModal());
-    const unitIndexBtn = this.createNavButton('Unit Index', 'DATABASE', callbacks.onUnitIndex);
-    const settingsBtn = this.createNavButton('Settings', 'CONFIG', callbacks.onSettings);
-    const aboutBtn = this.createNavButton('About', 'INFO', callbacks.onAbout);
+    const unitIndexBtn = this.createNavButton('🗂', 'Unit Database', 'INTEL', callbacks.onUnitIndex);
+    const settingsBtn = this.createNavButton('⚙', 'Settings', 'CONFIG', callbacks.onSettings);
+    const newsletterBtn = this.createNavButton('📡', 'Field Dispatch', '', () => this.showNewsletterModal());
+    const aboutBtn = this.createNavButton('ℹ', 'System Info', 'ABOUT', callbacks.onAbout);
 
-    navList.appendChild(newsletterBtn);
     navList.appendChild(unitIndexBtn);
     navList.appendChild(settingsBtn);
+    navList.appendChild(newsletterBtn);
     navList.appendChild(aboutBtn);
 
     panelWrap.appendChild(navList);
@@ -95,11 +134,12 @@ export class MainMenu {
     this.initAtmosphere();
   }
 
-  private createNavButton(title: string, badgeText: string, onClick: () => void): HTMLButtonElement {
+  private createNavButton(icon: string, title: string, badgeText: string, onClick: () => void): HTMLButtonElement {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'maw-nav-btn maw-bracket-box';
     btn.innerHTML = `
+      <span class="maw-nav-icon">${icon}</span>
       <span>${title}</span>
       ${badgeText ? `<span class="maw-nav-badge">${badgeText}</span>` : ''}
     `;

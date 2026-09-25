@@ -10,6 +10,7 @@ import type {
   IsometricPrism,
   IsometricCylinder,
 } from './BuildingVisualProfile';
+import { TeamColorPipeline } from '../team/TeamColorPipeline';
 
 export interface BuildingRenderState {
   readonly id?: string;
@@ -40,13 +41,6 @@ export interface BuildingRenderContext {
   readonly ghostValid?: boolean;
 }
 
-const TEAM_PALETTES: Array<{ primary: string; glow: string; dark: string }> = [
-  { primary: '#67b7ff', glow: 'rgba(103, 183, 255, 0.7)', dark: '#153658' }, // Cyan (Player 1)
-  { primary: '#ff6b6b', glow: 'rgba(255, 107, 107, 0.7)', dark: '#5e1717' }, // Crimson (Player 2)
-  { primary: '#ffd43b', glow: 'rgba(255, 212, 59, 0.7)', dark: '#5a490d' },  // Gold (Player 3)
-  { primary: '#b197fc', glow: 'rgba(177, 151, 252, 0.7)', dark: '#3b2466' }, // Purple (Player 4)
-];
-
 const ISO_Y_SCALE = 0.68; // 2.5D isometric pitch factor
 
 export class BuildingComponentRenderer {
@@ -60,11 +54,7 @@ export class BuildingComponentRenderer {
   ): void {
     const { ctx, camera, screenPos, isSelected, time, isGhost, ghostValid } = rc;
     const zoom = camera.zoom;
-    const teamPalette = TEAM_PALETTES[state.team] ?? TEAM_PALETTES[0] ?? {
-      primary: '#67b7ff',
-      glow: 'rgba(103, 183, 255, 0.7)',
-      dark: '#153658',
-    };
+    const teamPalette = TeamColorPipeline.getPalette(state.team);
 
     ctx.save();
     ctx.translate(screenPos.x, screenPos.y);

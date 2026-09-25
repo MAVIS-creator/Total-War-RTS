@@ -5,17 +5,24 @@ import { soundSystem } from './audio/SoundSystem';
 import type { MatchStatistics } from './ui/screens/VictoryDefeatModal';
 import { UnitRenderer } from './rendering/UnitRenderer';
 import { BuildingRenderer } from './rendering/BuildingRenderer';
+import { TeamColorPipeline } from './rendering/team/TeamColorPipeline';
+import { EffectsPipeline } from './effects/EffectsPipeline';
 
 declare global {
   interface Window {
     __ANTIGRAVITY_UNIT_RENDERER__?: typeof UnitRenderer;
     __ANTIGRAVITY_BUILDING_RENDERER__?: typeof BuildingRenderer;
+    __ANTIGRAVITY_TEAM_PIPELINE__?: typeof TeamColorPipeline;
+    __ANTIGRAVITY_EFFECTS__?: typeof EffectsPipeline;
   }
 }
 
 if (typeof window !== 'undefined') {
   window.__ANTIGRAVITY_UNIT_RENDERER__ = UnitRenderer;
   window.__ANTIGRAVITY_BUILDING_RENDERER__ = BuildingRenderer;
+  window.__ANTIGRAVITY_TEAM_PIPELINE__ = TeamColorPipeline;
+  window.__ANTIGRAVITY_EFFECTS__ = EffectsPipeline;
+  TeamColorPipeline.applyCSSTeamVariables();
 }
 
 /**
@@ -137,6 +144,7 @@ export const initAntigravityUI = (): UIManager => {
           buildingsDestroyed: 6,
           oreGathered: 42000,
         };
+        ui.getHUDOverlay()?.addAlert('VICTORY ACHIEVED — Hostile bases destroyed!', 'success');
         setTimeout(() => ui.showMatchResult(stats), 600);
       } else if (text.includes('DEFEAT')) {
         soundSystem.playDefeat();
@@ -149,16 +157,35 @@ export const initAntigravityUI = (): UIManager => {
           buildingsDestroyed: 1,
           oreGathered: 26000,
         };
+        ui.getHUDOverlay()?.addAlert('DEFEAT — Command Headquarters lost!', 'danger');
         setTimeout(() => ui.showMatchResult(stats), 600);
       } else if (text.includes('Warning') || text.includes('Need') || text.includes('Not enough') || text.includes('Requires')) {
         soundSystem.playAlert();
+        ui.getHUDOverlay()?.addAlert(text, 'warning');
       } else if (text.includes('constructed') || text.includes('complete') || text.includes('promoted')) {
         soundSystem.playPlacement();
+        ui.getHUDOverlay()?.addAlert(text, 'success');
+      } else if (text.includes('attack') || text.includes('damaged')) {
+        soundSystem.playAlert();
+        ui.getHUDOverlay()?.addAlert(text, 'danger');
+      } else {
+        ui.getHUDOverlay()?.addAlert(text, 'info');
       }
     });
 
     observer.observe(messageEl, { childList: true, characterData: true, subtree: true });
   }
+
+  // 5. Active match duration clock timer
+  window.setInterval(() => {
+    if (ui.getCurrentState() === 'hud') {
+      const elapsedSec = Math.floor((Date.now() - matchStartTime) / 1000);
+      const mins = Math.floor(elapsedSec / 60);
+      const secs = elapsedSec % 60;
+      const durationStr = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      ui.getHUDOverlay()?.updateClock(durationStr);
+    }
+  }, 1000);
 
   return ui;
 };
