@@ -249,16 +249,16 @@ Later:
 ## 11. Combat System
 
 - [ ] Target acquisition.
-- [ ] Range checking.
-- [ ] Fire cooldown.
+- [x] Range checking.
+- [x] Fire cooldown.
 - [ ] Projectile creation.
 - [ ] Hitscan option.
-- [ ] Damage.
+- [x] Damage.
 - [ ] Armor/resistance.
-- [ ] Unit death.
-- [ ] Building death.
-- [ ] Target invalidation.
-- [ ] Friendly/enemy filtering.
+- [x] Unit death.
+- [x] Building death.
+- [x] Target invalidation.
+- [x] Friendly/enemy filtering.
 - [ ] Ground/air targeting restrictions.
 
 Weapon definition should support:

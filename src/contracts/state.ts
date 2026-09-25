@@ -42,6 +42,7 @@ export interface UnitState {
   readonly health: number;
   readonly maxHealth: number;
   readonly destination?: WorldPosition;
+  readonly targetId?: EntityId;
 }
 
 export interface BuildingState {
@@ -119,7 +120,8 @@ export interface UISelectionState {
 
 export type CommandDefinition =
   | { readonly type: 'queue-unit'; readonly playerId: PlayerId; readonly factoryId: EntityId; readonly unitDefinitionId: string }
-  | { readonly type: 'move'; readonly playerId: PlayerId; readonly unitIds: readonly EntityId[]; readonly destination: WorldPosition };
+  | { readonly type: 'move'; readonly playerId: PlayerId; readonly unitIds: readonly EntityId[]; readonly destination: WorldPosition }
+  | { readonly type: 'attack'; readonly playerId: PlayerId; readonly unitIds: readonly EntityId[]; readonly targetId: EntityId };
 
 export type SimulationEvent =
   | { readonly type: 'unit-queued'; readonly playerId: PlayerId; readonly factoryId: EntityId; readonly unitDefinitionId: string }
@@ -127,6 +129,8 @@ export type SimulationEvent =
   | { readonly type: 'research-started'; readonly playerId: PlayerId; readonly researchId: string }
   | { readonly type: 'research-completed'; readonly playerId: PlayerId; readonly researchId: string }
   | { readonly type: 'move-issued'; readonly playerId: PlayerId; readonly unitIds: readonly EntityId[]; readonly destination: WorldPosition }
+  | { readonly type: 'attack-issued'; readonly playerId: PlayerId; readonly unitIds: readonly EntityId[]; readonly targetId: EntityId }
+  | { readonly type: 'entity-destroyed'; readonly entityId: EntityId; readonly ownerId: PlayerId }
   | { readonly type: 'command-rejected'; readonly playerId: PlayerId; readonly reason: string };
 
 export interface CommandResult {

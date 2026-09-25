@@ -33,8 +33,8 @@ type MutablePlayer = Omit<PlayerState, 'economy' | 'power' | 'population' | 'res
   research?: MutableResearchProgress;
 };
 type MutableQueueItem = { -readonly [Key in keyof ProductionQueueItem]: ProductionQueueItem[Key] };
-type MutableBuilding = Omit<BuildingState, 'productionQueue'> & { productionQueue: MutableQueueItem[] };
-type MutableUnit = Omit<UnitState, 'position' | 'destination'> & { position: { x: number; y: number }; destination?: { x: number; y: number } };
+type MutableBuilding = Omit<BuildingState, 'productionQueue' | 'health'> & { health: number; productionQueue: MutableQueueItem[] };
+type MutableUnit = Omit<UnitState, 'position' | 'destination' | 'health' | 'targetId'> & { health: number; position: { x: number; y: number }; destination?: { x: number; y: number }; targetId?: string; cooldown: number };
 
 export class GameSimulation {
   private readonly ids = new StableIdFactory();
@@ -110,9 +110,20 @@ export class GameSimulation {
     const selectedUnits = unitIds.map((id) => this.units.get(id));
     if (selectedUnits.some((unit) => !unit || unit.ownerId !== ownerId)) return this.reject(ownerId, 'Move orders require player-owned units.');
     for (const unit of selectedUnits) {
-      if (unit) unit.destination = { ...destination };
+      if (unit) { unit.destination = { ...destination }; unit.targetId = undefined; }
     }
     this.events.push({ type: 'move-issued', playerId: ownerId, unitIds: [...unitIds], destination: { ...destination } });
+    return { accepted: true };
+  }
+
+  public issueAttack(ownerId: PlayerId, unitIds: readonly string[], targetId: string): CommandResult {
+    if (unitIds.length === 0) return this.reject(ownerId, 'At least one unit must be selected.');
+    const target = this.entity(targetId);
+    if (!target || target.ownerId === ownerId) return this.reject(ownerId, 'Attack orders require an enemy target.');
+    const attackers = unitIds.map((id) => this.units.get(id));
+    if (attackers.some((unit) => !unit || unit.ownerId !== ownerId)) return this.reject(ownerId, 'Attack orders require player-owned units.');
+    for (const attacker of attackers) if (attacker) { attacker.targetId = targetId; attacker.destination = undefined; }
+    this.events.push({ type: 'attack-issued', playerId: ownerId, unitIds: [...unitIds], targetId });
     return { accepted: true };
   }
 
@@ -153,7 +164,7 @@ export class GameSimulation {
       tick: this.tickCount,
       settings: this.settings,
       players: [...this.players.values()].map((player) => ({ ...player, economy: { ...player.economy }, power: { ...player.power }, population: { ...player.population }, research: player.research ? { ...player.research } : undefined })),
-      units: [...this.units.values()].map((unit) => ({ ...unit, position: { ...unit.position }, destination: unit.destination ? { ...unit.destination } : undefined })),
+      units: [...this.units.values()].map((unit) => ({ ...unit, position: { ...unit.position }, destination: unit.destination ? { ...unit.destination } : undefined, targetId: unit.targetId })),
       buildings: [...this.buildings.values()].map((building) => ({ ...building, productionQueue: [...building.productionQueue] })),
     };
   }
@@ -191,11 +202,26 @@ export class GameSimulation {
     player.population.reserved -= item.populationReserved;
     player.population.used += item.populationReserved;
     const id = this.ids.next('unit');
-    this.units.set(id, { id, ownerId: factory.ownerId, definitionId: unit.id, position: { x: factory.position.x + 50, y: factory.position.y + this.random.between(-15, 15) }, health: unit.health, maxHealth: unit.health });
+    this.units.set(id, { id, ownerId: factory.ownerId, definitionId: unit.id, position: { x: factory.position.x + 50, y: factory.position.y + this.random.between(-15, 15) }, health: unit.health, maxHealth: unit.health, cooldown: 0 });
     this.events.push({ type: 'unit-completed', playerId: factory.ownerId, factoryId: factory.id, unitId: id });
   }
 
   private advanceUnit(unit: MutableUnit, dt: number): void {
+    unit.cooldown = Math.max(0, unit.cooldown - dt);
+    const target = unit.targetId ? this.entity(unit.targetId) : undefined;
+    if (unit.targetId && !target) unit.targetId = undefined;
+    if (target) {
+      const definition = this.unitById(unit.definitionId);
+      const targetDistance = Math.hypot(target.position.x - unit.position.x, target.position.y - unit.position.y);
+      if (targetDistance <= definition.weapon.range) {
+        if (unit.cooldown <= 0) {
+          unit.cooldown = definition.weapon.reloadSeconds;
+          this.damageEntity(target.id, definition.weapon.damage);
+        }
+        return;
+      }
+      unit.destination = { ...target.position };
+    }
     const destination = unit.destination;
     if (!destination) return;
     const definition = this.unitById(unit.definitionId);
@@ -211,6 +237,22 @@ export class GameSimulation {
     }
     unit.position.x += (deltaX / distance) * step;
     unit.position.y += (deltaY / distance) * step;
+  }
+
+  private entity(id: string): MutableUnit | MutableBuilding | undefined {
+    return this.units.get(id) ?? this.buildings.get(id);
+  }
+
+  private damageEntity(id: string, damage: number): void {
+    const target = this.entity(id);
+    if (!target) return;
+    target.health -= damage;
+    if (target.health > 0) return;
+    if (this.units.delete(id)) {
+      const player = this.requirePlayer(target.ownerId);
+      player.population.used -= this.unitById(target.definitionId).cost.population ?? 0;
+    } else if (this.buildings.delete(id)) this.recalculatePlayer(target.ownerId);
+    this.events.push({ type: 'entity-destroyed', entityId: id, ownerId: target.ownerId });
   }
 
   private recalculatePlayer(ownerId: PlayerId): void {

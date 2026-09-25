@@ -66,4 +66,19 @@ const movedUnit = movementSimulation.snapshot().units[0];
 if (!movedUnit || Math.hypot(movedUnit.position.x - 500, movedUnit.position.y - 500) > 0.01 || movedUnit.destination) throw new Error('Expected unit to complete its move order.');
 if (movementSimulation.drainEvents().filter((event) => event.type === 'move-issued').length !== 1) throw new Error('Expected one move-issued event.');
 
+const combatSimulation = new GameSimulation({ playerCount: 2, populationCap: 10, mapId: 'frozen-front', seed: 3 });
+combatSimulation.addPlayer('attacker', 'Attacker', 2_000);
+combatSimulation.addPlayer('defender', 'Defender', 2_000);
+const combatFactory = combatSimulation.addBuilding('attacker', prototypeBuildings.factory, { x: 300, y: 300 });
+combatSimulation.addBuilding('attacker', prototypeBuildings.powercell, { x: 400, y: 300 });
+const targetHq = combatSimulation.addBuilding('defender', prototypeBuildings.hq, { x: 500, y: 300 });
+if (!combatSimulation.queueUnit('attacker', combatFactory, 'tank').accepted) throw new Error('Expected tank queue for combat test.');
+combatSimulation.advance(3);
+const attacker = combatSimulation.snapshot().units[0];
+if (!attacker || !combatSimulation.issueAttack('attacker', [attacker.id], targetHq).accepted) throw new Error('Expected attack order to be accepted.');
+combatSimulation.advance(2);
+const damagedHq = combatSimulation.snapshot().buildings.find((building) => building.id === targetHq);
+if (!damagedHq || damagedHq.health >= damagedHq.maxHealth) throw new Error('Expected attack order to damage the target.');
+if (combatSimulation.drainEvents().filter((event) => event.type === 'attack-issued').length !== 1) throw new Error('Expected one attack-issued event.');
+
 console.log('Simulation smoke test passed.');
