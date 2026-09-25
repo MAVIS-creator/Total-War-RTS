@@ -115,9 +115,9 @@ Create strongly typed contracts:
 
 Rules:
 
-- [ ] Contracts contain no CSS/UI implementation.
-- [ ] Antigravity can consume state without touching simulation internals.
-- [ ] Breaking contract changes are documented.
+- [x] Contracts contain no CSS/UI implementation.
+- [x] Antigravity can consume state without touching simulation internals.
+- [x] Breaking contract changes are documented.
 
 ---
 
