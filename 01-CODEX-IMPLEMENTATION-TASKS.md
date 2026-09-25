@@ -141,15 +141,15 @@ Codex does not need to style these screens.
 
 ## 6. Map System
 
-- [ ] Define map JSON format.
-- [ ] Map width/height supported.
-- [ ] Terrain grid supported.
-- [ ] Collision/blocked cells supported.
-- [ ] Spawn points supported.
-- [ ] Ore fields supported.
+- [x] Define map JSON format.
+- [x] Map width/height supported.
+- [x] Terrain grid supported.
+- [x] Collision/blocked cells supported.
+- [x] Spawn points supported.
+- [x] Ore fields supported.
 - [ ] Decorative props can be ignored by simulation.
-- [ ] Map loader validates data.
-- [ ] At least one 1v1 map works.
+- [x] Map loader validates data.
+- [x] At least one 1v1 map works.
 
 Suggested map structure:
 

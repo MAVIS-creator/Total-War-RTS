@@ -69,7 +69,24 @@ export interface MapDefinition {
   readonly width: number;
   readonly height: number;
   readonly playerCount: 2 | 3 | 4;
-  readonly spawnPoints: readonly WorldPosition[];
+  readonly terrain: TerrainGrid;
+  readonly spawnPoints: readonly SpawnPoint[];
+  readonly oreFields: readonly OreField[];
+}
+
+export interface TerrainGrid {
+  readonly tileSize: number;
+  readonly rows: readonly string[];
+}
+
+export interface SpawnPoint {
+  readonly playerIndex: number;
+  readonly position: WorldPosition;
+}
+
+export interface OreField {
+  readonly position: WorldPosition;
+  readonly amount: number;
 }
 
 export type VictoryCondition = 'destroy-headquarters' | 'annihilation' | 'timed-score' | 'control-points';
