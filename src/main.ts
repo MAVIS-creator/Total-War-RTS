@@ -14,6 +14,7 @@ declare global {
     __ANTIGRAVITY_BUILDING_RENDERER__?: typeof BuildingRenderer;
     __ANTIGRAVITY_TEAM_PIPELINE__?: typeof TeamColorPipeline;
     __ANTIGRAVITY_EFFECTS__?: typeof EffectsPipeline;
+    __ANTIGRAVITY_SOUND__?: typeof soundSystem;
   }
 }
 
@@ -22,6 +23,7 @@ if (typeof window !== 'undefined') {
   window.__ANTIGRAVITY_BUILDING_RENDERER__ = BuildingRenderer;
   window.__ANTIGRAVITY_TEAM_PIPELINE__ = TeamColorPipeline;
   window.__ANTIGRAVITY_EFFECTS__ = EffectsPipeline;
+  window.__ANTIGRAVITY_SOUND__ = soundSystem;
   TeamColorPipeline.applyCSSTeamVariables();
 }
 

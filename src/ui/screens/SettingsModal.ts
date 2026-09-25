@@ -2,8 +2,10 @@ import { Modal } from '../components/Modal';
 import { Tabs } from '../components/Tabs';
 import { Slider } from '../components/Slider';
 import { Button } from '../components/Button';
+import { soundSystem } from '../../audio/SoundSystem';
 
 export interface GameSettingsConfig {
+  masterVolume?: number;
   musicVolume: number;
   sfxVolume: number;
   edgeScroll: boolean;
@@ -20,8 +22,9 @@ export class SettingsModal {
   private activeCategory: 'controls' | 'graphics' | 'sound' | 'advanced' = 'sound';
 
   private config: GameSettingsConfig = {
-    musicVolume: 80,
-    sfxVolume: 90,
+    masterVolume: 80,
+    musicVolume: 60,
+    sfxVolume: 85,
     edgeScroll: true,
     dragPan: true,
     hpBars: true,
@@ -87,13 +90,27 @@ export class SettingsModal {
     wrap.style.gap = '14px';
 
     if (this.activeCategory === 'sound') {
+      const masterSlider = new Slider({
+        label: 'Master Command Volume',
+        min: 0,
+        max: 100,
+        value: this.config.masterVolume ?? 80,
+        format: (v) => `${v}%`,
+        onChange: (v) => {
+          this.config.masterVolume = v;
+          soundSystem.setMasterVolume(v);
+        },
+      });
       const musicSlider = new Slider({
         label: 'Music Synthesizer Volume',
         min: 0,
         max: 100,
         value: this.config.musicVolume,
         format: (v) => `${v}%`,
-        onChange: (v) => (this.config.musicVolume = v),
+        onChange: (v) => {
+          this.config.musicVolume = v;
+          soundSystem.setMusicVolume(v);
+        },
       });
       const sfxSlider = new Slider({
         label: 'Combat SFX & Weaponry Volume',
@@ -101,8 +118,12 @@ export class SettingsModal {
         max: 100,
         value: this.config.sfxVolume,
         format: (v) => `${v}%`,
-        onChange: (v) => (this.config.sfxVolume = v),
+        onChange: (v) => {
+          this.config.sfxVolume = v;
+          soundSystem.setSfxVolume(v);
+        },
       });
+      wrap.appendChild(masterSlider.element);
       wrap.appendChild(musicSlider.element);
       wrap.appendChild(sfxSlider.element);
     } else if (this.activeCategory === 'graphics') {

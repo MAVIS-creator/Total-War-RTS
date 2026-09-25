@@ -32,6 +32,8 @@ export class HUDOverlay {
   private objectivesPanel: HTMLElement;
   private alertsFeed: HTMLElement;
   private callbacks: HUDCallbacks;
+  private lastSelectionKey = '';
+  private commandButtons = new Map<string, HTMLButtonElement>();
 
   constructor(callbacks: HUDCallbacks) {
     this.callbacks = callbacks;
@@ -79,6 +81,8 @@ export class HUDOverlay {
       variant: 'default',
       onClick: () => this.callbacks.onPauseMenu(),
     });
+    menuBtn.element.setAttribute('data-tooltip', 'Pause match and access operations console [Esc]');
+    menuBtn.element.setAttribute('data-tooltip-pos', 'bottom');
     controls.appendChild(menuBtn.element);
     topbar.appendChild(controls);
     this.root.appendChild(topbar);
@@ -161,15 +165,21 @@ export class HUDOverlay {
     // Tactical Command Matrix (8-action grid)
     this.commandGrid = document.createElement('div');
     this.commandGrid.className = 'maw-command-grid';
-    const commands = [
-      { label: 'ATTACK', icon: '🎯' },
-      { label: 'MOVE', icon: '⏩' },
-      { label: 'GUARD', icon: '🛡' },
-      { label: 'HOLD', icon: '✋' },
-      { label: 'PATROL', icon: '🔄' },
-      { label: 'CANCEL', icon: '✕', isOrange: true },
-      { label: 'ABILITY', icon: '⚡' },
-      { label: 'RETREAT', icon: '⏬' },
+    const commands: Array<{
+      label: string;
+      icon: string;
+      hotkey: string;
+      tooltip: string;
+      isOrange?: boolean;
+    }> = [
+      { label: 'ATTACK', icon: '🎯', hotkey: 'A', tooltip: 'Direct units to engage hostiles with weapon fire [A]' },
+      { label: 'MOVE', icon: '⏩', hotkey: 'M', tooltip: 'Reposition units to designated coordinates [M]' },
+      { label: 'GUARD', icon: '🛡', hotkey: 'G', tooltip: 'Escort allied target or patrol perimeter [G]' },
+      { label: 'HOLD', icon: '✋', hotkey: 'H', tooltip: 'Hold position and maintain fire envelope [H / S]' },
+      { label: 'PATROL', icon: '🔄', hotkey: 'P', tooltip: 'Cycle surveillance route between points [P]' },
+      { label: 'CANCEL', icon: '✕', hotkey: 'Esc', isOrange: true, tooltip: 'Cancel orders and clear selection [Esc]' },
+      { label: 'ABILITY', icon: '⚡', hotkey: 'Q', tooltip: 'Deploy special unit capability or nanites [Q]' },
+      { label: 'RETREAT', icon: '⏬', hotkey: 'R', tooltip: 'Emergency tactical withdrawal to base [R]' },
     ];
 
     commands.forEach((cmd) => {
@@ -177,9 +187,16 @@ export class HUDOverlay {
       btn.type = 'button';
       btn.className = `maw-cmd-btn ${cmd.isOrange ? 'orange-accent' : ''}`;
       btn.innerHTML = `<span>${cmd.icon}</span><span>${cmd.label}</span>`;
+      btn.setAttribute('data-tooltip', cmd.tooltip);
+      btn.setAttribute('aria-label', `${cmd.label} order, hotkey ${cmd.hotkey}`);
+
+      btn.addEventListener('mouseenter', () => soundSystem.playHover());
       btn.addEventListener('click', () => {
         soundSystem.playClick();
+        this.addAlert(`Command issued: ${cmd.label}`, cmd.isOrange ? 'warning' : 'info');
       });
+
+      this.commandButtons.set(cmd.label, btn);
       this.commandGrid.appendChild(btn);
     });
 
@@ -187,13 +204,34 @@ export class HUDOverlay {
     this.root.appendChild(this.selectionPanel);
   }
 
+  private handleKeyDown = (e: KeyboardEvent): void => {
+    if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+    const key = e.key.toUpperCase();
+    if (key === 'A') this.commandButtons.get('ATTACK')?.click();
+    else if (key === 'M') this.commandButtons.get('MOVE')?.click();
+    else if (key === 'G') this.commandButtons.get('GUARD')?.click();
+    else if (key === 'H' || key === 'S') this.commandButtons.get('HOLD')?.click();
+    else if (key === 'P') this.commandButtons.get('PATROL')?.click();
+    else if (key === 'Q') this.commandButtons.get('ABILITY')?.click();
+    else if (key === 'R') this.commandButtons.get('RETREAT')?.click();
+    else if (e.key === 'Escape') {
+      if (document.querySelector('.maw-modal-backdrop')) {
+        // Let modal handle Escape
+        return;
+      }
+      this.commandButtons.get('CANCEL')?.click();
+    }
+  };
+
   mount(parent: HTMLElement = document.body): void {
     if (!this.root.parentElement) {
       parent.appendChild(this.root);
+      window.addEventListener('keydown', this.handleKeyDown);
     }
   }
 
   unmount(): void {
+    window.removeEventListener('keydown', this.handleKeyDown);
     if (this.root.parentElement) {
       this.root.parentElement.removeChild(this.root);
     }
@@ -238,21 +276,26 @@ export class HUDOverlay {
 
     if (stats) {
       this.statsBox.innerHTML = `
-        <span>ATK: ${stats.atk ?? '--'}</span>
-        <span>RNG: ${stats.rng ?? '--'}</span>
-        <span>ARM: ${stats.arm ?? '--'}</span>
-        <span>SPD: ${stats.spd ?? '--'}</span>
+        <span data-tooltip="Attack Power">ATK: ${stats.atk ?? '--'}</span>
+        <span data-tooltip="Engagement Range">RNG: ${stats.rng ?? '--'}</span>
+        <span data-tooltip="Armor Rating">ARM: ${stats.arm ?? '--'}</span>
+        <span data-tooltip="Movement Speed">SPD: ${stats.spd ?? '--'}</span>
       `;
     }
 
-    this.selPortraitWrap.innerHTML = '';
-    const portrait = new UnitPortrait({
-      imageUrl,
-      fallbackText: title,
-      rank,
-      techLevel: tech,
-    });
-    this.selPortraitWrap.appendChild(portrait.element);
+    // Only rebuild portrait DOM when selection identity actually changes
+    const selectionKey = `${title}_${rank ?? 0}_${tech ?? 0}_${imageUrl ?? ''}`;
+    if (this.lastSelectionKey !== selectionKey) {
+      this.lastSelectionKey = selectionKey;
+      this.selPortraitWrap.innerHTML = '';
+      const portrait = new UnitPortrait({
+        imageUrl,
+        fallbackText: title,
+        rank,
+        techLevel: tech,
+      });
+      this.selPortraitWrap.appendChild(portrait.element);
+    }
   }
 
   addAlert(text: string, type: 'danger' | 'warning' | 'info' | 'success' = 'info'): void {

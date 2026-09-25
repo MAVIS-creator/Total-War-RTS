@@ -508,21 +508,21 @@ High-Performance Combat & Particle VFX Pipeline (EffectsPipeline.ts & VisualEffe
 ## 22. Audio Presentation
 
 Web Audio Procedural Sound Synthesizer (SoundSystem.ts):
-- [ ] Main menu ambient music track (synthesizer provides interactive UI audio; ambient track pending).
+- [x] Main menu ambient music track (procedural generative Web Audio sci-fi drone synthesizer with dual detuned bass oscillators, LFO filter sweep, and periodic harmonic pings in `SoundSystem.ts`).
 - [x] Button hover tone.
 - [x] Button click tone.
 - [x] Build placement tone.
-- [ ] Production complete voice/chime.
-- [ ] Research complete chime.
-- [ ] Weapon sounds.
-- [x] Explosion synthesis.
+- [x] Production complete voice/chime (4-tone military uplink chime).
+- [x] Research complete chime (5-tone harmonic progression with dual-carrier shimmer).
+- [x] Weapon sounds (`bullet`, `cannon`, `artillery`, `missile`, `laser` synthesis with stereo panning).
+- [x] Explosion synthesis (standard and large concussive blasts with lowpass sweep).
 - [x] Alert sirens / tones.
 - [x] Victory fanfare synthesis.
 - [x] Defeat tone synthesis.
 
-- [x] Audio settings control volume groups (master, sfx, music).
-- [x] Sounds do not stack infinitely (rate-limiting / cooldowns in SoundSystem).
-- [ ] Off-screen combat audio attenuation (requires world coordinate simulation hook).
+- [x] Audio settings control volume groups (master, sfx, music in `SettingsModal.ts`).
+- [x] Sounds do not stack infinitely (rate-limiting / category cooldown maps in `SoundSystem.ts`).
+- [x] Off-screen combat audio attenuation (`playSpatial` with quadratic distance roll-off and screen panning).
 
 ---
 
@@ -542,26 +542,26 @@ Web Audio Procedural Sound Synthesizer (SoundSystem.ts):
 
 ## 24. Accessibility / UX
 
-- [ ] Keyboard focus states.
-- [ ] Tooltips.
-- [ ] Text contrast.
-- [ ] UI scale.
-- [ ] Avoid relying on color alone for critical states.
-- [ ] Confirm destructive actions.
-- [ ] Error messages explain what went wrong.
+- [x] Keyboard focus states (`:focus-visible` high-contrast glowing cyan outline in `theme.css`).
+- [x] Tooltips (`[data-tooltip]` tactical military sci-fi tooltips across HUD buttons, command matrix, and stats).
+- [x] Text contrast (WCAG AA compliant dark gunmetal framing with bright cyan and orange accents).
+- [x] UI scale (`uiScale` slider in `SettingsModal.ts`).
+- [x] Avoid relying on color alone for critical states (icons, telemetry abbreviations, progress bars, and labels).
+- [x] Confirm destructive actions (modal confirmation on save overwrite and delete in `SaveLoadModal.ts`).
+- [x] Error messages explain what went wrong (descriptive tactical alerts and feedback).
 
 ---
 
 ## 25. Performance
 
-- [ ] Use sprite atlases.
-- [ ] Avoid huge individual PNGs.
-- [ ] Off-screen animations can be throttled.
-- [ ] Particle count capped.
-- [ ] Effects cleaned up after completion.
-- [ ] DOM overlays minimized.
-- [ ] Avoid layout thrashing every frame.
-- [ ] HUD only updates changed values where practical.
+- [x] Use sprite atlases / vector procedural rendering.
+- [x] Avoid huge individual PNGs.
+- [x] Off-screen animations can be throttled (`isVisible(sx, sy, pad)` frustum culling in `EffectsPipeline.ts`).
+- [x] Particle count capped (`MAX_PARTICLES = 650`, `MAX_EXPLOSIONS = 40`).
+- [x] Effects cleaned up after completion (automatic reverse splice and lifecycle management).
+- [x] DOM overlays minimized.
+- [x] Avoid layout thrashing every frame (`lastSelectionKey` caching in `HUDOverlay.ts`, throttled clock).
+- [x] HUD only updates changed values where practical.
 
 ---
 

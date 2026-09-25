@@ -10,6 +10,7 @@ import { SaveLoadModal, type SaveSlotData } from './screens/SaveLoadModal';
 import { TacticalMenuModal, type TacticalMenuCallbacks } from './screens/TacticalMenuModal';
 import { VictoryDefeatModal, type MatchStatistics } from './screens/VictoryDefeatModal';
 import { HUDOverlay } from './HUDOverlay';
+import { soundSystem } from '../audio/SoundSystem';
 
 export type ScreenState = 'main_menu' | 'play_menu' | 'skirmish_setup' | 'loading' | 'hud';
 
@@ -48,6 +49,7 @@ export class UIManager {
   showMainMenu(): void {
     this.clearActive();
     this.currentScreenState = 'main_menu';
+    soundSystem.startAmbientTrack();
 
     const menu = new MainMenu({
       onPlay: () => this.showPlayMenu(),
@@ -135,6 +137,7 @@ export class UIManager {
 
     this.root.appendChild(loading.element);
     this.activeScreenComponent = loading;
+    soundSystem.stopAmbientTrack();
 
     // Presentation loading transition: provides a visual briefing transition until Codex exposes real engine initialization progress events
     let progress = 0;

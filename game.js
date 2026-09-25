@@ -381,6 +381,15 @@ class Building {
           true,
         );
       }
+      if (typeof window !== "undefined" && window.__ANTIGRAVITY_SOUND__) {
+        window.__ANTIGRAVITY_SOUND__.playSpatial(
+          "explosionLarge",
+          this.x,
+          this.y,
+          camera.x,
+          camera.y,
+        );
+      }
     }
   }
   acquire() {
@@ -432,6 +441,15 @@ class Building {
             "#ffd166",
           );
         }
+        if (typeof window !== "undefined" && window.__ANTIGRAVITY_SOUND__) {
+          window.__ANTIGRAVITY_SOUND__.playSpatial(
+            this.type === "artilleryTurret" ? "artillery" : "cannon",
+            this.x,
+            this.y,
+            camera.x,
+            camera.y,
+          );
+        }
       }
     }
     if (this.type === "factory" && this.queue.length) {
@@ -448,6 +466,9 @@ class Building {
           this.x + this.size + 20,
           this.y + rand(-30, 30),
         );
+        if (this.team === 0 && typeof window !== "undefined" && window.__ANTIGRAVITY_SOUND__) {
+          window.__ANTIGRAVITY_SOUND__.playProductionComplete();
+        }
       }
     }
     if (this.type === "shield" && teamPowerAvailable(this.team) >= 0) {
@@ -626,6 +647,17 @@ class Unit {
           this.type === "juggernaut",
         );
       }
+      if (typeof window !== "undefined" && window.__ANTIGRAVITY_SOUND__) {
+        window.__ANTIGRAVITY_SOUND__.playSpatial(
+          this.type === "juggernaut" || this.type === "heavy"
+            ? "explosionLarge"
+            : "explosion",
+          this.x,
+          this.y,
+          camera.x,
+          camera.y,
+        );
+      }
       if (source && source instanceof Unit) {
         source.kills++;
         source.recalcRank();
@@ -697,6 +729,21 @@ class Unit {
                   ? 20
                   : 14,
               col,
+            );
+          }
+          if (typeof window !== "undefined" && window.__ANTIGRAVITY_SOUND__) {
+            const snd =
+              this.type === "artillery"
+                ? "artillery"
+                : this.type === "heavy" || this.type === "juggernaut"
+                  ? "cannon"
+                  : "bullet";
+            window.__ANTIGRAVITY_SOUND__.playSpatial(
+              snd,
+              this.x,
+              this.y,
+              camera.x,
+              camera.y,
             );
           }
         }
@@ -826,6 +873,15 @@ class Bullet {
             this.target.range || 220,
             Math.atan2(dy, dx),
           );
+          if (typeof window !== "undefined" && window.__ANTIGRAVITY_SOUND__) {
+            window.__ANTIGRAVITY_SOUND__.playSpatial(
+              "shieldHit",
+              this.target.x,
+              this.target.y,
+              camera.x,
+              camera.y,
+            );
+          }
         }
       }
       this.dead = true;
@@ -966,6 +1022,9 @@ function updateResearch(dt) {
             base.y,
             140,
           );
+        }
+        if (typeof window !== "undefined" && window.__ANTIGRAVITY_SOUND__) {
+          window.__ANTIGRAVITY_SOUND__.playResearchComplete();
         }
       }
     }
@@ -1623,6 +1682,9 @@ function pointerUp(x, y, button, touch = false) {
       resources[0] -= def.cost;
       addBuilding(buildMode, 0, w.x, w.y);
       showMsg(`${def.name} constructed.`);
+      if (typeof window !== "undefined" && window.__ANTIGRAVITY_SOUND__) {
+        window.__ANTIGRAVITY_SOUND__.playPlacement();
+      }
     }
     buildMode = null;
     pointer.down = false;
